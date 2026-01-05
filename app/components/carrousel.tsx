@@ -4,17 +4,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 
 export function Carrousel() {
-  const now = new Date();
-  const time = now.toLocaleTimeString('es-AR', { 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    hour12: false 
-  });
-
-  const lastUpdateMessage = `Última actualización hoy a las ${time} hs`;
-
   const items = [
-    lastUpdateMessage,
     "Los valores expresados son meramente informativos y de referencia.",
     "No realizamos operaciones de compra, venta o intermediación de divisas.",
     "Tu referencia diaria para el dólar en Argentina.",
@@ -34,7 +24,7 @@ export function Carrousel() {
     },
     [
       AutoScroll({
-        speed: 0.5,
+        speed: 0.6,
         stopOnInteraction: false,
         stopOnMouseEnter: false,
         stopOnFocusIn: false,
@@ -50,7 +40,7 @@ export function Carrousel() {
             {infiniteItems.map((text, i) => ( 
               <div
                 key={i}
-                className="flex-[0_0_auto] px-50 whitespace-nowrap text-center text-xs tracking-wide opacity-90"
+                className="flex-[0_0_auto] px-35 whitespace-nowrap text-center text-xs tracking-wide opacity-90"
               >
                 {text}
               </div>

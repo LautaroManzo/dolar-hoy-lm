@@ -3,13 +3,15 @@ import "./globals.css";
 
 import { Header } from "./components/header";
 import { Footer } from "./components/footer";
+import Description from "./components/description";
+
 import { InfoProvider } from "./context/InfoContext";
 
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
   title: {
-    default: "Dólar Blue Hoy en Argentina | Cotización en Tiempo Real",
+    default: "Dólar hoy | Cotización en tiempo real en Argentina",
     template: "%s | Dólar Hoy"
   },
   description:
@@ -43,7 +45,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       
         <InfoProvider>
           <Header />
+          
+          <Description/>
+          
           <main className="flex-1">{children}</main>
+          
           <Footer />
         </InfoProvider>
 

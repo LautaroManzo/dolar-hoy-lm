@@ -113,7 +113,7 @@ export function DolarCard({
 
             <span className="text-[0.65rem] font-bold text-gray-700 tracking-wide uppercase">Compra hoy</span>
 
-            <span className="text-4xl text-gray-700 font-bold leading-none mt-1">
+            <span className="text-2xl lg:text-4xl text-gray-700 font-bold leading-none mt-1">
               ${buy.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
 
@@ -125,7 +125,7 @@ export function DolarCard({
 
             <span className="text-[0.65rem] font-bold text-[#2d5a7b] tracking-wide uppercase">Venta hoy</span>
 
-            <span className="text-4xl text-[#2d5a7b] font-bold leading-none mt-1">
+            <span className="text-2xl lg:text-4xl text-[#2d5a7b] font-bold leading-none mt-1">
               ${sell.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
 
