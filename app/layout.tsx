@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "./components/header";
 import { Footer } from "./components/footer";
 import Description from "./components/description";
+import PreguntasFrecuentes from "./components/preguntas-frecuentes";
 
 import { InfoProvider } from "./context/InfoContext";
 
@@ -49,7 +50,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Description/>
           
           <main className="flex-1">{children}</main>
-          
+
+          < PreguntasFrecuentes/>
+
+          {/* Sobre nosotros */}
+
           <Footer />
         </InfoProvider>
 
