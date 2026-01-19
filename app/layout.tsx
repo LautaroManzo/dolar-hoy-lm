@@ -53,8 +53,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           < PreguntasFrecuentes/>
 
-          {/* Sobre nosotros */}
-
           <Footer />
         </InfoProvider>
 

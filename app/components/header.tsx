@@ -2,8 +2,12 @@
 
 import { Carrousel } from "../components/carrousel";
 import { Calculator } from "lucide-react";
+import { useState } from 'react';
+import CalculatorModal from './_calculator';
 
 export function Header() {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -23,14 +27,23 @@ export function Header() {
             </div>
           </div>
 
-          {/* <div className="hidden md:flex items-center gap-6">
+          <div className="flex items-center gap-6">
 
-            <button className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-all border border-white/20 cursor-pointer">
-                <Calculator size={18} />
-                <span>Calculadora</span>
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center justify-center bg-[#2d5a7b] text-white p-2 rounded-full 
+                        text-sm font-medium transition-all duration-700 ease-in-out hover:scale-110 
+                        border-3 border-white cursor-pointer shadow-lg"
+            >
+              <Calculator color="white" size={18} />
             </button>
 
-          </div> */}
+            <CalculatorModal 
+              isOpen={isModalOpen} 
+              onClose={() => setIsModalOpen(false)} 
+            />
+
+          </div>
 
         </div>
       </header>
