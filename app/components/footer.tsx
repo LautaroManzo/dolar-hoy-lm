@@ -6,11 +6,11 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-8">
         
         <div className="flex flex-col md:flex-row justify-evenly items-center gap-4 mb-6">
-          <div className="text-[11px] uppercase tracking-widest opacity-60">
+          <div className="text-[9px] sm:text-[11px] uppercase tracking-widest opacity-60">
             © {currentYear} • DólarAR • Todos los derechos reservados
           </div>
           
-          <div className="text-[12px] opacity-60 italic flex gap-2">
+          <div className="text-[10px] sm:text-[12px] opacity-60 italic flex gap-2">
             <span>Datos provistos por</span>
             <div className="flex gap-1.5">
               <a 

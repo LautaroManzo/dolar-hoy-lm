@@ -28,9 +28,9 @@ type DolarProcesado = {
 
 const EvolucionDolar: React.FC = () => {
   const [data, setData] = useState<DolarProcesado[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [tipoDolar, setTipoDolar] = useState<string>('blue');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -61,63 +61,72 @@ const EvolucionDolar: React.FC = () => {
   useEffect(() => {
     const controller = new AbortController();
 
+    let loadingTimer = setTimeout(() => setLoading(true), 300);
+
     const fetchHistorico = async () => {
-        setLoading(true);
-        setError(null);
+      setError(null);
 
-        const cacheKey = `historico_${tipoDolar}`;
-        const hoy = new Date().toISOString().split('T')[0];
-        const cached = localStorage.getItem(cacheKey);
+      const cacheKey = `historico_${tipoDolar}`;
+      const cached = localStorage.getItem(cacheKey);
 
-        if (cached) {
-          const { fechaCache, datos } = JSON.parse(cached);
-          if (fechaCache === hoy) {
-            setData(datos);
-            setLoading(false);
-            return;
-          }
+      if (cached) {
+        const { fechaCache, datos } = JSON.parse(cached);
+        const diffDias = (Date.now() - new Date(fechaCache).getTime()) / (1000 * 60 * 60 * 24);
+
+        if (diffDias < 7) {
+          setData(datos);
         }
+      }
 
-        try {
-          const response = await fetch(
-              `https://api.argentinadatos.com/v1/cotizaciones/dolares/${tipoDolar}`,
-              { signal: controller.signal }
-          );
+      try {
+        const response = await fetch(
+          `https://api.argentinadatos.com/v1/cotizaciones/dolares/${tipoDolar}`,
+          { signal: controller.signal }
+        );
 
-          if (!response.ok) throw new Error('Error al obtener datos');
+        if (!response.ok) throw new Error('Error al obtener datos');
 
-          const result = (await response.json()) as DolarHistorico[];
+        const result = (await response.json()) as DolarHistorico[];
 
-          const procesados: DolarProcesado[] = result
-              .slice(-30)
-              .map((item) => {
-                  const dateParts = item.fecha.split('-').map(Number);
-                  const fechaObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+        const procesados: DolarProcesado[] = result
+          .slice(-30)
+          .map((item) => {
+            const dateParts = item.fecha.split('-').map(Number);
+            const fechaObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
 
-                  return {
-                      fecha: fechaObj.toLocaleDateString('es-AR', {
-                          day: 'numeric',
-                          month: 'short',
-                      }),
-                      venta: item.venta,
-                      compra: item.compra,
-                      originalDate: item.fecha,
-                  };
-              });
+            return {
+              fecha: fechaObj.toLocaleDateString('es-AR', {
+                day: 'numeric',
+                month: 'short',
+              }),
+              venta: item.venta,
+              compra: item.compra,
+              originalDate: item.fecha,
+            };
+          });
 
-            setData(procesados);
-            localStorage.setItem(cacheKey, JSON.stringify({ fechaCache: hoy, datos: procesados }));
-        } catch (err: any) {
-          if (err.name === 'AbortError') return;
+        setData(procesados);
+        localStorage.setItem(
+          cacheKey,
+          JSON.stringify({ fechaCache: new Date().toISOString(), datos: procesados })
+        );
+
+      } catch (err: any) {
+        if (err.name !== 'AbortError') {
           console.error(err);
           setError('No se pudo cargar el gráfico.');
-        } finally {
-            setLoading(false);
         }
+      } finally {
+        clearTimeout(loadingTimer);
+        setLoading(false);
+      }
     };
-    
+
     fetchHistorico();
-    return () => controller.abort();
+    return () => {
+      clearTimeout(loadingTimer);
+      controller.abort();
+    };
   }, [tipoDolar]);
 
   const nombreSeleccionado = opcionesDolar.find(o => o.id === tipoDolar)?.nombre;
@@ -126,12 +135,13 @@ const EvolucionDolar: React.FC = () => {
     <section className="w-full font-sans mx-auto px-4 py-8">
       <div className="max-w-6xl mx-auto w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
 
+        {/* TITULO Y SELECTOR */}
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 gap-6">
-            <div className="text-center md:text-left">
-                <h2 className="text-2xl font-bold text-[#1a3a52]">
-                    Últimos 30 días
-                </h2>
-            </div>
+          <div className="text-center md:text-left">
+            <h2 className="text-2xl font-bold text-[#1a3a52]">
+              Últimos 30 días
+            </h2>
+          </div>
 
           <div className="flex flex-col items-center sm:items-end gap-3">
             <div className="relative w-60 sm:w-52" ref={dropdownRef}>
@@ -171,7 +181,9 @@ const EvolucionDolar: React.FC = () => {
           </div>
         </div>
 
+        {/* GRÁFICO */}
         <div className="w-full h-[380px] relative">
+
           {loading && (
             <div className="absolute inset-0 z-20 bg-white/60 backdrop-blur-[1px] flex items-center justify-center rounded-xl">
               <div className="flex flex-col items-center">

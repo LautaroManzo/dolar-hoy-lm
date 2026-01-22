@@ -19,7 +19,7 @@ const DOLAR_TYPES = [
 
 export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProps) {
   const [amount, setAmount] = useState<string>("");
-  const [selectedDolar, setSelectedDolar] = useState(DOLAR_TYPES[1]);
+  const [selectedDolar, setSelectedDolar] = useState(DOLAR_TYPES[0]);
   const [isInverse, setIsInverse] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);

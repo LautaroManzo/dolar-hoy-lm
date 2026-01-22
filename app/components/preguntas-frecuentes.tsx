@@ -27,8 +27,8 @@ const PreguntasFrecuentes = () => {
     transition-all duration-700 bg-white overflow-hidden rounded-[15px]
     border-l-3 border-l-[#1a3a52]
     ${openSection === id 
-      ? 'border-t border-r border-b border-blue-400/30 shadow-[0_40px_80px_rgba(30,41,59,0.1)]' 
-      : 'border-t border-r border-b border-slate-200/80 shadow-xl shadow-slate-200/20 hover:scale-[1.01]'}
+      ? 'shadow-[0_40px_80px_rgba(30,41,59,0.1)]' 
+      : 'shadow-xl shadow-slate-200/20 hover:scale-[1.01]'}
   `;
 
   return (
