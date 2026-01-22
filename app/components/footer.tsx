@@ -19,7 +19,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="underline hover:text-white transition-colors"
               >
-                DolarApi.com
+                DolarApi
               </a>
               <span>&</span>
               <a 

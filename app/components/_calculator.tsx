@@ -128,7 +128,6 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
                   type="number"
                   min="0"
                   placeholder="0"
-                  autoFocus
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   className="bg-transparent text-2xl font-bold text-[#1a3a52] focus:outline-none w-full placeholder:text-slate-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -142,7 +141,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
                   setIsInverse(!isInverse);
                   setAmount("");
                 }}
-                className="absolute -translate-y-1/2 bg-[#1a3a52] text-white p-2.5 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all border-[3px] border-white cursor-pointer"
+                className="absolute -translate-y-1/2 bg-[#2d5a7b] text-white p-2.5 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all border-[3px] border-white cursor-pointer"
               >
                 <ArrowRightLeft size={16} />
               </button>
