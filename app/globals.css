@@ -1,1 +1,5 @@
 @import 'tailwindcss';
+
+svg, path, g {
+    outline: none;
+}
