@@ -83,10 +83,10 @@ const PreguntasFrecuentes = () => {
             <div className="px-10 md:px-14 pb-14 space-y-5">
               <div className="h-px bg-gradient-to-r from-transparent via-slate-100 to-transparent mb-8" />
               <p className="text-slate-600 text-[16px] leading-relaxed">
-                ¡Hola! Todo empezó como un <em>proyecto personal</em>, con la idea de crear un espacio organizado donde consultar el valor del dólar en Argentina sin vueltas.
+                ¡Hola! Todo empezó como un <em>proyecto personal</em>, con la idea de crear un espacio organizado donde consultar el valor del <strong>dólar</strong> en Argentina sea rápido y fácil.
               </p>
               <p className="text-slate-600 text-[16px] leading-relaxed">
-                La idea detrás de este sitio es ofrecer <strong>información confiable</strong> en un entorno de estética limpia y clara, para que consultar el dólar sea rápido y sin complicaciones.
+                La idea detrás de este sitio es ofrecer <strong>información confiable</strong> en un entorno de estética limpia y clara.
               </p>
               <p className="text-slate-600 text-[16px] leading-relaxed">Espero que esta web te resulte útil.</p>
             </div>

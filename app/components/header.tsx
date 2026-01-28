@@ -22,7 +22,7 @@ export function Header() {
             />
 
             <div className="flex flex-col">
-              <h1 className="text-3xl font-semibold">DólarAR</h1>
+              <h1 className="text-3xl font-semibold">DolarInfoHoy</h1>
               <p className="text-xs font-semibold">Cotización en tiempo real</p>
             </div>
           </div>

@@ -7,7 +7,7 @@ export function Footer() {
         
         <div className="flex flex-col md:flex-row justify-evenly items-center gap-4 mb-6">
           <div className="text-[9px] sm:text-[11px] uppercase tracking-widest opacity-60">
-            © {currentYear} • DólarAR • Todos los derechos reservados
+            © {currentYear} • DolarInfoHoy • Todos los derechos reservados
           </div>
           
           <div className="text-[10px] sm:text-[12px] opacity-60 italic flex gap-2">
@@ -38,7 +38,7 @@ export function Footer() {
 
         <div className="max-w-3xl mx-auto">
           <p className="text-center text-[11px] leading-relaxed opacity-50 hover:opacity-80 transition-opacity duration-300">
-            <strong className="text-white/80">Aviso legal:</strong> Los datos mostrados son de carácter informativo y se obtienen de fuentes públicas y APIs de terceros. No constituyen una recomendación de inversión ni oferta de operación. El mercado del dólar informal (blue) no posee cotización oficial. <strong>DólarAR</strong> no se responsabiliza por errores u omisiones en la información ni por decisiones tomadas en base a la misma.
+            <strong className="text-white/80">Aviso legal:</strong> Los datos mostrados son de carácter informativo y se obtienen de fuentes públicas y APIs de terceros. No constituyen una recomendación de inversión ni oferta de operación. El mercado del dólar informal (blue) no posee cotización oficial. <strong>DólarInfoHoy</strong> no se responsabiliza por errores u omisiones en la información ni por decisiones tomadas en base a la misma.
           </p>
         </div>
 
