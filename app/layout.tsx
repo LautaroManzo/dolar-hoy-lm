@@ -32,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: `Seguí el minuto a minuto de las cotizaciones del dólar en Argentina este ${fechaHoy}.`,
       type: "website",
       locale: "es_AR",
-      url: "https://dolar-hoy-lm.vercel.app/", 
+      url: "https://dolarinfohoy.com.ar", 
       siteName: "Cotización Dólar",
     },
     twitter: {
