@@ -1,7 +1,56 @@
 import { getDolar } from "./services/dolar";
-import { Cards } from "./components/cards";
+import { Cards } from "./components/dolar/cards";
+import { Metadata } from "next";
 
 export const revalidate = 900; 
+
+export async function generateMetadata(): Promise<Metadata> {
+  const fecha = new Date();
+  const dia = fecha.getDate();
+  const mes = fecha.toLocaleString('es-AR', { month: 'long' });
+  const fechaHoy = `${dia} de ${mes}`;
+
+  try {
+    const blueData = await getDolar('blue');
+    const oficialData = await getDolar('oficial');
+    const mepData = await getDolar('bolsa');
+    const cclData = await getDolar('contadoconliqui');
+
+    const bluePrice = blueData?.sell || '---';
+    const oficialPrice = oficialData?.sell || '---';
+    const mepPrice = mepData?.sell || '---';
+    const cclPrice = cclData?.sell || '---';
+
+    return {
+      title: `Dólar Blue Hoy $${bluePrice} | Cotización ${fechaHoy}`,
+      description: `Dólar Blue: $${bluePrice} | Oficial: $${oficialPrice} | MEP: $${mepPrice} | CCL: $${cclPrice}. Cotizaciones actualizadas en tiempo real. Brecha cambiaria y variaciones diarias.`,
+      openGraph: {
+        title: `Dólar Blue Hoy $${bluePrice} | ${fechaHoy}`,
+        description: `Blue: $${bluePrice} | Oficial: $${oficialPrice} | MEP: $${mepPrice} | CCL: $${cclPrice}. Cotizaciones actualizadas al minuto.`,
+        type: "website",
+        locale: "es_AR",
+        url: "https://dolarinfohoy.com.ar",
+        siteName: "Dólar Hoy",
+        images: [{
+          url: "/og-image.jpg",
+          width: 1200,
+          height: 630,
+          alt: `Dólar Blue Hoy $${bluePrice} - Cotización en Argentina`
+        }]
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `Dólar Blue $${bluePrice} | Oficial $${oficialPrice} | ${fechaHoy}`,
+        description: `Blue: $${bluePrice} | MEP: $${mepPrice} | CCL: $${cclPrice}. Cotizaciones actualizadas en tiempo real.`
+      }
+    };
+  } catch (error) {
+    return {
+      title: `Dólar hoy ${fechaHoy} | Cotización en tiempo real en Argentina`,
+      description: `Consultá el precio del Dólar Blue, Oficial, MEP y CCL hoy ${fechaHoy}. Brecha cambiaria y las variaciones diarias en Argentina.`
+    };
+  }
+} 
 
 export default async function Page() {
   const entries = {

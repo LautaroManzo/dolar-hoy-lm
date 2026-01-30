@@ -23,7 +23,7 @@ const Description = () => {
     return (
         <section 
             className="relative bg-cover bg-center min-h-[400px] flex items-center"
-            style={{ backgroundImage: "url('/edificios.jpg')"}}
+            style={{ backgroundImage: "url('/images/edificios.jpg')"}}
         >
             <div 
                 className="absolute inset-0 w-full h-full" 

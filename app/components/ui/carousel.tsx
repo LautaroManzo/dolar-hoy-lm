@@ -3,7 +3,7 @@
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 
-export function Carrousel() {
+export function Carousel() {
   const items = [
     "Los valores expresados son meramente informativos y de referencia.",
     "No realizamos operaciones de compra, venta o intermediación de divisas.",
