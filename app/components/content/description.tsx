@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from 'react';
 
 const Description = () => {
-    const [lastUpdateMessage, setLastUpdateMessage] = useState('');
-
     const getFormattedTime = () => {
         const now = new Date();
         return new Intl.DateTimeFormat('es-AR', {
@@ -15,15 +13,21 @@ const Description = () => {
         }).format(now);
     };
 
+    const [lastUpdateMessage, setLastUpdateMessage] = useState(`Última actualización hoy a las ${getFormattedTime()} hs`);
+
     useEffect(() => {
-        const time = getFormattedTime();
-        setLastUpdateMessage(`Última actualización hoy a las ${time} hs`);
+        const interval = setInterval(() => {
+            const time = getFormattedTime();
+            setLastUpdateMessage(`Última actualización hoy a las ${time} hs`);
+        }, 60000);
+
+        return () => clearInterval(interval);
     }, []);
 
     return (
         <section 
             className="relative bg-cover bg-center min-h-[400px] flex items-center"
-            style={{ backgroundImage: "url('/images/edificios.jpg')"}}
+            style={{ backgroundImage: "url('/images/edificios.jpg')", backgroundSize: 'cover', backgroundPosition: 'center'}}
         >
             <div 
                 className="absolute inset-0 w-full h-full" 

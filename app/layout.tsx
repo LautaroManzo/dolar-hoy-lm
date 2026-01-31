@@ -151,6 +151,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es">
 
       <head>
+        <link rel="preload" href="/images/edificios.jpg" as="image" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
