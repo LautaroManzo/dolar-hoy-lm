@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUp, ArrowDown, Minus, TrendingUp, TrendingDown, Info, X } from "lucide-react";
+import { ArrowUp, ArrowDown, Minus, TrendingUp, TrendingDown, Info, X, Share, Copy } from "lucide-react";
 import { useState } from "react";
 
 interface DolarCardProps {
@@ -40,6 +40,76 @@ const colorMap = {
   neutral: "text-gray-600 bg-gray-200",
 };
 
+function DolarCardActions({
+  copied,
+  isOpen,
+  onCopy,
+  onShare,
+  setIsOpen,
+  variant,
+}: {
+  copied: boolean;
+  isOpen: boolean;
+  onCopy: () => void;
+  onShare: () => void;
+  setIsOpen: (open: boolean) => void;
+  variant: "front" | "back";
+}) {
+  const actionBarClassName =
+    "absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-20 p-1 bg-white rounded-full flex items-center justify-center shadow-md gap-1";
+
+  const actionButtonClassName =
+    "w-9 h-9 rounded-full flex items-center justify-center bg-[#2d5a7b] text-white transition-all duration-300 ease-in-out hover:scale-110 border-2 border-white cursor-pointer";
+
+  const toggleButtonClassName =
+    "w-9 h-9 rounded-full flex items-center justify-center bg-[#2d5a7b] text-white transition-all duration-700 ease-in-out hover:scale-110 border-2 border-white cursor-pointer";
+
+  const toggleAriaLabel =
+    variant === "front" ? (isOpen ? "Cerrar información" : "Ver más información") : "Cerrar información";
+
+  const toggleTitle =
+    variant === "front" ? (isOpen ? "Cerrar información" : "Ver más información") : "Volver";
+
+  return (
+    <div className={actionBarClassName}>
+      <div className="relative">
+        <button
+          onClick={onCopy}
+          className={actionButtonClassName}
+          aria-label="Copiar cotización"
+          title="Copiar cotización"
+        >
+          <Copy size={16} />
+        </button>
+
+        {copied && (
+          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-30">
+            ¡Copiado!
+          </div>
+        )}
+      </div>
+
+      <button
+        onClick={onShare}
+        className={actionButtonClassName}
+        aria-label="Compartir cotización"
+        title="Compartir cotización"
+      >
+        <Share size={16} />
+      </button>
+
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`${toggleButtonClassName} ${isOpen ? "rotate-180" : ""}`}
+        aria-label={toggleAriaLabel}
+        title={toggleTitle}
+      >
+        {isOpen ? <X size={18} /> : <Info size={18} />}
+      </button>
+    </div>
+  );
+}
+
 export function DolarCard({
   title,
   buy,
@@ -53,7 +123,39 @@ export function DolarCard({
   horaOperacion
 }: DolarCardProps) {
 
-  const [isOpen, setIsOpen] = useState(false);  
+  const [isOpen, setIsOpen] = useState(false); 
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    const copyText = `${title} - Compra: $${buy.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} | Venta: $${sell.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    
+    try {
+      await navigator.clipboard.writeText(copyText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error('Error al copiar:', error);
+    }
+  };
+
+  const handleShare = async () => {
+    const shareText = `${title} - Compra: $${buy.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} | Venta: $${sell.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: title,
+          text: shareText,
+        });
+      } else {
+        await navigator.clipboard.writeText(shareText);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch (error) {
+      console.error('Error al compartir:', error);
+    }
+  };
 
   const HeaderIcon = headerIconMap[variationSign]; 
   const DailyDiffIcon = iconMap[dailyDiffSign]; 
@@ -90,7 +192,7 @@ export function DolarCard({
       style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
     >
       <div
-        className="absolute inset-0 rounded-2xl shadow-md bg-white p-5 flex flex-col gap-5 border-t-4 border-[#2d5a7b] justify-center"
+        className={`absolute inset-0 rounded-2xl shadow-md bg-white p-5 flex flex-col gap-5 border-t-4 border-[#2d5a7b] justify-center ${isOpen ? "pointer-events-none" : "pointer-events-auto"}`}
         style={{ backfaceVisibility: "hidden" }}
       >
       
@@ -135,33 +237,22 @@ export function DolarCard({
 
         </div>
 
+        <DolarCardActions
+          copied={copied}
+          isOpen={isOpen}
+          onCopy={handleCopy}
+          onShare={handleShare}
+          setIsOpen={setIsOpen}
+          variant="front"
+        />
+
       </div>
 
-        <div 
-            className={`absolute bottom-0 left-1/2 
-                        transform -translate-x-1/2 translate-y-1/2 
-                        z-20 p-1 bg-white rounded-full 
-                        flex items-center justify-center shadow-md`}
-        >
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className={`w-10 h-10 rounded-full 
-                            flex items-center justify-center 
-                            bg-[#2d5a7b] text-white 
-                            transition-all duration-700 ease-in-out hover:scale-110
-                            border-2 border-white cursor-pointer
-                            ${isOpen ? 'rotate-180' : ''}`}
-                aria-label={isOpen ? "Cerrar información" : "Ver más información"}
-            >
-                {isOpen ? <X size={20} /> : <Info size={20} />}
-            </button>
-        </div>
 
         <div
-            className="absolute inset-0 rounded-3xl shadow-2xl border-t-4 border-[#2d5a7b] bg-white flex flex-col justify-center text-center p-[20px] pb-[26px]"
+            className={`absolute inset-0 rounded-3xl shadow-2xl border-t-4 border-[#2d5a7b] bg-white flex flex-col justify-center text-center p-[20px] pb-[26px] ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
             style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
         >
-
           <div className="space-y-2 mb-2">
               <h3 className="text-[#2d5a7b] font-bold text-[16px] tracking-wider">
                   {title}
@@ -181,7 +272,17 @@ export function DolarCard({
               </div>
           </div>
 
+          <DolarCardActions
+            copied={copied}
+            isOpen={isOpen}
+            onCopy={handleCopy}
+            onShare={handleShare}
+            setIsOpen={setIsOpen}
+            variant="back"
+          />
+
         </div>
+
 
     </motion.div>
   );
