@@ -12,8 +12,17 @@ interface CalculatorModalProps {
 
 export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProps) {
   const [amount, setAmount] = useState<string>("");
-  const [dolarTypes, setDolarTypes] = useState<Array<{id: string, name: string, price: number}>>([]);
-  const [selectedDolar, setSelectedDolar] = useState<{id: string, name: string, price: number} | null>(null);
+  const [dolarTypes, setDolarTypes] = useState<Array<{id: string, name: string, price: number}>>([
+    { id: 'blue', name: 'Dólar Blue', price: 0 },
+    { id: 'oficial', name: 'Dólar Oficial', price: 0 },
+    { id: 'bolsa', name: 'Dólar MEP', price: 0 },
+    { id: 'contadoconliqui', name: 'Dólar CCL', price: 0 },
+    { id: 'tarjeta', name: 'Dólar Tarjeta', price: 0 }, 
+    { id: 'crypto', name: 'Dólar Cripto', price: 0 },
+  ]);
+  const [selectedDolar, setSelectedDolar] = useState<{id: string, name: string, price: number} | null>(
+    { id: 'blue', name: 'Dólar Blue', price: 0 }
+  );
   const [isInverse, setIsInverse] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -30,16 +39,17 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
           { id: 'crypto', name: 'Dólar Cripto', price: await getDolarBuyPrice("cripto") },
         ];
         setDolarTypes(types);
-        setSelectedDolar(types[0]);
+        // Actualizar el selectedDolar con el precio real
+        setSelectedDolar(prev => prev ? types.find(t => t.id === prev.id) || types[0] : types[0]);
       } catch (error) {
         console.error('Error loading dolar types:', error);
       }
     };
 
-    if (isOpen && dolarTypes.length === 0) {
+    if (isOpen) {
       loadDolarTypes();
     }
-  }, [isOpen, dolarTypes.length]);
+  }, [isOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -104,7 +114,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
               }`}
               disabled={!selectedDolar}
             >
-              <span className="font-bold text-[#1a3a52]">{selectedDolar?.name || 'Cargando...'}</span>
+              <span className="font-bold text-[#1a3a52]">{selectedDolar?.name || 'Dólar Blue'}</span>
               <ChevronDown size={18} className={`text-[#1a3a52] transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
@@ -150,6 +160,12 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
                   placeholder="0"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      e.currentTarget.blur();
+                    }
+                  }}
                   className="bg-transparent text-2xl font-bold text-[#1a3a52] focus:outline-none w-full placeholder:text-slate-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
@@ -187,7 +203,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
           </div>
 
           <div className="flex items-center justify-center px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
-            <span className="text-sm font-black text-[#1a3a52]">1 USD = ${selectedDolar?.price || '---'}</span>
+            <span className="text-sm font-black text-[#1a3a52]">1 USD = ${selectedDolar?.price}</span>
           </div>
 
         </div>

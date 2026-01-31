@@ -151,6 +151,7 @@ export function DolarCard({
                             transition-all duration-700 ease-in-out hover:scale-110
                             border-2 border-white cursor-pointer
                             ${isOpen ? 'rotate-180' : ''}`}
+                aria-label={isOpen ? "Cerrar información" : "Ver más información"}
             >
                 {isOpen ? <X size={20} /> : <Info size={20} />}
             </button>

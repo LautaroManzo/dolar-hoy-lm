@@ -80,7 +80,7 @@ export default async function Page() {
   return (
     <main className="max-w-7xl mx-auto px-4 py-12">
 
-      <section className="flex justify-center w-full">
+      <section className="flex justify-center w-full" aria-label="Cotizaciones principales del dólar">
         <Cards data={dataForCards} />
       </section>
 
