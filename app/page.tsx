@@ -3,7 +3,7 @@ import { Cards } from "./components/dolar/cards";
 import { Metadata } from "next";
 import { getFechaHoyFormateada } from "./utils/site";
 
-export const revalidate = 900; 
+export const revalidate = 300; 
 
 export async function generateMetadata(): Promise<Metadata> {
   const fechaHoy = getFechaHoyFormateada();

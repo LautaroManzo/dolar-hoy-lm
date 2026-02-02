@@ -32,7 +32,7 @@ const HISTORICAL = "https://api.argentinadatos.com/v1/cotizaciones/dolares";
 
 const getSign = (n: number) => (n > 0 ? "up" : n < 0 ? "down" : "neutral");
 
-async function fetchJson<T>(url: string, revalidateTime: number = 900): Promise<T> {
+async function fetchJson<T>(url: string, revalidateTime: number = 300): Promise<T> {
   const res = await fetch(url, { next: { revalidate: revalidateTime } });
   if (!res.ok) throw new Error(`Error en fetch: ${res.status}`);
   return res.json();
@@ -40,7 +40,7 @@ async function fetchJson<T>(url: string, revalidateTime: number = 900): Promise<
 
 export async function getDolar(type: keyof typeof SOURCES): Promise<DolarResponse> {
   
-  const today: DolarData = await fetchJson(SOURCES[type], 900);
+  const today: DolarData = await fetchJson(SOURCES[type], 300);
 
   const yArgentina = getFechaArgentina();
   yArgentina.setDate(yArgentina.getDate() - 1);
@@ -48,7 +48,7 @@ export async function getDolar(type: keyof typeof SOURCES): Promise<DolarRespons
 
   let ayer: DolarData | null = null;
   try {
-    const resAyer = await fetch(yesterdayUrl, { next: { revalidate: 3600 } });
+    const resAyer = await fetch(yesterdayUrl, { next: { revalidate: 300 } });
     ayer = resAyer.ok ? await resAyer.json() : null;
   } catch (e) {
     console.warn(`No se pudo obtener precio histórico para ${type}`);

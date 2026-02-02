@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Description = () => {
+    const router = useRouter();
+
     const getFormattedTime = () => {
         const now = new Date();
         return new Intl.DateTimeFormat('es-AR', {
@@ -16,13 +19,22 @@ const Description = () => {
     const [lastUpdateMessage, setLastUpdateMessage] = useState(`Última actualización hoy a las ${getFormattedTime()} hs`);
 
     useEffect(() => {
-        const interval = setInterval(() => {
+        const refreshMs = 300000;
+
+        const doRefresh = () => {
+            router.refresh();
             const time = getFormattedTime();
             setLastUpdateMessage(`Última actualización hoy a las ${time} hs`);
-        }, 60000);
+        };
+
+        doRefresh();
+
+        const interval = setInterval(() => {
+            doRefresh();
+        }, refreshMs);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [router]);
 
     return (
         <section 
