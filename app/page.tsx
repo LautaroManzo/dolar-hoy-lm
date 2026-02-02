@@ -6,8 +6,9 @@ export const revalidate = 900;
 
 export async function generateMetadata(): Promise<Metadata> {
   const fecha = new Date();
-  const dia = fecha.getDate();
-  const mes = fecha.toLocaleString('es-AR', { month: 'long' });
+  const fechaArgentina = new Date(fecha.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
+  const dia = fechaArgentina.getDate();
+  const mes = fechaArgentina.toLocaleString('es-AR', { month: 'long', timeZone: 'America/Argentina/Buenos_Aires' });
   const fechaHoy = `${dia} de ${mes}`;
 
   try {

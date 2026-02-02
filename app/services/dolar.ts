@@ -46,8 +46,9 @@ export async function getDolar(type: keyof typeof SOURCES): Promise<DolarRespons
   const today: DolarData = await fetchJson(SOURCES[type], 900);
 
   const y = new Date();
-  y.setUTCDate(y.getUTCDate() - 1);
-  const yesterdayUrl = `${HISTORICAL}/${type}/${formatDate(y)}`;
+  const yArgentina = new Date(y.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
+  yArgentina.setUTCDate(yArgentina.getUTCDate() - 1);
+  const yesterdayUrl = `${HISTORICAL}/${type}/${formatDate(yArgentina)}`;
 
   let ayer: DolarData | null = null;
   try {

@@ -109,7 +109,7 @@ const EvolucionDolar: React.FC = () => {
         setData(procesados);
         localStorage.setItem(
           cacheKey,
-          JSON.stringify({ fechaCache: new Date().toISOString(), datos: procesados })
+          JSON.stringify({ fechaCache: new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })).toISOString(), datos: procesados })
         );
 
       } catch (err: any) {
