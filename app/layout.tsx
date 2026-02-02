@@ -9,15 +9,12 @@ import PreguntasFrecuentes from "./components/content/preguntas-frecuentes";
 
 import { InfoProvider } from "./context/InfoContext";
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { getFechaHoyFormateada } from "./utils/site";
 
 export const revalidate = 3600; 
 
 export async function generateMetadata(): Promise<Metadata> {
-  const fecha = new Date();
-  const fechaArgentina = new Date(fecha.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
-  const dia = fechaArgentina.getDate();
-  const mes = fechaArgentina.toLocaleString('es-AR', { month: 'long', timeZone: 'America/Argentina/Buenos_Aires' });
-  const fechaHoy = `${dia} de ${mes}`;
+  const fechaHoy = getFechaHoyFormateada();
 
   return {
     metadataBase: new URL('https://dolarinfohoy.com.ar'),

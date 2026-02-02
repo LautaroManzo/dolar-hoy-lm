@@ -1,8 +1,19 @@
+import { getFechaArgentina, formatDateLocal } from "../utils/site";
+
 interface DolarData {
   compra: number;
   venta: number;
   fechaActualizacion: string;
 }
+
+const SOURCES = {
+  blue: "https://dolarapi.com/v1/dolares/blue",
+  oficial: "https://dolarapi.com/v1/dolares/oficial",
+  bolsa: "https://dolarapi.com/v1/dolares/bolsa",
+  contadoconliqui: "https://dolarapi.com/v1/dolares/contadoconliqui",
+  tarjeta: "https://dolarapi.com/v1/dolares/tarjeta",
+  cripto: "https://dolarapi.com/v1/dolares/cripto",
+};
 
 interface DolarResponse {
   buy: number;
@@ -17,21 +28,7 @@ interface DolarResponse {
   fechaActualizacion: string;
 }
 
-const SOURCES = {
-  blue: "https://dolarapi.com/v1/dolares/blue",
-  oficial: "https://dolarapi.com/v1/dolares/oficial",
-  bolsa: "https://dolarapi.com/v1/dolares/bolsa",
-  contadoconliqui: "https://dolarapi.com/v1/dolares/contadoconliqui",
-  tarjeta: "https://dolarapi.com/v1/dolares/tarjeta",
-  cripto: "https://dolarapi.com/v1/dolares/cripto",
-};
-
 const HISTORICAL = "https://api.argentinadatos.com/v1/cotizaciones/dolares";
-
-const formatDate = (d: Date) =>
-  `${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, "0")}/${String(
-    d.getUTCDate()
-  ).padStart(2, "0")}`;
 
 const getSign = (n: number) => (n > 0 ? "up" : n < 0 ? "down" : "neutral");
 
@@ -45,10 +42,9 @@ export async function getDolar(type: keyof typeof SOURCES): Promise<DolarRespons
   
   const today: DolarData = await fetchJson(SOURCES[type], 900);
 
-  const y = new Date();
-  const yArgentina = new Date(y.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
-  yArgentina.setUTCDate(yArgentina.getUTCDate() - 1);
-  const yesterdayUrl = `${HISTORICAL}/${type}/${formatDate(yArgentina)}`;
+  const yArgentina = getFechaArgentina();
+  yArgentina.setDate(yArgentina.getDate() - 1);
+  const yesterdayUrl = `${HISTORICAL}/${type}/${formatDateLocal(yArgentina)}`;
 
   let ayer: DolarData | null = null;
   try {

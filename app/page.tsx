@@ -1,15 +1,12 @@
 import { getDolar } from "./services/dolar";
 import { Cards } from "./components/dolar/cards";
 import { Metadata } from "next";
+import { getFechaHoyFormateada } from "./utils/site";
 
 export const revalidate = 900; 
 
 export async function generateMetadata(): Promise<Metadata> {
-  const fecha = new Date();
-  const fechaArgentina = new Date(fecha.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
-  const dia = fechaArgentina.getDate();
-  const mes = fechaArgentina.toLocaleString('es-AR', { month: 'long', timeZone: 'America/Argentina/Buenos_Aires' });
-  const fechaHoy = `${dia} de ${mes}`;
+  const fechaHoy = getFechaHoyFormateada();
 
   try {
     const blueData = await getDolar('blue');
