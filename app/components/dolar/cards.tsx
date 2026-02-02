@@ -1,16 +1,41 @@
 "use client";
 
 import { DolarCard } from "./dolar-card";
+import ErrorBoundary from "../ui/error-boundary";
 
-export function Cards({ data }: { data: any }) {
+interface DolarData {
+  buy: number;
+  sell: number;
+  variationPercent: number;
+  variationPercentAbs: number;
+  variationSign: "up" | "down" | "neutral";
+  dailyDiff: number;
+  dailyDiffSign: "up" | "down" | "neutral";
+  spread: number;
+  spreadSign: "up" | "down" | "neutral";
+  descripcion: string;
+  extra: string;
+  horaOperacion: string;
+  title: string;
+}
+
+interface CardsProps {
+  data: Record<string, DolarData>;
+}
+
+export function Cards({ data }: CardsProps) {
 
   return (
     <div className="max-w-6xl mx-auto w-full space-y-10">
 
       <section>
         <div className="grid md:grid-cols-[6fr_4fr] gap-6">
-          <DolarCard {...data.blue} />
-          <DolarCard {...data.oficial} />
+          <ErrorBoundary>
+            <DolarCard {...data.blue} />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <DolarCard {...data.oficial} />
+          </ErrorBoundary>
         </div>
       </section>
 
@@ -23,13 +48,21 @@ export function Cards({ data }: { data: any }) {
         </h2>
 
         <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <DolarCard {...data.mep} />
-          <DolarCard {...data.ccl} />
+          <ErrorBoundary>
+            <DolarCard {...data.mep} />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <DolarCard {...data.ccl} />
+          </ErrorBoundary>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          <DolarCard {...data.tarjeta} />
-          <DolarCard {...data.cripto} />
+          <ErrorBoundary>
+            <DolarCard {...data.tarjeta} />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <DolarCard {...data.cripto} />
+          </ErrorBoundary>
         </div>
 
       </section>

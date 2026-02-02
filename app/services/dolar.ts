@@ -1,3 +1,22 @@
+interface DolarData {
+  compra: number;
+  venta: number;
+  fechaActualizacion: string;
+}
+
+interface DolarResponse {
+  buy: number;
+  sell: number;
+  variationPercent: number;
+  variationPercentAbs: number;
+  variationSign: "up" | "down" | "neutral";
+  dailyDiff: number;
+  dailyDiffSign: "up" | "down" | "neutral";
+  spread: number;
+  spreadSign: "up" | "down" | "neutral";
+  fechaActualizacion: string;
+}
+
 const SOURCES = {
   blue: "https://dolarapi.com/v1/dolares/blue",
   oficial: "https://dolarapi.com/v1/dolares/oficial",
@@ -22,37 +41,40 @@ async function fetchJson<T>(url: string, revalidateTime: number = 900): Promise<
   return res.json();
 }
 
-export async function getDolar(type: keyof typeof SOURCES) {
+export async function getDolar(type: keyof typeof SOURCES): Promise<DolarResponse> {
   
-  const today: any = await fetchJson(SOURCES[type], 900);
+  const today: DolarData = await fetchJson(SOURCES[type], 900);
 
   const y = new Date();
   y.setUTCDate(y.getUTCDate() - 1);
   const yesterdayUrl = `${HISTORICAL}/${type}/${formatDate(y)}`;
 
-  let yesterday = null;
+  let ayer: DolarData | null = null;
   try {
-    const yRes = await fetch(yesterdayUrl, { next: { revalidate: 3600 } });
-    yesterday = yRes.ok ? await yRes.json() : null;
+    const resAyer = await fetch(yesterdayUrl, { next: { revalidate: 3600 } });
+    ayer = resAyer.ok ? await resAyer.json() : null;
   } catch (e) {
     console.warn(`No se pudo obtener precio histórico para ${type}`);
   }
 
-  const buyY = yesterday?.compra ?? today.compra;
-  const sellY = yesterday?.venta ?? today.venta;
-  const sellDiff = today.venta - sellY;
-  const variationPercent = sellY === 0 ? 0 : (sellDiff / sellY) * 100;
+  const compraAyer = ayer?.compra ?? today.compra;
+  const ventaAyer = ayer?.venta ?? today.venta;
+  
+  const diferenciaVenta = today.venta - ventaAyer;
+  const variacionPorcentual = ventaAyer === 0 ? 0 : ((today.venta - ventaAyer) / ventaAyer) * 100;
   const spread = today.venta - today.compra;
+  const diferenciaCompra = today.compra - compraAyer;
+  const diferenciaDiaria = (diferenciaVenta + diferenciaCompra) / 2;
 
   return {
     buy: today.compra,
     sell: today.venta,
-    variationPercent: Number(variationPercent.toFixed(2)),
-    variationPercentAbs: Number(Math.abs(variationPercent).toFixed(2)),
-    variationSign: getSign(variationPercent),
-    dailyDiff: Number(Math.abs(sellDiff).toFixed(2)),
-    dailyDiffSign: getSign(sellDiff),
-    spread: Number(Math.abs(spread).toFixed(2)),
+    variationPercent: Number(variacionPorcentual.toFixed(2)),
+    variationPercentAbs: Number(Math.abs(variacionPorcentual).toFixed(2)),
+    variationSign: getSign(variacionPorcentual),
+    dailyDiff: Number(diferenciaDiaria.toFixed(2)),
+    dailyDiffSign: getSign(diferenciaDiaria),
+    spread: Number(spread.toFixed(2)),
     spreadSign: getSign(spread),
     fechaActualizacion: today.fechaActualizacion
   };

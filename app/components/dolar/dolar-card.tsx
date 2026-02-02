@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUp, ArrowDown, Minus, TrendingUp, TrendingDown, Info, X, Share, Copy } from "lucide-react";
+import { ArrowUp, ArrowDown, Minus, TrendingUp, TrendingDown, Info, X, Share2, Copy } from "lucide-react";
 import { useState } from "react";
 
 interface DolarCardProps {
@@ -95,7 +95,7 @@ function DolarCardActions({
         aria-label="Compartir cotización"
         title="Compartir cotización"
       >
-        <Share size={16} />
+        <Share2 size={16} className="mx-auto" />
       </button>
 
       <button
@@ -127,7 +127,7 @@ export function DolarCard({
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    const copyText = `${title} - Compra: $${buy.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} | Venta: $${sell.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const copyText = `${title}\n• Compra: $${buy.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n• Venta: $${sell.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     
     try {
       await navigator.clipboard.writeText(copyText);
@@ -139,7 +139,7 @@ export function DolarCard({
   };
 
   const handleShare = async () => {
-    const shareText = `${title} - Compra: $${buy.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} | Venta: $${sell.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const shareText = `${title}\n• Compra: $${buy.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n• Venta: $${sell.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     
     try {
       if (navigator.share) {

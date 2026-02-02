@@ -5,6 +5,12 @@ import { useState, useRef, useEffect } from 'react';
 
 import { getDolarBuyPrice } from '../../services/getDolarBuyPrice';
 
+interface DolarType {
+  id: string;
+  name: string;
+  price: number;
+}
+
 interface CalculatorModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -12,7 +18,7 @@ interface CalculatorModalProps {
 
 export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProps) {
   const [amount, setAmount] = useState<string>("");
-  const [dolarTypes, setDolarTypes] = useState<Array<{id: string, name: string, price: number}>>([
+  const [dolarTypes, setDolarTypes] = useState<DolarType[]>([
     { id: 'blue', name: 'Dólar Blue', price: 0 },
     { id: 'oficial', name: 'Dólar Oficial', price: 0 },
     { id: 'bolsa', name: 'Dólar MEP', price: 0 },
@@ -20,7 +26,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
     { id: 'tarjeta', name: 'Dólar Tarjeta', price: 0 }, 
     { id: 'crypto', name: 'Dólar Cripto', price: 0 },
   ]);
-  const [selectedDolar, setSelectedDolar] = useState<{id: string, name: string, price: number} | null>(
+  const [selectedDolar, setSelectedDolar] = useState<DolarType | null>(
     { id: 'blue', name: 'Dólar Blue', price: 0 }
   );
   const [isInverse, setIsInverse] = useState(false);
