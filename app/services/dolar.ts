@@ -15,14 +15,19 @@ const SOURCES = {
   cripto: "https://dolarapi.com/v1/dolares/cripto",
 };
 
+interface VariationData {
+  percent: number;
+  percentAbs: number;
+  sign: "up" | "down" | "neutral";
+  dailyDiff: number;
+  dailyDiffSign: "up" | "down" | "neutral";
+}
+
 interface DolarResponse {
   buy: number;
   sell: number;
-  variationPercent: number;
-  variationPercentAbs: number;
-  variationSign: "up" | "down" | "neutral";
-  dailyDiff: number;
-  dailyDiffSign: "up" | "down" | "neutral";
+  buyVariation: VariationData;
+  sellVariation: VariationData;
   spread: number;
   spreadSign: "up" | "down" | "neutral";
   fechaActualizacion: string;
@@ -99,21 +104,36 @@ export async function getDolar(type: keyof typeof SOURCES): Promise<DolarRespons
     console.warn(`Error obteniendo datos históricos para ${type}:`, e);
   }
 
+  const compraAyer = ayer?.compra ?? today.compra;
   const ventaAyer = ayer?.venta ?? today.venta;
-  
-  // Calcular variaciones
-  const diferenciaVenta = today.venta - ventaAyer;
-  const variacionPorcentual = ventaAyer === 0 ? 0 : ((today.venta - ventaAyer) / ventaAyer) * 100;
   const spread = today.venta - today.compra;
+
+  // Helper para calcular variaciones
+  const calcVariation = (actual: number, anterior: number) => ({
+    diff: actual - anterior,
+    percent: anterior === 0 ? 0 : ((actual - anterior) / anterior) * 100
+  });
+
+  const buyVariation = calcVariation(today.compra, compraAyer);
+  const sellVariation = calcVariation(today.venta, ventaAyer);
 
   return {
     buy: today.compra,
     sell: today.venta,
-    variationPercent: Number(variacionPorcentual.toFixed(2)),
-    variationPercentAbs: Number(Math.abs(variacionPorcentual).toFixed(2)),
-    variationSign: getSign(variacionPorcentual),
-    dailyDiff: Number(diferenciaVenta.toFixed(2)),
-    dailyDiffSign: getSign(diferenciaVenta),
+    buyVariation: {
+      percent: Number(buyVariation.percent.toFixed(2)),
+      percentAbs: Number(Math.abs(buyVariation.percent).toFixed(2)),
+      sign: getSign(buyVariation.percent),
+      dailyDiff: Number(buyVariation.diff.toFixed(2)),
+      dailyDiffSign: getSign(buyVariation.diff)
+    },
+    sellVariation: {
+      percent: Number(sellVariation.percent.toFixed(2)),
+      percentAbs: Number(Math.abs(sellVariation.percent).toFixed(2)),
+      sign: getSign(sellVariation.percent),
+      dailyDiff: Number(sellVariation.diff.toFixed(2)),
+      dailyDiffSign: getSign(sellVariation.diff)
+    },
     spread: Number(spread.toFixed(2)),
     spreadSign: getSign(spread),
     fechaActualizacion: today.fechaActualizacion

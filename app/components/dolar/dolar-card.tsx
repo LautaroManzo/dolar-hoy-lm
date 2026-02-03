@@ -4,14 +4,20 @@ import { motion } from "framer-motion";
 import { ArrowUp, ArrowDown, Minus, TrendingUp, TrendingDown, Info, X, Share2, Copy } from "lucide-react";
 import { useState } from "react";
 
+interface VariationData {
+  percent: number;
+  percentAbs: number;
+  sign: "up" | "down" | "neutral";
+  dailyDiff: number;
+  dailyDiffSign: "up" | "down" | "neutral";
+}
+
 interface DolarCardProps {
   title: string;
   buy: number;
   sell: number;
-  dailyDiff: number; 
-  dailyDiffSign: "up" | "down" | "neutral"; 
-  variationPercentAbs: number;
-  variationSign: "up" | "down" | "neutral";
+  buyVariation: VariationData;
+  sellVariation: VariationData;
   spread: number; 
   spreadSign: "up" | "down" | "neutral"; 
   descripcion: string;
@@ -114,10 +120,8 @@ export function DolarCard({
   title,
   buy,
   sell,
-  dailyDiff, 
-  dailyDiffSign,
-  variationPercentAbs,
-  variationSign,
+  buyVariation,
+  sellVariation,
   descripcion,
   extra,
   horaOperacion
@@ -157,32 +161,45 @@ export function DolarCard({
     }
   };
 
-  const HeaderIcon = headerIconMap[variationSign]; 
-  const DailyDiffIcon = iconMap[dailyDiffSign]; 
+  // Variaciones para COMPRA
+  const BuyDailyDiffIcon = iconMap[buyVariation.dailyDiffSign];
+  const buyDiffColorClasses = colorMap[buyVariation.dailyDiffSign];
+  const buySignPrefix = buyVariation.dailyDiffSign === "up" ? "+" : buyVariation.dailyDiffSign === "down" ? "-" : "";
+  const buyHasDailyDifference = buyVariation.dailyDiff !== 0;
 
-  const colorClasses = colorMap[variationSign];
-  const diffColorClasses = colorMap[dailyDiffSign];
-
-  const signPrefix = dailyDiffSign === "up" ? "+" : dailyDiffSign === "down" ? "-" : "";
-  const hasDailyDifference = dailyDiff !== 0; 
-  const isNeutral = variationSign === "neutral";
-
-  const VariationContent = hasDailyDifference && (
+  const BuyVariationContent = buyHasDailyDifference && (
     <span className="flex items-center justify-center gap-1 text-xs font-semibold mt-2">
-      
-      {/* Variación en pesos */}
-      <span className={`flex items-center gap-1 px-3 py-1 rounded-full ${diffColorClasses}`}>
-        <DailyDiffIcon size={12} />
-        {signPrefix}{Math.abs(dailyDiff).toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      <span className={`flex items-center gap-1 px-3 py-1 rounded-full ${buyDiffColorClasses}`}>
+        <BuyDailyDiffIcon size={12} />
+        {buySignPrefix}{Math.abs(buyVariation.dailyDiff).toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
       </span>
-
-      {/* Variación porcentual */}
-      <span className={`text-gray-700`}>
-        ({signPrefix}{variationPercentAbs.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%)
+      <span className="text-gray-700">
+        ({buySignPrefix}{buyVariation.percentAbs.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%)
       </span>
-
     </span>
   );
+
+  // Variaciones para VENTA
+  const SellDailyDiffIcon = iconMap[sellVariation.dailyDiffSign];
+  const sellDiffColorClasses = colorMap[sellVariation.dailyDiffSign];
+  const sellSignPrefix = sellVariation.dailyDiffSign === "up" ? "+" : sellVariation.dailyDiffSign === "down" ? "-" : "";
+  const sellHasDailyDifference = sellVariation.dailyDiff !== 0;
+
+  const SellVariationContent = sellHasDailyDifference && (
+    <span className="flex items-center justify-center gap-1 text-xs font-semibold mt-2">
+      <span className={`flex items-center gap-1 px-3 py-1 rounded-full ${sellDiffColorClasses}`}>
+        <SellDailyDiffIcon size={12} />
+        {sellSignPrefix}{Math.abs(sellVariation.dailyDiff).toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </span>
+      <span className="text-gray-700">
+        ({sellSignPrefix}{sellVariation.percentAbs.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%)
+      </span>
+    </span>
+  );
+
+  // Tendencia general (basada en venta)
+  const HeaderIcon = headerIconMap[sellVariation.sign];
+  const isNeutral = sellVariation.sign === "neutral";
 
   return (
     <motion.div
@@ -202,7 +219,7 @@ export function DolarCard({
           </h3>
 
           {!isNeutral && (
-              <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${colorClasses}`}>
+              <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${colorMap[sellVariation.sign]}`}>
                 <HeaderIcon size={14} />
                 Tendencia
               </div>
@@ -219,7 +236,7 @@ export function DolarCard({
               ${buy.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
 
-            {VariationContent}
+            {BuyVariationContent}
 
           </div>
 
@@ -231,7 +248,7 @@ export function DolarCard({
               ${sell.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
 
-            {VariationContent}
+            {SellVariationContent}
 
           </div>
 
