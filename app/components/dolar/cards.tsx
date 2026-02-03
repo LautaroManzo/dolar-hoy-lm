@@ -4,19 +4,28 @@ import { DolarCard } from "./dolar-card";
 import ErrorBoundary from "../ui/error-boundary";
 
 interface DolarData {
+  title: string;
   buy: number;
   sell: number;
-  variationPercent: number;
-  variationPercentAbs: number;
-  variationSign: "up" | "down" | "neutral";
-  dailyDiff: number;
-  dailyDiffSign: "up" | "down" | "neutral";
+  buyVariation: {
+    percent: number;
+    percentAbs: number;
+    sign: "up" | "down" | "neutral";
+    dailyDiff: number;
+    dailyDiffSign: "up" | "down" | "neutral";
+  };
+  sellVariation: {
+    percent: number;
+    percentAbs: number;
+    sign: "up" | "down" | "neutral";
+    dailyDiff: number;
+    dailyDiffSign: "up" | "down" | "neutral";
+  };
   spread: number;
   spreadSign: "up" | "down" | "neutral";
   descripcion: string;
   extra: string;
   horaOperacion: string;
-  title: string;
 }
 
 interface CardsProps {
