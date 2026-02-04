@@ -23,6 +23,7 @@ interface DolarCardProps {
   descripcion: string;
   extra: string;
   horaOperacion: string;
+  fechaActualizacion: string;
 }
 
 // Iconos para la tendencia general
@@ -124,11 +125,15 @@ export function DolarCard({
   sellVariation,
   descripcion,
   extra,
-  horaOperacion
+  horaOperacion,
+  fechaActualizacion
 }: DolarCardProps) {
 
   const [isOpen, setIsOpen] = useState(false); 
   const [copied, setCopied] = useState(false);
+
+  // Calculate spread
+  const spread = sell - buy;
 
   const handleCopy = async () => {
     const copyText = `${title}\n• Compra: $${buy.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n• Venta: $${sell.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -204,13 +209,13 @@ export function DolarCard({
 
   return (
     <motion.div
-      className="relative w-full h-[220px] mb-6"
+      className="relative w-full h-[300px] mb-6"
       animate={{ rotateY: isOpen ? 180 : 0 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
       style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
     >
       <div
-        className={`absolute inset-0 rounded-2xl shadow-md bg-white p-5 flex flex-col gap-5 border-t-4 border-[#2d5a7b] justify-center ${isOpen ? "pointer-events-none" : "pointer-events-auto"}`}
+        className={`absolute inset-0 rounded-2xl shadow-md bg-white p-5 flex flex-col gap-3 border-t-4 border-[#2d5a7b] justify-center ${isOpen ? "pointer-events-none" : "pointer-events-auto"}`}
         style={{ backfaceVisibility: "hidden" }}
       >
       
@@ -227,7 +232,7 @@ export function DolarCard({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-1">
+        <div className="grid grid-cols-2 gap-3 mb-1">
 
           <div className="flex flex-col p-4 text-center bg-slate-50 border border-slate-100 rounded-xl h-[120px] justify-center">
 
@@ -236,8 +241,6 @@ export function DolarCard({
             <span className="text-2xl lg:text-4xl text-gray-700 font-bold leading-none mt-1">
               ${buy.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
-
-            {BuyVariationContent}
 
           </div>
 
@@ -249,10 +252,36 @@ export function DolarCard({
               ${sell.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
 
-            {SellVariationContent}
-
           </div>
 
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 text-center">
+          <div className="bg-gray-50 rounded-lg p-3">
+            <div className="text-[0.65rem] font-bold text-gray-700 tracking-wide uppercase">
+              Variación
+            </div>
+            <div className={`text-sm font-bold flex items-center justify-center gap-1 ${
+              buyVariation.sign === 'down' ? 'text-red-600' : 
+              buyVariation.sign === 'up' ? 'text-green-600' : 
+              'text-gray-600'
+            }`}>
+              {buyVariation.sign === 'down' ? <ArrowDown size={12} /> : 
+               buyVariation.sign === 'up' ? <ArrowUp size={12} /> : 
+               <Minus size={12} />}
+              {buyVariation.sign === 'down' ? '-' : 
+               buyVariation.sign === 'up' ? '+' : ''}{buyVariation.percentAbs.toFixed(2)}%
+            </div>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-3">
+            <div className="text-[0.65rem] font-bold text-gray-700 tracking-wide uppercase">
+              Brecha
+            </div>
+            <div className="text-sm font-bold text-gray-700">
+              $ {spread.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </div>
+          </div>
         </div>
 
         <DolarCardActions
@@ -265,7 +294,6 @@ export function DolarCard({
         />
 
       </div>
-
 
         <div
             className={`absolute inset-0 rounded-3xl shadow-2xl border-t-4 border-[#2d5a7b] bg-white flex flex-col justify-center text-center p-[20px] pb-[26px] ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
