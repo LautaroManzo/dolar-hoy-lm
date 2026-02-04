@@ -1,19 +1,12 @@
-import { getFechaArgentina, formatDateLocal } from "../utils/site";
-
 interface DolarData {
   compra: number;
   venta: number;
   fechaActualizacion: string;
+  variacion: number;
+  casa: string;
 }
 
-const SOURCES = {
-  blue: "https://dolarapi.com/v1/dolares/blue",
-  oficial: "https://dolarapi.com/v1/dolares/oficial",
-  bolsa: "https://dolarapi.com/v1/dolares/bolsa",
-  contadoconliqui: "https://dolarapi.com/v1/dolares/contadoconliqui",
-  tarjeta: "https://dolarapi.com/v1/dolares/tarjeta",
-  cripto: "https://dolarapi.com/v1/dolares/cripto",
-};
+const API_AMBITO = "https://dolarapi.com/v1/ambito/dolares";
 
 interface VariationData {
   percent: number;
@@ -33,45 +26,7 @@ interface DolarResponse {
   fechaActualizacion: string;
 }
 
-const HISTORICAL = "https://api.argentinadatos.com/v1/cotizaciones/dolares";
-
-const getSign = (n: number) => (n > 0 ? "up" : n < 0 ? "down" : "neutral");
-
-// Función para verificar si un día es hábil (no feriado y no fin de semana)
-async function esDiaHabil(fecha: Date): Promise<boolean> {
-  const diaSemana = fecha.getDay();
-  // 0 = Domingo, 6 = Sábado
-  if (diaSemana === 0 || diaSemana === 6) return false;
-  
-  try {
-    const feriados = await fetchJson<Array<{fecha: string}>>(`https://api.argentinadatos.com/v1/feriados/${fecha.getFullYear()}`, 3600);
-    
-    const fechaStr = formatDateLocal(fecha);
-    return !feriados.some(feriado => feriado.fecha === fechaStr);
-  } catch (e) {
-    console.warn('Error obteniendo feriados:', e);
-    return true;
-  }
-}
-
-// Función para obtener el último día hábil anterior
-async function obtenerUltimoDiaHabil(fecha: Date): Promise<Date> {
-  let fechaBusqueda = new Date(fecha);
-  fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
-  
-  // Buscar hasta 7 días atrás
-  for (let i = 0; i < 7; i++) {
-    if (await esDiaHabil(fechaBusqueda)) {
-      return fechaBusqueda;
-    }
-    fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
-  }
-  
-  // Fallback: devolver 1 día atrás
-  fechaBusqueda = new Date(fecha);
-  fechaBusqueda.setDate(fechaBusqueda.getDate() - 1);
-  return fechaBusqueda;
-}
+const getSign = (n: number): "up" | "down" | "neutral" => (n > 0 ? "up" : n < 0 ? "down" : "neutral");
 
 async function fetchJson<T>(url: string, revalidateTime: number = 300): Promise<T> {
   const res = await fetch(url, { next: { revalidate: revalidateTime } });
@@ -79,63 +34,56 @@ async function fetchJson<T>(url: string, revalidateTime: number = 300): Promise<
   return res.json();
 }
 
-export async function getDolar(type: keyof typeof SOURCES): Promise<DolarResponse> {
-  const today: DolarData = await fetchJson(SOURCES[type], 300);
-  const yArgentina = getFechaArgentina();
+export async function getDolar(type: string): Promise<DolarResponse> {
+  // Obtener todos los datos de la API de Ámbito
+  const allDolars: DolarData[] = await fetchJson(API_AMBITO, 300);
   
-  // Determinar fecha de búsqueda según el tipo
-  const esCripto = type === 'cripto';
-  const fechaBusqueda = esCripto 
-    ? (() => { const d = new Date(yArgentina); d.setDate(d.getDate() - 1); return d; })()
-    : await obtenerUltimoDiaHabil(yArgentina);
+  // Buscar el dólar específico
+  const dolarData = allDolars.find(d => d.casa === type);
   
-  // Obtener datos históricos
-  const yesterdayUrl = `${HISTORICAL}/${type}/${formatDateLocal(fechaBusqueda)}`;
-  let ayer: DolarData | null = null;
-  
-  try {
-    const resAyer = await fetch(yesterdayUrl, { next: { revalidate: 300 } });
-    if (resAyer.ok) {
-      ayer = await resAyer.json();
-      const tipoBusqueda = esCripto ? 'día anterior' : 'último día hábil';
-      console.log(`Datos históricos para ${type} (${tipoBusqueda}): ${formatDateLocal(fechaBusqueda)}`);
-    }
-  } catch (e) {
-    console.warn(`Error obteniendo datos históricos para ${type}:`, e);
+  if (!dolarData) {
+    throw new Error(`No se encontró el tipo de dólar: ${type}`);
   }
 
-  const compraAyer = ayer?.compra ?? today.compra;
-  const ventaAyer = ayer?.venta ?? today.venta;
-  const spread = today.venta - today.compra;
+  const spread = dolarData.venta - dolarData.compra;
+  const variacionPercent = dolarData.variacion || 0;
 
-  // Helper para calcular variaciones
-  const calcVariation = (actual: number, anterior: number) => ({
-    diff: actual - anterior,
-    percent: anterior === 0 ? 0 : ((actual - anterior) / anterior) * 100
-  });
+  // Crear variaciones basadas en la variación general de la API
+  const buyVariation = {
+    percent: variacionPercent,
+    percentAbs: Math.abs(variacionPercent),
+    sign: getSign(variacionPercent),
+    dailyDiff: Number((dolarData.compra * variacionPercent / 100).toFixed(2)),
+    dailyDiffSign: getSign(variacionPercent)
+  };
 
-  const buyVariation = calcVariation(today.compra, compraAyer);
-  const sellVariation = calcVariation(today.venta, ventaAyer);
+  const sellVariation = {
+    percent: variacionPercent,
+    percentAbs: Math.abs(variacionPercent),
+    sign: getSign(variacionPercent),
+    dailyDiff: Number((dolarData.venta * variacionPercent / 100).toFixed(2)),
+    dailyDiffSign: getSign(variacionPercent)
+  };
 
   return {
-    buy: today.compra,
-    sell: today.venta,
+    buy: dolarData.compra,
+    sell: dolarData.venta,
     buyVariation: {
       percent: Number(buyVariation.percent.toFixed(2)),
-      percentAbs: Number(Math.abs(buyVariation.percent).toFixed(2)),
-      sign: getSign(buyVariation.percent),
-      dailyDiff: Number(buyVariation.diff.toFixed(2)),
-      dailyDiffSign: getSign(buyVariation.diff)
+      percentAbs: Number(buyVariation.percentAbs.toFixed(2)),
+      sign: buyVariation.sign,
+      dailyDiff: buyVariation.dailyDiff,
+      dailyDiffSign: buyVariation.dailyDiffSign
     },
     sellVariation: {
       percent: Number(sellVariation.percent.toFixed(2)),
-      percentAbs: Number(Math.abs(sellVariation.percent).toFixed(2)),
-      sign: getSign(sellVariation.percent),
-      dailyDiff: Number(sellVariation.diff.toFixed(2)),
-      dailyDiffSign: getSign(sellVariation.diff)
+      percentAbs: Number(sellVariation.percentAbs.toFixed(2)),
+      sign: sellVariation.sign,
+      dailyDiff: sellVariation.dailyDiff,
+      dailyDiffSign: sellVariation.dailyDiffSign
     },
     spread: Number(spread.toFixed(2)),
     spreadSign: getSign(spread),
-    fechaActualizacion: today.fechaActualizacion
+    fechaActualizacion: dolarData.fechaActualizacion
   };
 }

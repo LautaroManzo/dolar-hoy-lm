@@ -58,12 +58,12 @@ export default async function Page() {
     ccl: ["contadoconliqui", "Dólar CCL", "Cambio de pesos por dólares en el exterior.", "Utilizado por empresas.", "De 11:30hs a 18:00hs."],
     tarjeta: ["tarjeta", "Dólar Tarjeta", "Es el tipo de cambio que se aplica a los consumos realizados en moneda extranjera. Se calcula sumando al Dólar Oficial los impuestos correspondientes por gastos en el exterior.", "Aplica tanto para servicios digitales como para gastos de viajes y compras fuera del país."],
     cripto: ["cripto", "Dólar Cripto", "Es la cotización de las monedas digitales vinculadas al dólar (como el USDT).", "Opera las 24 horas, los 7 días de la semana."],
-  } as const;
+  };
 
   const resultsArray = await Promise.all(
     Object.entries(entries).map(async ([key, [api, title, desc, extra, hora]]) => {
       try {
-        const stats = await getDolar(api as any);
+        const stats = await getDolar(api);
         return { key, data: { ...stats, title, descripcion: desc, extra, horaOperacion: hora } };
       } catch (error) {
         console.error(`Error cargando ${key}:`, error);

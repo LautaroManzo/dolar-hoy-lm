@@ -197,9 +197,10 @@ export function DolarCard({
     </span>
   );
 
-  // Tendencia general (basada en venta)
-  const HeaderIcon = headerIconMap[sellVariation.sign];
-  const isNeutral = sellVariation.sign === "neutral";
+  // Tendencia general
+  const generalTrendSign = buyVariation.sign;
+  const HeaderIcon = headerIconMap[generalTrendSign];
+  const isNeutral = generalTrendSign === "neutral";
 
   return (
     <motion.div
@@ -219,7 +220,7 @@ export function DolarCard({
           </h3>
 
           {!isNeutral && (
-              <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${colorMap[sellVariation.sign]}`}>
+              <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${colorMap[generalTrendSign]}`}>
                 <HeaderIcon size={14} />
                 Tendencia
               </div>
