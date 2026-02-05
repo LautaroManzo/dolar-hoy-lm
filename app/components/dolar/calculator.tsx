@@ -1,9 +1,10 @@
 "use client";
 
-import { X, ArrowRightLeft, ChevronDown } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
-
+import { X, ArrowRightLeft } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { getDolarBuyPrice } from '../../services/getDolarBuyPrice';
+import { Dropdown } from '../ui/Dropdown';
+import { formatPrice } from '../../utils/format';
 
 interface DolarType {
   id: string;
@@ -30,8 +31,6 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
     { id: 'blue', name: 'Dólar Blue', price: 0 }
   );
   const [isInverse, setIsInverse] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadDolarTypes = async () => {
@@ -45,7 +44,6 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
           { id: 'crypto', name: 'Dólar Cripto', price: await getDolarBuyPrice("cripto") },
         ];
         setDolarTypes(types);
-        // Actualizar el selectedDolar con el precio real
         setSelectedDolar(prev => prev ? types.find(t => t.id === prev.id) || types[0] : types[0]);
       } catch (error) {
         console.error('Error loading dolar types:', error);
@@ -56,16 +54,6 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
       loadDolarTypes();
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   useEffect(() => {
     if (isOpen)
@@ -105,50 +93,19 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
         </div>
 
         <div className="p-6 space-y-5">
-          
-          <div className="relative" ref={dropdownRef}>
+          <div>
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] ml-1 mb-1.5 block">
               Tipo de dólar
             </label>
-
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all cursor-pointer ${
-                isDropdownOpen 
-                  ? 'border-[#1a3a52] bg-[#f8fafc]'
-                  : 'border-slate-100 bg-slate-50 hover:bg-slate-100'
-              }`}
-              disabled={!selectedDolar}
-            >
-              <span className="font-bold text-[#1a3a52]">{selectedDolar?.name || 'Dólar Blue'}</span>
-              <ChevronDown size={18} className={`text-[#1a3a52] transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {isDropdownOpen && (
-              <div className="absolute top-[calc(100%+5px)] left-0 right-0 z-50 bg-[#2d5a7b] border border-[#2d5a7b] rounded-xl overflow-hidden shadow-2xl animate-in fade-in slide-in-from-top-2">
-                {dolarTypes.map((dolar) => (
-                  <button
-                    key={dolar.id}
-                    onClick={() => {
-                      setSelectedDolar(dolar);
-                      setIsDropdownOpen(false);
-                    }}
-                    className={`w-full px-4 py-3 flex items-center justify-between transition-colors border-b border-white/5 last:border-none cursor-pointer ${
-                      selectedDolar?.id === dolar.id 
-                        ? 'bg-white/10' 
-                        : 'hover:bg-white/5'
-                    }`}
-                  >
-                    <span className={`font-semibold ${
-                      selectedDolar?.id === dolar.id ? 'text-white' : 'text-slate-300'
-                    }`}>
-                      {dolar.name}
-                    </span>
-                    {selectedDolar?.id === dolar.id}
-                  </button>
-                ))}
-              </div>
-            )}
+            <Dropdown
+              options={dolarTypes}
+              selectedId={selectedDolar?.id || 'blue'}
+              onSelect={(id) => {
+                const selected = dolarTypes.find(t => t.id === id);
+                if (selected) setSelectedDolar(selected);
+              }}
+              className="w-full"
+            />
           </div>
 
           <div className="flex flex-col relative">
@@ -209,7 +166,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
           </div>
 
           <div className="flex items-center justify-center px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
-            <span className="text-sm font-black text-[#1a3a52]">1 USD = ${selectedDolar?.price}</span>
+            <span className="text-sm font-black text-[#1a3a52]">1 USD = ${formatPrice(selectedDolar?.price || 0)}</span>
           </div>
 
         </div>
