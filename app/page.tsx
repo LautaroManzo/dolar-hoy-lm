@@ -85,15 +85,14 @@ export default async function Page() {
       "tarjeta", 
       "Dólar Tarjeta", 
       "Precio para consumos y servicios en moneda extranjera.", 
-      "Incluye el valor oficial más impuestos y percepciones.", 
-      "Aplica para servicios digitales y gastos en el exterior."
+      "Incluye el valor oficial más impuestos y percepciones. Aplica para servicios digitales y gastos en el exterior."
     ],
     cripto: [
       "cripto", 
       "Dólar Cripto", 
       "Cotización de monedas digitales como el USDT o USDC.", 
       "Permite operar libremente sin restricciones ni cepos.", 
-      "Opera las 24 horas, los 7 días de la semana."
+      "24 horas, los 7 días de la semana."
     ],
   };
 

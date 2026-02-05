@@ -256,12 +256,12 @@ export function DolarCard({
 
         </div>
 
-        <div className="flex items-center justify-evenly bg-slate-50 rounded-lg p-3 gap-4">
+        <div className="flex items-center justify-evenly bg-slate-50 rounded-lg p-2 gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-[0.65rem] font-bold text-gray-700 tracking-wide uppercase">
+            <span className="text-[0.5rem] font-bold text-gray-700 tracking-wide uppercase sm:text-[0.65rem]">
               Variación:
             </span>
-            <div className={`text-sm font-semibold flex items-center gap-1 ${buyVariation.sign === 'down' ? 'text-red-700' : buyVariation.sign === 'up' ? 'text-green-700' : 
+            <div className={`text-xs font-semibold flex items-center gap-1 sm:text-sm ${buyVariation.sign === 'down' ? 'text-red-700' : buyVariation.sign === 'up' ? 'text-green-700' : 
               'text-gray-600'
             }`}>
               {buyVariation.sign === 'down' ? <ArrowDown size={12} /> : buyVariation.sign === 'up' ? <ArrowUp size={12} /> : 
@@ -271,10 +271,10 @@ export function DolarCard({
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-[0.65rem] font-bold text-gray-700 tracking-wide uppercase">
+            <span className="text-[0.45rem] font-bold text-gray-700 tracking-wide uppercase sm:text-[0.55rem]">
               Brecha:
             </span>
-            <div className="text-sm font-semibold text-gray-700">
+            <div className="text-xs font-semibold text-gray-700 sm:text-sm">
               $ {spread.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
           </div>
@@ -292,26 +292,26 @@ export function DolarCard({
       </div>
 
       <div
-        className={`absolute inset-0 rounded-3xl shadow-2xl border-t-4 border-[#2d5a7b] bg-white flex flex-col p-[24px] ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        className={`absolute inset-0 rounded-3xl shadow-2xl border-t-4 border-[#2d5a7b] bg-white flex flex-col p-[20px] ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
         style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
       >
-        <div className="flex-1 flex flex-col justify-center space-y-6">
+        <div className="flex-1 flex flex-col justify-center space-y-4">
           <div className="text-center">
-            <h3 className="text-xl font-semibold text-gray-900 tracking-wide mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 tracking-wide mb-3">
               {title}
             </h3>
-            <p className="text-[16px] text-gray-700 font-semibold leading-relaxed">
+            <p className="text-[14px] sm:text-[16px] text-gray-700 font-semibold leading-relaxed">
               {descripcion}
             </p>
           </div>
 
-          <div className="flex flex-col gap-6 text-sm">
+          <div className="flex flex-col gap-2 text-sm">
             <div className="flex items-center justify-center gap-2 text-gray-600">
-              <p className="text-[15px] font-medium text-center">{extra}</p>
+              <p className="text-[13px] sm:text-[15px] font-medium text-center">{extra}</p>
             </div>
             
             <div className="flex items-center justify-center gap-2 text-gray-600">
-              <p className="text-[14px] font-medium text-center">{horaOperacion}</p>
+              <p className="text-[12px] sm:text-[14px] font-medium text-center">{horaOperacion}</p>
             </div>
           </div>
         </div>
