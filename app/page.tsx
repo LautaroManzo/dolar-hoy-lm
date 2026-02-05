@@ -51,13 +51,50 @@ export async function generateMetadata(): Promise<Metadata> {
 } 
 
 export default async function Page() {
+
   const entries = {
-    blue: ["blue", "Dólar Blue", "Cotización de compra y venta en el mercado paralelo.", "Se opera en efectivo, sin límites de compra.", "De 11:00hs a 16:00hs."],
-    oficial: ["oficial", "Dólar Oficial", "Valor de referencia del Banco Central.", "Base para el cálculo de impuestos.", "De 10:00hs a 15:00hs."],
-    mep: ["bolsa", "Dólar MEP", "Forma legal de comprar dólares vía bonos.", "Se deposita en tu cuenta bancaria.", "De 11:30hs a 18:00hs."],
-    ccl: ["contadoconliqui", "Dólar CCL", "Cambio de pesos por dólares en el exterior.", "Utilizado por empresas.", "De 11:30hs a 18:00hs."],
-    tarjeta: ["tarjeta", "Dólar Tarjeta", "Es el tipo de cambio que se aplica a los consumos realizados en moneda extranjera. Se calcula sumando al Dólar Oficial los impuestos correspondientes por gastos en el exterior.", "Aplica tanto para servicios digitales como para gastos de viajes y compras fuera del país."],
-    cripto: ["cripto", "Dólar Cripto", "Es la cotización de las monedas digitales vinculadas al dólar (como el USDT).", "Opera las 24 horas, los 7 días de la semana."],
+    blue: [
+      "blue", 
+      "Dólar Blue", 
+      "Cotización del mercado paralelo e informal.", 
+      "Se opera habitualmente en efectivo y sin límites.", 
+      "De 11:00hs a 16:00hs."
+    ],
+    oficial: [
+      "oficial", 
+      "Dólar Oficial", 
+      "Valor de referencia determinado por el Banco Central.", 
+      "Base para el cálculo de impuestos y contratos legales.", 
+      "De 10:00hs a 15:00hs."
+    ],
+    mep: [
+      "bolsa", 
+      "Dólar MEP", 
+      "Compra legal de dólares mediante bonos nacionales.", 
+      "Se acredita de forma segura en tu cuenta bancaria.", 
+      "De 11:30hs a 18:00hs."
+    ],
+    ccl: [
+      "contadoconliqui", 
+      "Dólar CCL", 
+      "Cambio de pesos por dólares en el exterior vía bonos.", 
+      "Utilizado mayormente por empresas para girar fondos.", 
+      "De 11:30hs a 18:00hs."
+    ],
+    tarjeta: [
+      "tarjeta", 
+      "Dólar Tarjeta", 
+      "Precio para consumos y servicios en moneda extranjera.", 
+      "Incluye el valor oficial más impuestos y percepciones.", 
+      "Aplica para servicios digitales y gastos en el exterior."
+    ],
+    cripto: [
+      "cripto", 
+      "Dólar Cripto", 
+      "Cotización de monedas digitales como el USDT o USDC.", 
+      "Permite operar libremente sin restricciones ni cepos.", 
+      "Opera las 24 horas, los 7 días de la semana."
+    ],
   };
 
   const resultsArray = await Promise.all(

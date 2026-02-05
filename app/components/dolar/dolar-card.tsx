@@ -209,7 +209,7 @@ export function DolarCard({
 
   return (
     <motion.div
-      className="relative w-full h-[300px] mb-6"
+      className="relative w-full h-[270px] mb-6"
       animate={{ rotateY: isOpen ? 180 : 0 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
       style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
@@ -256,29 +256,25 @@ export function DolarCard({
 
         </div>
 
-        <div className="grid grid-cols-2 gap-3 text-center">
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-[0.65rem] font-bold text-gray-700 tracking-wide uppercase">
-              Variación
-            </div>
-            <div className={`text-sm font-bold flex items-center justify-center gap-1 ${
-              buyVariation.sign === 'down' ? 'text-red-600' : 
-              buyVariation.sign === 'up' ? 'text-green-600' : 
+        <div className="flex items-center justify-evenly bg-slate-50 rounded-lg p-3 gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-[0.65rem] font-bold text-gray-700 tracking-wide uppercase">
+              Variación:
+            </span>
+            <div className={`text-sm font-semibold flex items-center gap-1 ${buyVariation.sign === 'down' ? 'text-red-700' : buyVariation.sign === 'up' ? 'text-green-700' : 
               'text-gray-600'
             }`}>
-              {buyVariation.sign === 'down' ? <ArrowDown size={12} /> : 
-               buyVariation.sign === 'up' ? <ArrowUp size={12} /> : 
-               <Minus size={12} />}
-              {buyVariation.sign === 'down' ? '-' : 
-               buyVariation.sign === 'up' ? '+' : ''}{buyVariation.percentAbs.toFixed(2)}%
+              {buyVariation.sign === 'down' ? <ArrowDown size={12} /> : buyVariation.sign === 'up' ? <ArrowUp size={12} /> : 
+              <Minus size={12} />}
+              {buyVariation.sign === 'down' ? '-' : buyVariation.sign === 'up' ? '+' : ''}{buyVariation.percentAbs.toFixed(2)}%
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-[0.65rem] font-bold text-gray-700 tracking-wide uppercase">
-              Brecha
-            </div>
-            <div className="text-sm font-bold text-gray-700">
+          <div className="flex items-center gap-2">
+            <span className="text-[0.65rem] font-bold text-gray-700 tracking-wide uppercase">
+              Brecha:
+            </span>
+            <div className="text-sm font-semibold text-gray-700">
               $ {spread.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
           </div>
@@ -295,40 +291,41 @@ export function DolarCard({
 
       </div>
 
-        <div
-            className={`absolute inset-0 rounded-3xl shadow-2xl border-t-4 border-[#2d5a7b] bg-white flex flex-col justify-center text-center p-[20px] pb-[26px] ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
-            style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
-        >
-          <div className="space-y-2 mb-2">
-              <h3 className="text-[#2d5a7b] font-bold text-[16px] tracking-wider">
-                  {title}
-              </h3>
-              <p className="text-[14px] text-gray-700 font-semibold leading-snug">
-                  {descripcion}
-              </p>
+      <div
+        className={`absolute inset-0 rounded-3xl shadow-2xl border-t-4 border-[#2d5a7b] bg-white flex flex-col p-[24px] ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
+      >
+        <div className="flex-1 flex flex-col justify-center space-y-6">
+          <div className="text-center">
+            <h3 className="text-xl font-semibold text-gray-900 tracking-wide mb-4">
+              {title}
+            </h3>
+            <p className="text-[16px] text-gray-700 font-semibold leading-relaxed">
+              {descripcion}
+            </p>
           </div>
 
-          <div className="flex flex-col gap-4 text-sm">
-              <div className="flex items-center justify-center gap-2 text-gray-600">
-                  <p className="text-[13px] font-medium">{extra}</p>
-              </div>
-              
-              <div className="flex items-center justify-center gap-2 text-gray-600">
-                  <p className="text-[12px] font-medium">{horaOperacion}</p>
-              </div>
+          <div className="flex flex-col gap-6 text-sm">
+            <div className="flex items-center justify-center gap-2 text-gray-600">
+              <p className="text-[15px] font-medium text-center">{extra}</p>
+            </div>
+            
+            <div className="flex items-center justify-center gap-2 text-gray-600">
+              <p className="text-[14px] font-medium text-center">{horaOperacion}</p>
+            </div>
           </div>
-
-          <DolarCardActions
-            copied={copied}
-            isOpen={isOpen}
-            onCopy={handleCopy}
-            onShare={handleShare}
-            setIsOpen={setIsOpen}
-            variant="back"
-          />
-
         </div>
 
+        <DolarCardActions
+          copied={copied}
+          isOpen={isOpen}
+          onCopy={handleCopy}
+          onShare={handleShare}
+          setIsOpen={setIsOpen}
+          variant="back"
+        />
+
+      </div>
 
     </motion.div>
   );
