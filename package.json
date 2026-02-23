@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/third-parties": "^16.1.1",
+    "@supabase/supabase-js": "^2.95.3",
     "@vercel/analytics": "^1.6.1",
     "embla-carousel-auto-scroll": "^8.6.0",
     "embla-carousel-react": "^8.6.0",

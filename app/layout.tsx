@@ -6,6 +6,7 @@ import { Footer } from "./components/layout/footer";
 import EvolucionDolar from "./components/content/evolucion-dolar";
 import Description from "./components/content/description";
 import PreguntasFrecuentes from "./components/content/preguntas-frecuentes";
+import Noticias from './components/content/Noticias';
 
 import { InfoProvider } from "./context/InfoContext";
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -163,6 +164,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Description/>
           <main className="flex-1">{children}</main>
           <EvolucionDolar/>
+          <Noticias/>
           <PreguntasFrecuentes/>
           <Footer />
         </InfoProvider>
