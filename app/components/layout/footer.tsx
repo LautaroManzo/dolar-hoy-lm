@@ -30,6 +30,15 @@ export function Footer() {
               >
                 ArgentinaDatos API
               </a>
+              <span>&</span>
+              <a 
+                href="https://newsapi.org/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="underline hover:text-white transition-colors"
+              >
+                News API
+              </a>
             </div>
           </div>
         </div>
