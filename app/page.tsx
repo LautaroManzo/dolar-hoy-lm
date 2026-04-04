@@ -2,6 +2,10 @@ import { getAllDolarData } from "./services/getAllDolarData";
 import { Cards } from "./components/dolar/cards";
 import { Metadata } from "next";
 import { getFechaHoyFormateada } from "./utils/site";
+import Description from "./components/content/description";
+import EvolucionDolar from "./components/content/evolucion-dolar";
+import Noticias from "./noticias/components/Noticias";
+import PreguntasFrecuentes from "./components/content/preguntas-frecuentes";
 
 export const revalidate = 300; 
 
@@ -51,12 +55,18 @@ export default async function Page() {
   const dataForCards = await getAllDolarData();
 
   return (
-    <main className="max-w-7xl mx-auto px-4 py-12">
+    <>
+      <Description />
+      
+      <main className="max-w-7xl mx-auto px-4 py-12">
+        <section className="flex justify-center w-full" aria-label="Cotizaciones principales del dólar">
+          <Cards data={dataForCards} />
+        </section>
+      </main>
 
-      <section className="flex justify-center w-full" aria-label="Cotizaciones principales del dólar">
-        <Cards data={dataForCards} />
-      </section>
-
-    </main>
+      <EvolucionDolar />
+      <Noticias />
+      <PreguntasFrecuentes />
+    </>
   );
 }

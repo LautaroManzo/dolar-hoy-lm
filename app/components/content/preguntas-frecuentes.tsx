@@ -32,7 +32,7 @@ const PreguntasFrecuentes = () => {
   `;
 
   return (
-    <div className="w-full bg-gray-100 font-sans py-12 px-4 [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%)]">
+    <div className="w-full font-sans py-12 px-4 [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%)]">
       <div className="max-w-6xl mx-auto space-y-6">
         
         <div className={sectionClasses('faq')}>

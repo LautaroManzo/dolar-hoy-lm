@@ -3,3 +3,26 @@
 svg, path, g {
     outline: none;
 }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos mejorados para el contenido de noticias */
+.prose p {
+    margin-bottom: 1.5rem !important;
+    line-height: 1.8 !important;
+    text-align: justify;
+}
+
+.prose p:first-child {
+    font-size: 1.125rem;
+    font-weight: 500;
+}

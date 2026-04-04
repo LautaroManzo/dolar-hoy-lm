@@ -34,7 +34,8 @@ const EvolucionDolar: React.FC = () => {
 
   return (
     <section className="w-full font-sans mx-auto px-4 py-8">
-      <div className="max-w-6xl mx-auto w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+      <div className="max-w-6xl mx-auto w-full rounded-2xl border-t-4 border-[#2d5a7b]">
+        <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
 
         {/* TITULO Y SELECTOR */}
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 gap-6">
@@ -163,6 +164,7 @@ const EvolucionDolar: React.FC = () => {
             )}
           </div>
         </ErrorBoundary>
+        </div>
       </div>
     </section>
   );
