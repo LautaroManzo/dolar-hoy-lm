@@ -4,6 +4,7 @@ import { Carousel } from "../ui/carousel";
 import { Calculator } from "lucide-react";
 import { useState } from 'react';
 import CalculatorModal from '../dolar/calculator';
+import Link from 'next/link';
 
 export function Header() {
 
@@ -14,7 +15,7 @@ export function Header() {
       <header className="sticky top-0 z-50 bg-gradient-to-r from-[#1a3a52] to-[#2d5a7b] text-white">
         <div className="max-w-6xl mx-auto px-4 py-4 sm:py-3 flex items-center justify-between">
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3">
             <img
               src="/icons/money.svg"
               alt="Icono de dólar - DolarInfoHoy"
@@ -25,7 +26,7 @@ export function Header() {
               <h1 className="text-lg sm:text-xl font-semibold">DolarInfoHoy</h1>
               <p className="text-[10px] sm:text-xs font-semibold hidden sm:block">Cotización en tiempo real</p>
             </div>
-          </div>
+          </Link>
 
           <div className="flex items-center gap-6">
 
