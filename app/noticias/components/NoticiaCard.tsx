@@ -4,7 +4,7 @@ import { Calendar, TrendingUp, ArrowUpRight } from 'lucide-react';
 
 interface NoticiaCardProps {
   post: {
-    id: string;
+    id: number;
     title: string;
     resumen_noticia: string;
     content: string;
