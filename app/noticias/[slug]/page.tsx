@@ -78,11 +78,11 @@ export default async function NoticiaPage({ params }: PageProps) {
             />
           </div>
 
-          <div className="p-8">
+          <div className="p-6 sm:p-8">
 
             <div className="flex items-center gap-2 text-slate-500 mb-4">
               <Calendar size={16} />
-              <span className="text-sm font-medium">
+              <span className="text-[12px] sm:text-sm font-medium">
                 {new Date(post.created_at).toLocaleDateString('es-AR', {
                   day: 'numeric',
                   month: 'long',
@@ -91,25 +91,25 @@ export default async function NoticiaPage({ params }: PageProps) {
               </span>
             </div>
 
-            <h1 className="text-4xl font-bold text-slate-900 mb-6 leading-tight">
+            <h1 className="mb-4 text-xl sm:text-3xl font-bold text-slate-900 leading-tight">
               {post.title}
             </h1>
 
-            <div className="prose prose-lg prose-slate max-w-none">
+            <div className="max-w-none">
               {post.content ? (
                 <div
-                  className="text-slate-700 leading-relaxed space-y-6"
+                  className="text-slate-700 leading-relaxed space-y-2 text-sm sm:text-base"
                   dangerouslySetInnerHTML={{ 
                     __html: post.content
-                      .replace(/\n\n/g, '</p><p class="mb-4">')
+                      .replace(/\n\n/g, '</p><p class="mb-3">')
                       .replace(/\n/g, '<br />')
-                      .replace(/^/, '<p class="mb-4">')
+                      .replace(/^/, '<p class="mb-3">')
                       .replace(/$/, '</p>')
                   }}
                 />
               ) : (
-                <div className="text-slate-700 leading-relaxed space-y-4">
-                  <p className="text-lg italic text-slate-500">
+                <div className="text-slate-700 leading-relaxed space-y-3 text-sm sm:text-base">
+                  <p className="text-sm italic text-slate-500">
                     El contenido completo de esta noticia no está disponible en este momento.
                   </p>
                   <p>

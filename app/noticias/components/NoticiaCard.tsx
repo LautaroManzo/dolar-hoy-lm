@@ -33,11 +33,11 @@ export default function NoticiaCard({ post }: NoticiaCardProps) {
 
       <div className="flex flex-1 flex-col p-7">
         
-        <h2 className="mb-4 text-2xl font-semibold text-gray-900 tracking-wide leading-tight">
+        <h2 className="mb-3 text-lg sm:text-xl font-semibold text-gray-900 tracking-wide leading-tight">
           {post.title}
         </h2>
         
-        <p className="line-clamp-3 text-base leading-relaxed text-slate-600">
+        <p className="text-sm sm:text-base leading-relaxed text-slate-600">
           {post.resumen_noticia}
         </p>
 
