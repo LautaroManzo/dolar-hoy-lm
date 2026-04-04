@@ -63,7 +63,7 @@ export default async function NoticiaPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#fcf7f8]">
+    <div className="bg-[#fcf7f8]">
       <div className="max-w-6xl mx-auto px-4 py-10">
 
         <article className="bg-white rounded-2xl shadow-sm overflow-hidden">
