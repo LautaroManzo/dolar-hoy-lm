@@ -11,6 +11,7 @@ interface NoticiaCardProps {
     category: string;
     image_url: string;
     created_at: string;
+    slug: string;
   };
   slug: string;
 }
