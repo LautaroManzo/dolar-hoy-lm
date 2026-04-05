@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, Minus, Info, X, Share2, Copy } from "lucide-react";
 import { useState } from "react";
-import { VariationDisplay } from "../ui/VariationDisplay";
-import { PriceDisplay } from "../ui/PriceDisplay";
+import { VariationDisplay } from "../../shared/ui/VariationDisplay";
+import { PriceDisplay } from "../../shared/ui/PriceDisplay";
 import { formatPrice } from "../../utils/format";
 import { COLORS } from "../../constants/colors";
 

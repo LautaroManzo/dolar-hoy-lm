@@ -1,11 +1,11 @@
 import { getAllDolarData } from "./services/getAllDolarData";
-import { Cards } from "./components/dolar/cards";
+import { Cards } from "./dolar/components/cards";
 import { Metadata } from "next";
 import { getFechaHoyFormateada } from "./utils/site";
-import Description from "./components/content/description";
-import EvolucionDolar from "./components/content/evolucion-dolar";
-import Noticias from "./noticias/components/Noticias";
-import PreguntasFrecuentes from "./components/content/preguntas-frecuentes";
+import Description from "./dolar/components/description";
+import EvolucionDolar from "./dolar/components/evolucion-dolar";
+import Noticias from "./noticia/components/Noticias";
+import PreguntasFrecuentes from "./dolar/components/preguntas-frecuentes";
 
 export const revalidate = 300; 
 

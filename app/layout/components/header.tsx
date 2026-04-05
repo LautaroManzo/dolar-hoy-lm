@@ -1,9 +1,9 @@
 "use client";
 
-import { Carousel } from "../ui/carousel";
+import { Carousel } from "../../shared/ui/carousel";
 import { Calculator } from "lucide-react";
 import { useState } from 'react';
-import CalculatorModal from '../dolar/calculator';
+import CalculatorModal from '../../dolar/components/calculator';
 import Link from 'next/link';
 
 export function Header() {

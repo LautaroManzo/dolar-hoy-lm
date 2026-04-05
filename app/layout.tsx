@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-import { Header } from "./components/layout/header";
-import { Footer } from "./components/layout/footer";
+import { Header } from "./layout/components/header";
+import { Footer } from "./layout/components/footer";
 
-import { InfoProvider } from "./context/InfoContext";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { getFechaHoyFormateada } from "./utils/site";
 
@@ -154,15 +153,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
 
       <body className="font-sans antialiased bg-[#fcf7f8] min-h-screen flex flex-col">
-
-        <InfoProvider>
-          <Header />
-          <main id="top" className="flex-1">{children}</main>
-          <Footer />
-        </InfoProvider>
-
+        <Header />
+        <main id="top" className="flex-1">{children}</main>
+        <Footer />
         <GoogleAnalytics gaId="G-6MP230WEJ1" />
-
       </body>
 
     </html>

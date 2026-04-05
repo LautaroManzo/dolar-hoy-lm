@@ -3,7 +3,7 @@
 import { X, ArrowRightLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getDolarBuyPrice } from '../../services/getDolarBuyPrice';
-import { Dropdown } from '../ui/Dropdown';
+import { Dropdown } from '../../shared/ui/Dropdown';
 import { formatPrice } from '../../utils/format';
 
 interface DolarType {

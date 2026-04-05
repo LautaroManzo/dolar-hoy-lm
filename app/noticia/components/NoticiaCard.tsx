@@ -12,12 +12,13 @@ interface NoticiaCardProps {
     image_url: string;
     created_at: string;
   };
+  slug: string;
 }
 
-export default function NoticiaCard({ post }: NoticiaCardProps) {
+export default function NoticiaCard({ post, slug }: NoticiaCardProps) {
   return (
     <Link
-      href={`/noticias/${post.id}`}
+      href={`/noticia/${slug}`}
       className="h-full group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-md transition-all duration-500 hover:-translate-y-3 hover:shadow-lg backdrop-blur-sm bg-gradient-to-br from-white via-white to-blue-50/30 border-b-4 border-[#2d5a7b] cursor-pointer"
     >
       <div className="relative h-72 w-full overflow-hidden">

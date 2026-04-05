@@ -1,7 +1,7 @@
 "use client";
 
 import { DolarCard } from "./dolar-card";
-import ErrorBoundary from "../ui/error-boundary";
+import ErrorBoundary from "../../shared/ui/error-boundary";
 
 interface DolarData {
   title: string;

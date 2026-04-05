@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import NoticiaCard from './NoticiaCard';
 import { Newspaper, TrendingUp, Calendar } from 'lucide-react';
+import { createSlug } from '../../utils/slug';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -52,18 +53,21 @@ export default async function Noticias() {
         <div className="relative z-10">
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 py-4 px-1">
-            {posts.map((post, index) => (
-              <div 
-                key={post.id} 
-                className="transform transition-all duration-700"
-                style={{
-                  animationDelay: `${index * 150}ms`,
-                  animation: 'fadeInUp 0.8s ease-out forwards'
-                }}
-              >
-                <NoticiaCard post={post} />
-              </div>
-            ))}
+            {posts.map((post, index) => {
+              const slug = createSlug(post.title);
+              return (
+                <div 
+                  key={post.id} 
+                  className="transform transition-all duration-700"
+                  style={{
+                    animationDelay: `${index * 150}ms`,
+                    animation: 'fadeInUp 0.8s ease-out forwards'
+                  }}
+                >
+                  <NoticiaCard post={post} slug={slug} />
+                </div>
+              );
+            })}
           </div>
         
         </div>

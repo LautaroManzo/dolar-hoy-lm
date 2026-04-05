@@ -11,8 +11,8 @@ import {
   ResponsiveContainer,
   Legend
 } from 'recharts';
-import ErrorBoundary from '../ui/error-boundary';
-import { Dropdown } from '../ui/Dropdown';
+import ErrorBoundary from '../../shared/ui/error-boundary';
+import { Dropdown } from '../../shared/ui/Dropdown';
 import { useDolarHistorico } from '../../hooks/useDolarHistorico';
 import { COLORS } from '../../constants/colors';
 
