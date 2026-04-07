@@ -1,9 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Calendar, ArrowLeft } from 'lucide-react'
-import Link from 'next/link'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -92,7 +90,7 @@ export default async function NoticiaPage({ params }: PageProps) {
       .single()
 
     if (fallbackError || !fallbackPost) {
-      notFound()
+      throw new Error('404 La noticia solicitada no está disponible o no existe en nuestro sistema.')
     }
 
     return (
