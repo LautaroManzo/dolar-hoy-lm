@@ -3,6 +3,15 @@ import Image from 'next/image'
 import { Calendar, ArrowLeft } from 'lucide-react'
 import { supabase } from '@/app/lib/supabase'
 
+export async function generateStaticParams() {
+  const { data: posts } = await supabase
+    .from('posts')
+    .select('slug')
+    .not('slug', 'is', null)
+
+  return (posts ?? []).map((post) => ({ id: post.slug }))
+}
+
 interface PageProps {
   params: Promise<{ id: string }>
 }

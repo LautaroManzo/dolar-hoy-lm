@@ -13,6 +13,11 @@ type DolarProcesado = {
   originalDate: string;
 };
 
+const LOADING_DEBOUNCE_MS = 300;
+const CACHE_TTL_DAYS = 7;
+const HISTORICAL_DAYS = 30;
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
 export function useDolarHistorico(tipoDolar: string) {
   const [data, setData] = useState<DolarProcesado[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -20,7 +25,7 @@ export function useDolarHistorico(tipoDolar: string) {
 
   useEffect(() => {
     const controller = new AbortController();
-    let loadingTimer = setTimeout(() => setLoading(true), 300);
+    let loadingTimer = setTimeout(() => setLoading(true), LOADING_DEBOUNCE_MS);
 
     const fetchHistorico = async () => {
       setError(null);
@@ -30,9 +35,9 @@ export function useDolarHistorico(tipoDolar: string) {
 
       if (cached) {
         const { fechaCache, datos } = JSON.parse(cached);
-        const diffDias = (Date.now() - new Date(fechaCache).getTime()) / (1000 * 60 * 60 * 24);
+        const diffDias = (Date.now() - new Date(fechaCache).getTime()) / MS_PER_DAY;
 
-        if (diffDias < 7) {
+        if (diffDias < CACHE_TTL_DAYS) {
           setData(datos);
         }
       }
@@ -48,7 +53,7 @@ export function useDolarHistorico(tipoDolar: string) {
         const result = (await response.json()) as DolarHistorico[];
 
         const procesados: DolarProcesado[] = result
-          .slice(-30)
+          .slice(-HISTORICAL_DAYS)
           .map((item) => {
             const dateParts = item.fecha.split('-').map(Number);
             const fechaObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);

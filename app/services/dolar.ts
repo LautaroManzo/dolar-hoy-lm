@@ -7,6 +7,7 @@ export interface DolarData {
 }
 
 const API_AMBITO = "https://dolarapi.com/v1/ambito/dolares";
+const REVALIDATE_SECONDS = 60;
 
 export interface VariationData {
   percent: number;
@@ -28,14 +29,14 @@ export interface DolarResponse {
 
 const getSign = (n: number): "up" | "down" | "neutral" => (n > 0 ? "up" : n < 0 ? "down" : "neutral");
 
-async function fetchJson<T>(url: string, revalidateTime: number = 60): Promise<T> {
+async function fetchJson<T>(url: string, revalidateTime: number = REVALIDATE_SECONDS): Promise<T> {
   const res = await fetch(url, { next: { revalidate: revalidateTime } });
   if (!res.ok) throw new Error(`Error en fetch: ${res.status}`);
   return res.json();
 }
 
 export async function fetchAllDolars(): Promise<DolarData[]> {
-  return fetchJson<DolarData[]>(API_AMBITO, 60);
+  return fetchJson<DolarData[]>(API_AMBITO, REVALIDATE_SECONDS);
 }
 
 export function processDolar(dolarData: DolarData): DolarResponse {
