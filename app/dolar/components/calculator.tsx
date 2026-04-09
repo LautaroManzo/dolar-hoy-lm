@@ -1,16 +1,9 @@
 "use client";
 
 import { X, ArrowRightLeft } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { fetchAllDolars } from '../../services/dolar';
+import { useCalculator } from '../../hooks/useCalculator';
 import { Dropdown } from '../../shared/ui/Dropdown';
 import { formatPrice } from '../../utils/format';
-
-interface DolarType {
-  id: string;
-  name: string;
-  price: number;
-}
 
 interface CalculatorModalProps {
   isOpen: boolean;
@@ -18,76 +11,34 @@ interface CalculatorModalProps {
 }
 
 export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProps) {
-  const [amount, setAmount] = useState<string>("");
-  const [dolarTypes, setDolarTypes] = useState<DolarType[]>([
-    { id: 'blue', name: 'Dólar Blue', price: 0 },
-    { id: 'oficial', name: 'Dólar Oficial', price: 0 },
-    { id: 'bolsa', name: 'Dólar MEP', price: 0 },
-    { id: 'contadoconliqui', name: 'Dólar CCL', price: 0 },
-    { id: 'tarjeta', name: 'Dólar Tarjeta', price: 0 }, 
-    { id: 'crypto', name: 'Dólar Cripto', price: 0 },
-  ]);
-  const [selectedDolar, setSelectedDolar] = useState<DolarType | null>(
-    { id: 'blue', name: 'Dólar Blue', price: 0 }
-  );
-  const [isInverse, setIsInverse] = useState(false);
-
-  useEffect(() => {
-    const loadDolarTypes = async () => {
-      try {
-        const allDolars = await fetchAllDolars();
-        const find = (casa: string) => allDolars.find(d => d.casa === casa)?.compra ?? 0;
-        const types = [
-          { id: 'blue', name: 'Dólar Blue', price: find("blue") },
-          { id: 'oficial', name: 'Dólar Oficial', price: find("oficial") },
-          { id: 'bolsa', name: 'Dólar MEP', price: find("bolsa") },
-          { id: 'contadoconliqui', name: 'Dólar CCL', price: find("contadoconliqui") },
-          { id: 'tarjeta', name: 'Dólar Tarjeta', price: find("tarjeta") },
-          { id: 'crypto', name: 'Dólar Cripto', price: find("cripto") },
-        ];
-        setDolarTypes(types);
-        setSelectedDolar(prev => prev ? types.find(t => t.id === prev.id) || types[0] : types[0]);
-      } catch (error) {
-        console.error('Error loading dolar types:', error);
-      }
-    };
-
-    if (isOpen) {
-      loadDolarTypes();
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (isOpen)
-      document.body.style.overflow = "hidden";
-    else
-      document.body.style.overflow = "";
-
-    return () => { document.body.style.overflow = ""; };
-  }, [isOpen]);
+  const {
+    amount,
+    setAmount,
+    dolarTypes,
+    selectedDolar,
+    setSelectedDolar,
+    isInverse,
+    toggleInverse,
+    result,
+    clearAmount,
+  } = useCalculator(isOpen);
 
   if (!isOpen) return null;
 
-  const result = selectedDolar && amount 
-    ? isInverse 
-      ? (Number(amount) * selectedDolar.price) 
-      : (Number(amount) / selectedDolar.price)
-    : 0;
-
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-[#0f2535]/60 backdrop-blur-lg p-4 transition-all"
-      onClick={() => { setAmount(""); onClose(); }}
+      onClick={() => { clearAmount(); onClose(); }}
     >
-      <div 
+      <div
         className="bg-white w-full max-w-sm overflow-visible rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] max-h-screen overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
 
         <div className="p-5 flex justify-between items-center bg-[#1a3a52] rounded-t-2xl text-white">
           <h2 className="text-lg font-bold tracking-tight uppercase text-sm opacity-90">Conversor de Moneda</h2>
-          <button 
-            onClick={() => { setAmount(""); onClose(); }}
+          <button
+            onClick={() => { clearAmount(); onClose(); }}
             className="p-2 hover:bg-white/10 rounded-full transition-colors text-white cursor-pointer"
           >
             <X size={20} />
@@ -111,7 +62,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
           </div>
 
           <div className="flex flex-col relative">
-            
+
             {/* Input */}
             <div className="p-4 rounded-xl border-2 border-slate-100 bg-white focus-within:border-slate-300 transition-colors">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">
@@ -119,7 +70,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
               </span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-slate-300">$</span>
-                <input 
+                <input
                   type="number"
                   min="0"
                   placeholder="0"
@@ -137,11 +88,8 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
             </div>
 
             <div className="relative h-0 flex justify-center z-10">
-              <button 
-                onClick={() => { 
-                  setIsInverse(!isInverse);
-                  setAmount("");
-                }}
+              <button
+                onClick={toggleInverse}
                 className="absolute -translate-y-1/2 bg-[#2d5a7b] text-white p-2.5 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all border-[3px] border-white cursor-pointer"
               >
                 <ArrowRightLeft size={16} />

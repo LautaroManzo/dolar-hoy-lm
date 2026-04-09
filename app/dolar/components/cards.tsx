@@ -1,5 +1,3 @@
-"use client";
-
 import { DolarCard } from "./dolar-card";
 import ErrorBoundary from "../../shared/ui/error-boundary";
 
