@@ -1,12 +1,7 @@
-import { createClient } from '@supabase/supabase-js'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { Calendar, ArrowLeft } from 'lucide-react'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import { supabase } from '@/app/lib/supabase'
 
 interface PageProps {
   params: Promise<{ id: string }>

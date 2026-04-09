@@ -1,4 +1,4 @@
-interface DolarData {
+export interface DolarData {
   compra: number;
   venta: number;
   fechaActualizacion: string;
@@ -8,7 +8,7 @@ interface DolarData {
 
 const API_AMBITO = "https://dolarapi.com/v1/ambito/dolares";
 
-interface VariationData {
+export interface VariationData {
   percent: number;
   percentAbs: number;
   sign: "up" | "down" | "neutral";
@@ -16,7 +16,7 @@ interface VariationData {
   dailyDiffSign: "up" | "down" | "neutral";
 }
 
-interface DolarResponse {
+export interface DolarResponse {
   buy: number;
   sell: number;
   buyVariation: VariationData;

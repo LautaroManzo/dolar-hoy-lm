@@ -2,7 +2,7 @@
 
 import { X, ArrowRightLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { getDolarBuyPrice } from '../../services/getDolarBuyPrice';
+import { fetchAllDolars } from '../../services/dolar';
 import { Dropdown } from '../../shared/ui/Dropdown';
 import { formatPrice } from '../../utils/format';
 
@@ -35,13 +35,15 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
   useEffect(() => {
     const loadDolarTypes = async () => {
       try {
+        const allDolars = await fetchAllDolars();
+        const find = (casa: string) => allDolars.find(d => d.casa === casa)?.compra ?? 0;
         const types = [
-          { id: 'blue', name: 'Dólar Blue', price: await getDolarBuyPrice("blue") },
-          { id: 'oficial', name: 'Dólar Oficial', price: await getDolarBuyPrice("oficial") },
-          { id: 'bolsa', name: 'Dólar MEP', price: await getDolarBuyPrice("bolsa") },
-          { id: 'contadoconliqui', name: 'Dólar CCL', price: await getDolarBuyPrice("contadoconliqui") },
-          { id: 'tarjeta', name: 'Dólar Tarjeta', price: await getDolarBuyPrice("tarjeta") }, 
-          { id: 'crypto', name: 'Dólar Cripto', price: await getDolarBuyPrice("cripto") },
+          { id: 'blue', name: 'Dólar Blue', price: find("blue") },
+          { id: 'oficial', name: 'Dólar Oficial', price: find("oficial") },
+          { id: 'bolsa', name: 'Dólar MEP', price: find("bolsa") },
+          { id: 'contadoconliqui', name: 'Dólar CCL', price: find("contadoconliqui") },
+          { id: 'tarjeta', name: 'Dólar Tarjeta', price: find("tarjeta") },
+          { id: 'crypto', name: 'Dólar Cripto', price: find("cripto") },
         ];
         setDolarTypes(types);
         setSelectedDolar(prev => prev ? types.find(t => t.id === prev.id) || types[0] : types[0]);
