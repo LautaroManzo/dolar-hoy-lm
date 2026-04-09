@@ -7,7 +7,7 @@ import EvolucionDolar from "./dolar/components/evolucion-dolar";
 import Noticias from "./noticia/components/Noticias";
 import PreguntasFrecuentes from "./dolar/components/preguntas-frecuentes";
 
-export const revalidate = 300; 
+export const revalidate = 60; 
 
 export async function generateMetadata(): Promise<Metadata> {
   const fechaHoy = getFechaHoyFormateada();

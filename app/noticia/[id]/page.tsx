@@ -128,16 +128,15 @@ export default async function NoticiaPage({ params }: PageProps) {
 
               <div className="max-w-none">
                 {fallbackPost.content ? (
-                  <div
-                    className="text-slate-700 leading-relaxed space-y-2 text-sm sm:text-base"
-                    dangerouslySetInnerHTML={{ 
-                      __html: fallbackPost.content
-                        .replace(/\n\n/g, '</p><p class="mb-3">')
-                        .replace(/\n/g, '<br />')
-                        .replace(/^/, '<p class="mb-3">')
-                        .replace(/$/, '</p>')
-                    }}
-                  />
+                  <div className="text-slate-700 leading-relaxed space-y-2 text-sm sm:text-base">
+                    {fallbackPost.content.split('\n\n').map((paragraph, i) => (
+                      <p key={i} className="mb-3">
+                        {paragraph.split('\n').map((line, j, arr) => (
+                          <span key={j}>{line}{j < arr.length - 1 && <br />}</span>
+                        ))}
+                      </p>
+                    ))}
+                  </div>
                 ) : (
                   <div className="text-slate-700 leading-relaxed space-y-3 text-sm sm:text-base">
                     <p className="text-sm italic text-slate-500">
@@ -195,16 +194,15 @@ export default async function NoticiaPage({ params }: PageProps) {
 
             <div className="max-w-none">
               {post.content ? (
-                <div
-                  className="text-slate-700 leading-relaxed space-y-2 text-sm sm:text-base"
-                  dangerouslySetInnerHTML={{ 
-                    __html: post.content
-                      .replace(/\n\n/g, '</p><p class="mb-3">')
-                      .replace(/\n/g, '<br />')
-                      .replace(/^/, '<p class="mb-3">')
-                      .replace(/$/, '</p>')
-                  }}
-                />
+                <div className="text-slate-700 leading-relaxed space-y-2 text-sm sm:text-base">
+                  {post.content.split('\n\n').map((paragraph, i) => (
+                    <p key={i} className="mb-3">
+                      {paragraph.split('\n').map((line, j, arr) => (
+                        <span key={j}>{line}{j < arr.length - 1 && <br />}</span>
+                      ))}
+                    </p>
+                  ))}
+                </div>
               ) : (
                 <div className="text-slate-700 leading-relaxed space-y-3 text-sm sm:text-base">
                   <p className="text-sm italic text-slate-500">

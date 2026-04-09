@@ -1,5 +1,6 @@
-import { getDolar } from "./dolar";
-import { DOLAR_ENTRIES } from "../constants/dolarTypes";
+import { cache } from 'react';
+import { fetchAllDolars, processDolar } from './dolar';
+import { DOLAR_ENTRIES } from '../constants/dolarTypes';
 
 interface DolarData {
   title: string;
@@ -27,29 +28,30 @@ interface DolarData {
   fechaActualizacion: string;
 }
 
-export async function getAllDolarData(): Promise<Record<string, DolarData>> {
-  const resultsArray = await Promise.all(
-    Object.entries(DOLAR_ENTRIES).map(async ([key, [api, title, desc, extra, hora]]) => {
-      try {
-        const stats = await getDolar(api);
-        return { 
-          key, 
-          data: { 
-            ...stats, 
-            title, 
-            descripcion: desc, 
-            extra, 
-            horaOperacion: hora 
-          } 
-        };
-      } catch (error) {
-        console.error(`Error cargando ${key}:`, error);
-        return null;
-      }
-    })
-  );
+export const getAllDolarData = cache(async (): Promise<Record<string, DolarData>> => {
+  const allDolars = await fetchAllDolars();
 
-  const validResults = resultsArray.filter((r): r is {key: string, data: DolarData} => r !== null);
-  
-  return Object.fromEntries(validResults.map(r => [r.key, r.data]));
-}
+  const resultsArray = Object.entries(DOLAR_ENTRIES).map(([key, [api, title, desc, extra, hora]]) => {
+    const rawData = allDolars.find(d => d.casa === api);
+    if (!rawData) {
+      console.error(`No se encontró el tipo de dólar: ${api}`);
+      return null;
+    }
+    try {
+      const stats = processDolar(rawData);
+      return {
+        key,
+        data: { ...stats, title, descripcion: desc, extra, horaOperacion: hora }
+      };
+    } catch (error) {
+      console.error(`Error procesando ${key}:`, error);
+      return null;
+    }
+  });
+
+  return Object.fromEntries(
+    resultsArray
+      .filter((r): r is { key: string; data: DolarData } => r !== null)
+      .map(r => [r.key, r.data])
+  );
+});
