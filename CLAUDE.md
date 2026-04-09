@@ -1,51 +1,52 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Este archivo provee instrucciones a Claude Code (claude.ai/code) para trabajar con el código de este repositorio.
 
-## Commands
+## Comandos
 
 ```bash
-npm run dev      # Start development server (localhost:3000)
-npm run build    # Production build
-npm run start    # Start production server
-npm run lint     # ESLint check
+npm run dev      # Inicia el servidor de desarrollo (localhost:3000)
+npm run build    # Build de producción
+npm run start    # Inicia el servidor de producción
+npm run lint     # Verificación con ESLint
 ```
 
-No test suite is configured.
+No hay suite de tests configurada.
 
-## What This App Does
+## Qué hace la app
 
-Real-time Argentine peso/USD exchange rate tracker. Displays 6 rate types (Blue, Oficial, MEP, CCL, Tarjeta, Cripto) with 30-day historical charts, a currency calculator, and financial news. Deployed at `dolarinfohoy.com.ar`.
+Tracker en tiempo real del tipo de cambio peso argentino/USD. Muestra 6 tipos de cambio (Blue, Oficial, MEP, CCL, Tarjeta, Cripto) con gráficos históricos de 30 días, una calculadora de divisas y noticias financieras. Desplegada en `dolarinfohoy.com.ar`.
 
-## Architecture
+## Arquitectura
 
-**Data sources:**
-- `dolarapi.com/v1/ambito/dolares` — live exchange rates (main page revalidates every 60s)
-- `api.argentinadatos.com/v1/cotizaciones/dolares/{type}` — 30-day historical (client-side, localStorage cache with 7-day TTL)
-- Supabase `posts` table — news/articles (last 2 shown on homepage)
+**Fuentes de datos:**
+- `dolarapi.com/v1/ambito/dolares` — cotizaciones en tiempo real (la página principal revalida cada 60s)
+- `api.argentinadatos.com/v1/cotizaciones/dolares/{type}` — histórico de 30 días (lado cliente, caché en localStorage con TTL de 7 días)
+- Tabla `posts` de Supabase — noticias/artículos (las últimas 2 se muestran en la homepage)
 
-**Component model:** Main `page.tsx` is a server component that fetches all rate data and passes it down. Interactive pieces (`cards.tsx`, `evolucion-dolar.tsx`, `calculator.tsx`) are client components.
+**Modelo de componentes:** El `page.tsx` principal es un Server Component que obtiene todos los datos y los pasa hacia abajo. Las partes interactivas (`cards.tsx`, `evolucion-dolar.tsx`, `calculator.tsx`) son Client Components.
 
-**Key service files:**
-- `app/services/dolar.ts` — fetches from dolarapi.com, calculates spread and variation
-- `app/services/getAllDolarData.ts` — orchestrates fetching all 6 exchange types
-- `app/hooks/useDolarHistorico.ts` — client hook for historical data with localStorage caching
+**Archivos de servicios clave:**
+- `app/services/dolar.ts` — obtiene datos de dolarapi.com, calcula spread y variación
+- `app/services/getAllDolarData.ts` — orquesta la obtención de los 6 tipos de cambio
+- `app/hooks/useDolarHistorico.ts` — hook cliente para datos históricos con caché en localStorage
 
-**News section** (`app/noticia/`): server component queries Supabase; dynamic `[id]/page.tsx` renders individual articles.
+**Sección de noticias** (`app/noticia/`): el Server Component consulta Supabase; el `[id]/page.tsx` dinámico renderiza los artículos individuales.
 
-**Constants:** `app/constants/dolarTypes.ts` defines the 6 exchange rate types with their API keys, display names, descriptions, and operating hours.
+**Constantes:** `app/constants/dolarTypes.ts` define los 6 tipos de cambio con sus claves de API, nombres de display, descripciones y horarios de operación.
 
-## Environment Variables
+## Variables de entorno
 
-Required in `.env.local`:
+Requeridas en `.env.local`:
 ```
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 ```
 
-## Notable Conventions
+## Convenciones importantes
 
-- Path alias `@/*` maps to the repo root (e.g., `@/app/services/dolar`).
-- All date/time logic uses Buenos Aires timezone — use helpers in `app/utils/site.ts`.
-- SEO is critical: `page.tsx` dynamically injects current prices into `<title>` and JSON-LD structured data (FinancialQuote schema). Keep this in sync when changing data shapes.
-- Remote image domain `resizer.glanacion.com` is whitelisted in `next.config.ts` for news images.
+- El alias de path `@/*` apunta a la raíz del repositorio (ej: `@/app/services/dolar`).
+- Toda la lógica de fecha/hora usa la zona horaria de Buenos Aires — usar los helpers en `app/utils/site.ts`.
+- El SEO es crítico: `page.tsx` inyecta dinámicamente los precios actuales en `<title>` y en los datos estructurados JSON-LD (esquema FinancialQuote). Mantener esto sincronizado al cambiar la forma de los datos.
+- El dominio de imágenes remotas `resizer.glanacion.com` está en la whitelist de `next.config.ts` para imágenes de noticias.
+- Google Analytics está implementado con `<GoogleAnalytics gaId="G-6MP230WEJ1" />` en `app/layout.tsx` — no usar el campo `verification.google` de metadata para esto.
