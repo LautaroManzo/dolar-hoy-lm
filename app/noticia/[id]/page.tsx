@@ -172,9 +172,9 @@ export default async function NoticiaPage({ params }: PageProps) {
               <div className="max-w-none">
                 {fallbackPost.content ? (
                   <div className="text-slate-700 leading-relaxed space-y-2 text-sm sm:text-base">
-                    {fallbackPost.content.split('\n\n').map((paragraph, i) => (
+                    {fallbackPost.content.split('\n\n').map((paragraph: string, i: number) => (
                       <p key={i} className="mb-3">
-                        {paragraph.split('\n').map((line, j, arr) => (
+                        {paragraph.split('\n').map((line: string, j: number, arr: string[]) => (
                           <span key={j}>{line}{j < arr.length - 1 && <br />}</span>
                         ))}
                       </p>
@@ -251,9 +251,9 @@ export default async function NoticiaPage({ params }: PageProps) {
             <div className="max-w-none">
               {post.content ? (
                 <div className="text-slate-700 leading-relaxed space-y-2 text-sm sm:text-base">
-                  {post.content.split('\n\n').map((paragraph, i) => (
+                  {post.content.split('\n\n').map((paragraph: string, i: number) => (
                     <p key={i} className="mb-3">
-                      {paragraph.split('\n').map((line, j, arr) => (
+                      {paragraph.split('\n').map((line: string, j: number, arr: string[]) => (
                         <span key={j}>{line}{j < arr.length - 1 && <br />}</span>
                       ))}
                     </p>
