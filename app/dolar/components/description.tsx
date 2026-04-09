@@ -1,11 +1,18 @@
+import Image from "next/image";
 import { AutoRefreshBadge } from "./auto-refresh-badge";
 
 const Description = () => {
     return (
         <section
-            className="relative bg-cover bg-center min-h-[400px] flex items-center"
-            style={{ backgroundImage: "url('/images/edificios.jpg')", backgroundSize: 'cover', backgroundPosition: 'center'}}
+            className="relative min-h-[400px] flex items-center overflow-hidden"
         >
+            <Image
+                src="/images/edificios.jpg"
+                alt=""
+                fill
+                className="object-cover object-center"
+                priority
+            />
             <div
                 className="absolute inset-0 w-full h-full"
                 style={{

@@ -5,6 +5,7 @@ import { Calculator } from "lucide-react";
 import { useState } from 'react';
 import CalculatorModal from '../../dolar/components/calculator';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function Header() {
 
@@ -16,14 +17,16 @@ export function Header() {
         <div className="max-w-6xl mx-auto px-4 py-4 sm:py-3 flex items-center justify-between">
 
           <Link href="/" className="flex items-center gap-2 sm:gap-3">
-            <img
+            <Image
               src="/icons/money.svg"
               alt="Icono de dólar - DolarInfoHoy"
+              width={40}
+              height={40}
               className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
             />
 
             <div className="flex flex-col">
-              <h1 className="text-lg sm:text-xl font-semibold">DolarInfoHoy</h1>
+              <span className="text-lg sm:text-xl font-semibold">DolarInfoHoy</span>
               <p className="text-[10px] sm:text-xs font-semibold hidden sm:block">Cotización en tiempo real</p>
             </div>
           </Link>

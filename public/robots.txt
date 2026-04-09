@@ -1,13 +1,7 @@
 User-agent: *
 Allow: /
-Allow: /dolar-blue
-Allow: /dolar-oficial
-Allow: /dolar-mep
-Allow: /dolar-ccl
-Allow: /dolar-tarjeta
-Allow: /dolar-cripto
 
-# Block common non-content paths
+# Block non-content paths
 Disallow: /api/
 Disallow: /_next/
 Disallow: /admin/
@@ -15,11 +9,7 @@ Disallow: /*.json$
 
 # Allow important assets
 Allow: /images/
-Allow: /css/
-Allow: /js/
+Allow: /icons/
 
 # Sitemap location
 Sitemap: https://dolarinfohoy.com.ar/sitemap.xml
-
-# Crawl delay (optional, be respectful)
-Crawl-delay: 1

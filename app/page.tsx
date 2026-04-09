@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
         url: "https://dolarinfohoy.com.ar",
         siteName: "Dólar Hoy",
         images: [{
-          url: "/og-image.jpg",
+          url: "/opengraph-image",
           width: 1200,
           height: 630,
           alt: `Dólar Blue Hoy $${bluePrice} - Cotización en Argentina`
@@ -40,7 +40,8 @@ export async function generateMetadata(): Promise<Metadata> {
       twitter: {
         card: "summary_large_image",
         title: `Dólar Blue $${bluePrice} | Oficial $${oficialPrice} | ${fechaHoy}`,
-        description: `Blue: $${bluePrice} | MEP: $${mepPrice} | CCL: $${cclPrice}. Cotizaciones actualizadas en tiempo real.`
+        description: `Blue: $${bluePrice} | MEP: $${mepPrice} | CCL: $${cclPrice}. Cotizaciones actualizadas en tiempo real.`,
+        images: ["/opengraph-image"]
       }
     };
   } catch (error) {

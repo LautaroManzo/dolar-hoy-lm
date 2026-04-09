@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Buscar por título que coincida con el slug
   const { data: post } = await supabase
     .from('posts')
-    .select('title, resumen_noticia, content, category')
+    .select('title, resumen_noticia, content, category, image_url, created_at')
     .eq('slug', slug)
     .single()
 
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const titleFromSlug = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     const { data: fallbackPost } = await supabase
       .from('posts')
-      .select('title, resumen_noticia, content, category')
+      .select('title, resumen_noticia, content, category, image_url, created_at')
       .ilike('title', `%${titleFromSlug}%`)
       .single()
 
@@ -51,12 +51,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: `${fallbackPost.title} | Dólar Hoy`,
       description: fallbackPost.resumen_noticia,
+      alternates: {
+        canonical: `https://dolarinfohoy.com.ar/noticia/${slug}`,
+      },
       openGraph: {
         title: fallbackPost.title,
         description: fallbackPost.resumen_noticia,
         type: 'article',
         locale: 'es_AR',
         url: `https://dolarinfohoy.com.ar/noticia/${slug}`,
+        publishedTime: fallbackPost.created_at,
+        images: fallbackPost.image_url
+          ? [{ url: fallbackPost.image_url, width: 1200, height: 630, alt: fallbackPost.title }]
+          : [],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: fallbackPost.title,
+        description: fallbackPost.resumen_noticia,
+        images: fallbackPost.image_url ? [fallbackPost.image_url] : [],
       },
     }
   }
@@ -64,12 +77,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${post.title} | Dólar Hoy`,
     description: post.resumen_noticia,
+    alternates: {
+      canonical: `https://dolarinfohoy.com.ar/noticia/${slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.resumen_noticia,
       type: 'article',
       locale: 'es_AR',
       url: `https://dolarinfohoy.com.ar/noticia/${slug}`,
+      publishedTime: post.created_at,
+      images: post.image_url
+        ? [{ url: post.image_url, width: 1200, height: 630, alt: post.title }]
+        : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.resumen_noticia,
+      images: post.image_url ? [post.image_url] : [],
     },
   }
 }
@@ -97,8 +123,21 @@ export default async function NoticiaPage({ params }: PageProps) {
       throw new Error('404 La noticia solicitada no está disponible o no existe en nuestro sistema.')
     }
 
+    const fallbackJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "headline": fallbackPost.title,
+      "description": fallbackPost.resumen_noticia,
+      "image": fallbackPost.image_url,
+      "datePublished": fallbackPost.created_at,
+      "dateModified": fallbackPost.created_at,
+      "author": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar" },
+      "publisher": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar", "logo": { "@type": "ImageObject", "url": "https://dolarinfohoy.com.ar/icons/money.svg" } },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": `https://dolarinfohoy.com.ar/noticia/${slug}` }
+    }
     return (
       <div className="bg-[#fcf7f8]">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(fallbackJsonLd) }} />
         <div className="max-w-6xl mx-auto px-4 py-10">
 
           <article className="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -163,8 +202,21 @@ export default async function NoticiaPage({ params }: PageProps) {
     )
   }
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": post.title,
+    "description": post.resumen_noticia,
+    "image": post.image_url,
+    "datePublished": post.created_at,
+    "dateModified": post.created_at,
+    "author": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar" },
+    "publisher": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar", "logo": { "@type": "ImageObject", "url": "https://dolarinfohoy.com.ar/icons/money.svg" } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://dolarinfohoy.com.ar/noticia/${slug}` }
+  }
   return (
     <div className="bg-[#fcf7f8]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <div className="max-w-6xl mx-auto px-4 py-10">
 
         <article className="bg-white rounded-2xl shadow-sm overflow-hidden">

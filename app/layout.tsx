@@ -38,13 +38,20 @@ export async function generateMetadata(): Promise<Metadata> {
       description: `Seguí el minuto a minuto de las cotizaciones del dólar en Argentina este ${fechaHoy}.`,
       type: "website",
       locale: "es_AR",
-      url: "https://dolarinfohoy.com.ar", 
+      url: "https://dolarinfohoy.com.ar",
       siteName: "Cotización Dólar",
+      images: [{
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "DolarInfoHoy - Cotización del Dólar en Argentina"
+      }]
     },
     twitter: {
       card: "summary_large_image",
       title: `Dólar Blue Hoy en Argentina | ${fechaHoy}`,
       description: `Cotización actualizada de Blue, MEP, CCL y Oficial al ${fechaHoy}.`,
+      images: ["/opengraph-image"]
     },
     icons: {
       icon: [
@@ -54,9 +61,6 @@ export async function generateMetadata(): Promise<Metadata> {
       apple: "/icons/money.svg",
       shortcut: "/icons/money.svg",
     },
-    verification: {
-      google: 'G-6MP230WEJ1'
-    }
   };
 }
 
@@ -145,7 +149,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es">
 
       <head>
-        <link rel="preload" href="/images/edificios.jpg" as="image" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
