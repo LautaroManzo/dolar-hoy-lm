@@ -7,7 +7,7 @@ export interface DolarData {
 }
 
 const API_AMBITO = "https://dolarapi.com/v1/ambito/dolares";
-const REVALIDATE_SECONDS = 60;
+const REVALIDATE_SECONDS = 300;
 
 export interface VariationData {
   percent: number;
@@ -25,9 +25,19 @@ export interface DolarResponse {
   spread: number;
   spreadSign: "up" | "down" | "neutral";
   fechaActualizacion: string;
+  horaActualizacion: string;
 }
 
 const getSign = (n: number): "up" | "down" | "neutral" => (n > 0 ? "up" : n < 0 ? "down" : "neutral");
+
+function formatFechaHoraArgentina(fechaISO: string): string {
+  if (!fechaISO) return "—";
+  const ba = new Date(new Date(fechaISO).getTime() - 3 * 60 * 60 * 1000);
+  const dia = ba.getUTCDate().toString().padStart(2, "0");
+  const mes = (ba.getUTCMonth() + 1).toString().padStart(2, "0");
+  const hora = `${ba.getUTCHours().toString().padStart(2, "0")}:${ba.getUTCMinutes().toString().padStart(2, "0")}`;
+  return `${dia}/${mes} ${hora} hs`;
+}
 
 async function fetchJson<T>(url: string, revalidateTime: number = REVALIDATE_SECONDS): Promise<T> {
   const res = await fetch(url, { next: { revalidate: revalidateTime } });
@@ -66,7 +76,8 @@ export function processDolar(dolarData: DolarData): DolarResponse {
     sellVariation,
     spread: Number(spread.toFixed(2)),
     spreadSign: getSign(spread),
-    fechaActualizacion: dolarData.fechaActualizacion
+    fechaActualizacion: dolarData.fechaActualizacion,
+    horaActualizacion: formatFechaHoraArgentina(dolarData.fechaActualizacion),
   };
 }
 

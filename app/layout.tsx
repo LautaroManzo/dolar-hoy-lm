@@ -7,7 +7,7 @@ import { Footer } from "./layout/components/footer";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { getFechaHoyFormateada } from "./utils/site";
 
-export const revalidate = 3600; 
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const fechaHoy = getFechaHoyFormateada();
@@ -24,13 +24,15 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       `Consultá el precio del Dólar Blue, Oficial, MEP y CCL hoy ${fechaHoy}. Brecha cambiaria y las variaciones diarias en Argentina.`,
     keywords: [
-      "dólar blue hoy", "dólar oficial", "cotización dólar blue", 
+      "dólar blue hoy", "dólar oficial", "cotización dólar blue",
       "dólar mep hoy", "dólar ccl", "dólar tarjeta", "precio dólar",
       "brecha cambiaria", "dólar argentina", "comprar dólar blue",
       "venta dólar blue", "dólar cripto", "dólar hoy argentina",
       "cotización dólar oficial", "dólar bolsa", "contado con liqui",
       "dólar ahorro", "dólar turista", "precio dólar blue",
-      "variación dólar", "dólar banco central", "mercado paralelo"
+      "variación dólar", "dólar banco central", "mercado paralelo",
+      "tipo de cambio", "cotización dólar blue hoy", "dólar paralelo",
+      "cuanto vale el dólar hoy"
     ],
     authors: [{ name: "LMJT" }],
     openGraph: {
@@ -39,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "es_AR",
       url: "https://dolarinfohoy.com.ar",
-      siteName: "Cotización Dólar",
+      siteName: "DolarInfoHoy",
       images: [{
         url: "/opengraph-image",
         width: 1200,
@@ -68,85 +70,36 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": ["FinancialQuote", "WebPage"],
-    "name": "Cotización del Dólar en Argentina",
-    "description": "Precios actualizados del dólar blue, oficial, MEP y CCL en tiempo real.",
-    "url": "https://dolarinfohoy.com.ar",
-    "dateModified": new Date().toISOString(),
-    "inLanguage": "es-AR",
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "Dólar Hoy",
-      "url": "https://dolarinfohoy.com.ar"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Dólar Hoy LM",
-      "url": "https://dolarinfohoy.com.ar",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://dolarinfohoy.com.ar/icons/money.svg",
-        "width": 185,
-        "height": 185
-      }
-    },
-    "mainEntity": {
-      "@type": "ItemList",
-      "name": "Cotizaciones del Dólar en Argentina",
-      "description": "Lista de cotizaciones actualizadas de diferentes tipos de dólar",
-      "numberOfItems": 6,
-      "itemListElement": [
-        {
-          "@type": "FinancialQuote",
-          "name": "Dólar Blue",
-          "description": "Cotización de compra y venta en el mercado paralelo",
-          "currency": "ARS"
-        },
-        {
-          "@type": "FinancialQuote", 
-          "name": "Dólar Oficial",
-          "description": "Valor de referencia del Banco Central",
-          "currency": "ARS"
-        },
-        {
-          "@type": "FinancialQuote",
-          "name": "Dólar MEP",
-          "description": "Forma legal de comprar dólares vía bonos",
-          "currency": "ARS"
-        },
-        {
-          "@type": "FinancialQuote",
-          "name": "Dólar CCL", 
-          "description": "Cambio de pesos por dólares en el exterior",
-          "currency": "ARS"
-        },
-        {
-          "@type": "FinancialQuote",
-          "name": "Dólar Tarjeta",
-          "description": "Tipo de cambio para consumos en moneda extranjera",
-          "currency": "ARS"
-        },
-        {
-          "@type": "FinancialQuote",
-          "name": "Dólar Cripto",
-          "description": "Cotización de monedas digitales vinculadas al dólar",
-          "currency": "ARS"
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://dolarinfohoy.com.ar/#website",
+        "url": "https://dolarinfohoy.com.ar",
+        "name": "DolarInfoHoy",
+        "description": "Cotización del dólar blue, oficial, MEP y CCL en tiempo real en Argentina.",
+        "inLanguage": "es-AR",
+        "publisher": {
+          "@id": "https://dolarinfohoy.com.ar/#organization"
         }
-      ]
-    },
-    "about": {
-      "@type": "Thing",
-      "name": "Dólar Argentino",
-      "description": "Tipo de cambio del dólar en Argentina"
-    },
-    "audience": {
-      "@type": "Audience",
-      "audienceType": "Inversores y consumidores en Argentina"
-    }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://dolarinfohoy.com.ar/#organization",
+        "name": "DolarInfoHoy",
+        "url": "https://dolarinfohoy.com.ar",
+        "logo": {
+          "@type": "ImageObject",
+          "@id": "https://dolarinfohoy.com.ar/#logo",
+          "url": "https://dolarinfohoy.com.ar/icons/money.svg",
+          "width": 185,
+          "height": 185
+        }
+      }
+    ]
   };
 
   return (
-    <html lang="es">
+    <html lang="es-AR">
 
       <head>
         <script

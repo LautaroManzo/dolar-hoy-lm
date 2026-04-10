@@ -27,7 +27,7 @@ interface DolarCardProps {
   descripcion: string;
   extra: string;
   horaOperacion: string;
-  fechaActualizacion: string;
+  horaActualizacion: string;
 }
 
 // Iconos para la tendencia general
@@ -116,7 +116,7 @@ export function DolarCard({
   descripcion,
   extra,
   horaOperacion,
-  fechaActualizacion,
+  horaActualizacion,
 }: DolarCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -168,7 +168,7 @@ export function DolarCard({
 
   return (
     <motion.div
-      className="relative w-full h-[270px] mb-6"
+      className="relative w-full h-[300px] mb-6"
       animate={{ rotateY: isOpen ? 180 : 0 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
       style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
@@ -211,6 +211,10 @@ export function DolarCard({
               $ {formatPrice(spread)}
             </div>
           </div>
+        </div>
+
+        <div className="text-[10px] text-gray-400 text-center">
+          Última actualización {horaActualizacion}
         </div>
 
         <DolarCardActions

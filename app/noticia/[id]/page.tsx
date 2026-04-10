@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Calendar, ArrowLeft } from 'lucide-react'
 import { supabase } from '@/app/lib/supabase'
 
@@ -18,7 +19,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id: slug } = await params;
-  
+
   if (!slug || slug === 'undefined') {
     return {
       title: 'Noticia no encontrada',
@@ -26,14 +27,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
-  // Buscar por título que coincida con el slug
   const { data: post } = await supabase
     .from('posts')
     .select('title, resumen_noticia, content, category, image_url, created_at')
     .eq('slug', slug)
     .single()
 
-  // Si no se encuentra por slug, intentar convertir el slug a título y buscar
   if (!post) {
     const titleFromSlug = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     const { data: fallbackPost } = await supabase
@@ -102,15 +101,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function NoticiaPage({ params }: PageProps) {
   const { id: slug } = await params;
-  
-  // Primero intentar buscar por slug (si existe el campo)
+
   const { data: post, error } = await supabase
     .from('posts')
     .select('id, title, resumen_noticia, content, category, image_url, created_at')
     .eq('slug', slug)
     .single()
 
-  // Si no se encuentra por slug, intentar buscar por título similar
   if (error || !post) {
     const titleFromSlug = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     const { data: fallbackPost, error: fallbackError } = await supabase
@@ -125,20 +122,45 @@ export default async function NoticiaPage({ params }: PageProps) {
 
     const fallbackJsonLd = {
       "@context": "https://schema.org",
-      "@type": "NewsArticle",
-      "headline": fallbackPost.title,
-      "description": fallbackPost.resumen_noticia,
-      "image": fallbackPost.image_url,
-      "datePublished": fallbackPost.created_at,
-      "dateModified": fallbackPost.created_at,
-      "author": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar" },
-      "publisher": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar", "logo": { "@type": "ImageObject", "url": "https://dolarinfohoy.com.ar/icons/money.svg" } },
-      "mainEntityOfPage": { "@type": "WebPage", "@id": `https://dolarinfohoy.com.ar/noticia/${slug}` }
+      "@graph": [
+        {
+          "@type": "NewsArticle",
+          "headline": fallbackPost.title,
+          "description": fallbackPost.resumen_noticia,
+          "image": fallbackPost.image_url,
+          "datePublished": fallbackPost.created_at,
+          "dateModified": fallbackPost.created_at,
+          "author": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar" },
+          "publisher": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar", "logo": { "@type": "ImageObject", "url": "https://dolarinfohoy.com.ar/icons/money.svg" } },
+          "mainEntityOfPage": { "@type": "WebPage", "@id": `https://dolarinfohoy.com.ar/noticia/${slug}` }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://dolarinfohoy.com.ar" },
+            { "@type": "ListItem", "position": 2, "name": fallbackPost.title, "item": `https://dolarinfohoy.com.ar/noticia/${slug}` }
+          ]
+        }
+      ]
     }
+
     return (
       <div className="bg-[#fcf7f8]">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(fallbackJsonLd) }} />
         <div className="max-w-6xl mx-auto px-4 py-10">
+
+          <nav aria-label="Ruta de navegación" className="mb-6">
+            <ol className="flex items-center gap-3 text-sm">
+              <li>
+                <Link href="/" className="flex items-center gap-3 text-slate-500 hover:text-slate-800 transition-colors">
+                  <ArrowLeft size={13} />
+                  Inicio
+                </Link>
+              </li>
+              <li className="text-slate-400 select-none" aria-hidden="true">/</li>
+              <li className="text-[#1a3a52] font-medium truncate max-w-[200px] sm:max-w-xs">{fallbackPost.title}</li>
+            </ol>
+          </nav>
 
           <article className="bg-white rounded-2xl shadow-sm overflow-hidden">
 
@@ -147,6 +169,7 @@ export default async function NoticiaPage({ params }: PageProps) {
                 src={fallbackPost.image_url}
                 alt={fallbackPost.title}
                 fill
+                sizes="(max-width: 1152px) 100vw, 1152px"
                 className="object-cover"
                 priority
               />
@@ -204,20 +227,45 @@ export default async function NoticiaPage({ params }: PageProps) {
 
   const articleJsonLd = {
     "@context": "https://schema.org",
-    "@type": "NewsArticle",
-    "headline": post.title,
-    "description": post.resumen_noticia,
-    "image": post.image_url,
-    "datePublished": post.created_at,
-    "dateModified": post.created_at,
-    "author": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar" },
-    "publisher": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar", "logo": { "@type": "ImageObject", "url": "https://dolarinfohoy.com.ar/icons/money.svg" } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://dolarinfohoy.com.ar/noticia/${slug}` }
+    "@graph": [
+      {
+        "@type": "NewsArticle",
+        "headline": post.title,
+        "description": post.resumen_noticia,
+        "image": post.image_url,
+        "datePublished": post.created_at,
+        "dateModified": post.created_at,
+        "author": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar" },
+        "publisher": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar", "logo": { "@type": "ImageObject", "url": "https://dolarinfohoy.com.ar/icons/money.svg" } },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://dolarinfohoy.com.ar/noticia/${slug}` }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://dolarinfohoy.com.ar" },
+          { "@type": "ListItem", "position": 2, "name": post.title, "item": `https://dolarinfohoy.com.ar/noticia/${slug}` }
+        ]
+      }
+    ]
   }
+
   return (
     <div className="bg-[#fcf7f8]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <div className="max-w-6xl mx-auto px-4 py-10">
+
+        <nav aria-label="Ruta de navegación" className="mb-6">
+          <ol className="flex items-center gap-3 text-sm">
+            <li>
+              <Link href="/" className="flex items-center gap-3 text-slate-500 hover:text-slate-800 transition-colors">
+                <ArrowLeft size={13} />
+                Inicio
+              </Link>
+            </li>
+            <li className="text-slate-400 select-none" aria-hidden="true">/</li>
+            <li className="text-[#1a3a52] font-medium truncate max-w-[200px] sm:max-w-xs">{post.title}</li>
+          </ol>
+        </nav>
 
         <article className="bg-white rounded-2xl shadow-sm overflow-hidden">
 
@@ -226,6 +274,7 @@ export default async function NoticiaPage({ params }: PageProps) {
               src={post.image_url}
               alt={post.title}
               fill
+              sizes="(max-width: 1152px) 100vw, 1152px"
               className="object-cover"
               priority
             />

@@ -26,6 +26,7 @@ interface DolarData {
   extra: string;
   horaOperacion: string;
   fechaActualizacion: string;
+  horaActualizacion: string;
 }
 
 export const getAllDolarData = cache(async (): Promise<Record<string, DolarData>> => {

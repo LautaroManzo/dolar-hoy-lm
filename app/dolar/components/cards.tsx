@@ -24,7 +24,7 @@ interface DolarData {
   descripcion: string;
   extra: string;
   horaOperacion: string;
-  fechaActualizacion: string;
+  horaActualizacion: string;
 }
 
 interface CardsProps {

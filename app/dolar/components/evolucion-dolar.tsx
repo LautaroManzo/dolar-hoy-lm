@@ -18,7 +18,10 @@ import { COLORS } from '../../constants/colors';
 
 const EvolucionDolar: React.FC = () => {
   const [tipoDolar, setTipoDolar] = useState<string>('blue');
+  const [isMounted, setIsMounted] = useState(false);
   const { data, loading, error } = useDolarHistorico(tipoDolar);
+
+  React.useEffect(() => { setIsMounted(true); }, []);
 
   const opcionesDolar = [
     { id: 'blue', name: 'Dólar Blue', nombre: 'Dólar Blue' },
@@ -72,7 +75,7 @@ const EvolucionDolar: React.FC = () => {
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm border-2 border-dashed border-gray-100 rounded-xl">
                 {error}
               </div>
-            ) : (
+            ) : isMounted ? (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
@@ -161,7 +164,7 @@ const EvolucionDolar: React.FC = () => {
                   />
                 </AreaChart>
               </ResponsiveContainer>
-            )}
+            ) : null}
           </div>
         </ErrorBoundary>
         </div>

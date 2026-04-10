@@ -5,11 +5,6 @@ Allow: /
 Disallow: /api/
 Disallow: /_next/
 Disallow: /admin/
-Disallow: /*.json$
-
-# Allow important assets
-Allow: /images/
-Allow: /icons/
 
 # Sitemap location
 Sitemap: https://dolarinfohoy.com.ar/sitemap.xml
