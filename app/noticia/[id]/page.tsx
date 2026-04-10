@@ -179,13 +179,13 @@ export default async function NoticiaPage({ params }: PageProps) {
 
               <div className="flex items-center gap-2 text-slate-500 mb-4">
                 <Calendar size={16} />
-                <span className="text-[12px] sm:text-sm font-medium">
+                <time dateTime={new Date(fallbackPost.created_at).toISOString()} className="text-[12px] sm:text-sm font-medium">
                   {new Date(fallbackPost.created_at).toLocaleDateString('es-AR', {
                     day: 'numeric',
                     month: 'long',
                     year: 'numeric'
                   })}
-                </span>
+                </time>
               </div>
 
               <h1 className="mb-4 text-xl sm:text-3xl font-bold text-slate-900 leading-tight">
@@ -284,13 +284,13 @@ export default async function NoticiaPage({ params }: PageProps) {
 
             <div className="flex items-center gap-2 text-slate-500 mb-4">
               <Calendar size={16} />
-              <span className="text-[12px] sm:text-sm font-medium">
+              <time dateTime={new Date(post.created_at).toISOString()} className="text-[12px] sm:text-sm font-medium">
                 {new Date(post.created_at).toLocaleDateString('es-AR', {
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric'
                 })}
-              </span>
+              </time>
             </div>
 
             <h1 className="mb-4 text-xl sm:text-3xl font-bold text-slate-900 leading-tight">
