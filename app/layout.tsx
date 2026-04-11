@@ -77,6 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         "url": "https://dolarinfohoy.com.ar",
         "name": "DolarInfoHoy",
         "description": "Cotización del dólar blue, oficial, MEP y CCL en tiempo real en Argentina.",
+        "image": "https://dolarinfohoy.com.ar/opengraph-image",
         "inLanguage": "es-AR",
         "publisher": {
           "@id": "https://dolarinfohoy.com.ar/#organization"

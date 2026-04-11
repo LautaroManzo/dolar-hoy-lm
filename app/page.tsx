@@ -68,6 +68,7 @@ export default async function Page() {
     "name": "Cotizaciones del Dólar en Argentina",
     "description": "Precios actualizados del dólar blue, oficial, MEP y CCL en tiempo real.",
     "url": "https://dolarinfohoy.com.ar",
+    "image": "https://dolarinfohoy.com.ar/opengraph-image",
     "dateModified": fechaActualizacion,
     "inLanguage": "es-AR",
     "itemListElement": [
