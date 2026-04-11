@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next'
 import { supabase } from '@/app/lib/supabase'
 
+export const dynamic = 'force-dynamic'
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://dolarinfohoy.com.ar'
 

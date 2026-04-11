@@ -1,17 +1,14 @@
 import { getAllDolarData } from "./services/getAllDolarData";
 import { Cards } from "./dolar/components/cards";
 import { Metadata } from "next";
-import { getFechaHoyFormateada } from "./utils/site";
 import Description from "./dolar/components/description";
 import EvolucionDolar from "./dolar/components/evolucion-dolar";
 import Noticias from "./noticia/components/Noticias";
 import PreguntasFrecuentes from "./dolar/components/preguntas-frecuentes";
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const fechaHoy = getFechaHoyFormateada();
-
   try {
     const dataForCards = await getAllDolarData();
 
@@ -21,10 +18,10 @@ export async function generateMetadata(): Promise<Metadata> {
     const cclPrice = dataForCards.ccl?.sell || '---';
 
     return {
-      title: { absolute: `Dólar Blue Hoy $${bluePrice} | Cotización ${fechaHoy}` },
+      title: { absolute: `Dólar Blue Hoy $${bluePrice} | Cotización en tiempo real` },
       description: `Dólar Blue: $${bluePrice} | Oficial: $${oficialPrice} | MEP: $${mepPrice} | CCL: $${cclPrice}. Cotizaciones actualizadas en tiempo real. Brecha cambiaria y variaciones diarias.`,
       openGraph: {
-        title: `Dólar Blue Hoy $${bluePrice} | ${fechaHoy}`,
+        title: `Dólar Blue Hoy $${bluePrice} | Cotización en tiempo real`,
         description: `Blue: $${bluePrice} | Oficial: $${oficialPrice} | MEP: $${mepPrice} | CCL: $${cclPrice}. Cotizaciones actualizadas al minuto.`,
         type: "website",
         locale: "es_AR",
@@ -39,15 +36,15 @@ export async function generateMetadata(): Promise<Metadata> {
       },
       twitter: {
         card: "summary_large_image",
-        title: `Dólar Blue $${bluePrice} | Oficial $${oficialPrice} | ${fechaHoy}`,
+        title: `Dólar Blue $${bluePrice} | Oficial $${oficialPrice} | Tiempo real`,
         description: `Blue: $${bluePrice} | MEP: $${mepPrice} | CCL: $${cclPrice}. Cotizaciones actualizadas en tiempo real.`,
         images: ["/opengraph-image"]
       }
     };
   } catch {
     return {
-      title: { absolute: `Dólar hoy ${fechaHoy} | Cotización en tiempo real en Argentina` },
-      description: `Consultá el precio del Dólar Blue, Oficial, MEP y CCL hoy ${fechaHoy}. Brecha cambiaria y las variaciones diarias en Argentina.`
+      title: { absolute: `Dólar hoy en Argentina | Cotización en tiempo real` },
+      description: `Consultá el precio del Dólar Blue, Oficial, MEP y CCL. Brecha cambiaria y variaciones diarias en Argentina.`
     };
   }
 }
