@@ -1,3 +1,7 @@
+import type { VariationData, DolarResponse } from '../types/dolar';
+
+export type { VariationData, DolarResponse };
+
 export interface DolarData {
   compra: number;
   venta: number;
@@ -8,35 +12,23 @@ export interface DolarData {
 
 const API_AMBITO = "https://dolarapi.com/v1/ambito/dolares";
 const REVALIDATE_SECONDS = 300;
-
-export interface VariationData {
-  percent: number;
-  percentAbs: number;
-  sign: "up" | "down" | "neutral";
-  dailyDiff: number;
-  dailyDiffSign: "up" | "down" | "neutral";
-}
-
-export interface DolarResponse {
-  buy: number;
-  sell: number;
-  buyVariation: VariationData;
-  sellVariation: VariationData;
-  spread: number;
-  spreadSign: "up" | "down" | "neutral";
-  fechaActualizacion: string;
-  horaActualizacion: string;
-}
+const TZ_BA = 'America/Argentina/Buenos_Aires';
 
 const getSign = (n: number): "up" | "down" | "neutral" => (n > 0 ? "up" : n < 0 ? "down" : "neutral");
 
 function formatFechaHoraArgentina(fechaISO: string): string {
   if (!fechaISO) return "—";
-  const ba = new Date(new Date(fechaISO).getTime() - 3 * 60 * 60 * 1000);
-  const dia = ba.getUTCDate().toString().padStart(2, "0");
-  const mes = (ba.getUTCMonth() + 1).toString().padStart(2, "0");
-  const hora = `${ba.getUTCHours().toString().padStart(2, "0")}:${ba.getUTCMinutes().toString().padStart(2, "0")}`;
-  return `${dia}/${mes} ${hora} hs`;
+  const fecha = new Date(fechaISO);
+  const formatter = new Intl.DateTimeFormat('es-AR', {
+    timeZone: TZ_BA,
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+  const parts = Object.fromEntries(formatter.formatToParts(fecha).map(p => [p.type, p.value]));
+  return `${parts.day}/${parts.month} ${parts.hour}:${parts.minute} hs`;
 }
 
 async function fetchJson<T>(url: string, revalidateTime: number = REVALIDATE_SECONDS): Promise<T> {

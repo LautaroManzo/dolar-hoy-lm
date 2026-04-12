@@ -24,23 +24,33 @@ export function useDolarHistorico(tipoDolar: string) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const controller = new AbortController();
-    let loadingTimer = setTimeout(() => setLoading(true), LOADING_DEBOUNCE_MS);
+    const cacheKey = `historico_${tipoDolar}`;
+
+    // Intenta cargar desde caché antes de mostrar el spinner
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        const { fechaCache, datos } = JSON.parse(cached) as { fechaCache: string; datos: DolarProcesado[] };
+        const diffDias = (Date.now() - new Date(fechaCache).getTime()) / MS_PER_DAY;
+        if (diffDias < CACHE_TTL_DAYS) {
+          setData(datos);
+          // Caché vigente: no hace falta fetch ni mostrar loading
+          return () => controller.abort();
+        }
+      } catch {
+        // Caché corrupta, la ignoramos y seguimos al fetch
+        localStorage.removeItem(cacheKey);
+      }
+    }
+
+    // Caché vencida o ausente: mostrar spinner después del debounce
+    const loadingTimer = setTimeout(() => setLoading(true), LOADING_DEBOUNCE_MS);
 
     const fetchHistorico = async () => {
       setError(null);
-
-      const cacheKey = `historico_${tipoDolar}`;
-      const cached = localStorage.getItem(cacheKey);
-
-      if (cached) {
-        const { fechaCache, datos } = JSON.parse(cached);
-        const diffDias = (Date.now() - new Date(fechaCache).getTime()) / MS_PER_DAY;
-
-        if (diffDias < CACHE_TTL_DAYS) {
-          setData(datos);
-        }
-      }
 
       try {
         const response = await fetch(
@@ -48,7 +58,7 @@ export function useDolarHistorico(tipoDolar: string) {
           { signal: controller.signal }
         );
 
-        if (!response.ok) throw new Error('Error al obtener datos');
+        if (!response.ok) throw new Error(`Error al obtener datos: ${response.status}`);
 
         const result = (await response.json()) as DolarHistorico[];
 
@@ -70,19 +80,23 @@ export function useDolarHistorico(tipoDolar: string) {
           });
 
         setData(procesados);
-        localStorage.setItem(
-          cacheKey,
-          JSON.stringify({ 
-            fechaCache: new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })).toISOString(), 
-            datos: procesados 
-          })
-        );
 
-      } catch (err: any) {
-        if (err.name !== 'AbortError') {
-          console.error(err);
-          setError('No se pudo cargar el gráfico.');
+        try {
+          localStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+              fechaCache: new Date().toISOString(),
+              datos: procesados,
+            })
+          );
+        } catch (storageErr) {
+          console.warn('No se pudo guardar el caché en localStorage:', storageErr);
         }
+
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') return;
+        console.error(`Error cargando histórico de ${tipoDolar}:`, err);
+        setError('No se pudo cargar el gráfico.');
       } finally {
         clearTimeout(loadingTimer);
         setLoading(false);

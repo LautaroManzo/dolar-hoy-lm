@@ -1,6 +1,5 @@
 import { ChevronDown } from 'lucide-react';
 import { useDropdown } from '../../hooks/useDropdown';
-import { COLORS } from '../../constants/colors';
 
 interface DropdownOption {
   id: string;

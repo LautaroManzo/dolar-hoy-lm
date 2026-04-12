@@ -15,7 +15,7 @@ const DEFAULT_TYPES: DolarType[] = [
   { id: "bolsa", name: "Dólar MEP", price: 0 },
   { id: "contadoconliqui", name: "Dólar CCL", price: 0 },
   { id: "tarjeta", name: "Dólar Tarjeta", price: 0 },
-  { id: "crypto", name: "Dólar Cripto", price: 0 },
+  { id: "cripto", name: "Dólar Cripto", price: 0 },
 ];
 
 export function useCalculator(isOpen: boolean) {
@@ -38,7 +38,7 @@ export function useCalculator(isOpen: boolean) {
           { id: "bolsa", name: "Dólar MEP", price: find("bolsa") },
           { id: "contadoconliqui", name: "Dólar CCL", price: find("contadoconliqui") },
           { id: "tarjeta", name: "Dólar Tarjeta", price: find("tarjeta") },
-          { id: "crypto", name: "Dólar Cripto", price: find("cripto") },
+          { id: "cripto", name: "Dólar Cripto", price: find("cripto") },
         ];
         setDolarTypes(types);
         setSelectedDolar((prev) =>

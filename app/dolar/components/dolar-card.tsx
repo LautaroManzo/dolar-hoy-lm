@@ -7,28 +7,9 @@ import { VariationDisplay } from "../../shared/ui/VariationDisplay";
 import { PriceDisplay } from "../../shared/ui/PriceDisplay";
 import { formatPrice } from "../../utils/format";
 import { COLORS } from "../../constants/colors";
+import type { DolarCardData } from "../../types/dolar";
 
-interface VariationData {
-  percent: number;
-  percentAbs: number;
-  sign: "up" | "down" | "neutral";
-  dailyDiff: number;
-  dailyDiffSign: "up" | "down" | "neutral";
-}
-
-interface DolarCardProps {
-  title: string;
-  buy: number;
-  sell: number;
-  buyVariation: VariationData;
-  sellVariation: VariationData;
-  spread: number;
-  spreadSign: "up" | "down" | "neutral";
-  descripcion: string;
-  extra: string;
-  horaOperacion: string;
-  horaActualizacion: string;
-}
+type DolarCardProps = Omit<DolarCardData, 'fechaActualizacion'>;
 
 // Iconos para la tendencia general
 const headerIconMap = {
@@ -112,7 +93,6 @@ export function DolarCard({
   buy,
   sell,
   buyVariation,
-  sellVariation,
   descripcion,
   extra,
   horaOperacion,
@@ -154,12 +134,6 @@ export function DolarCard({
       console.error("Error al compartir:", error);
     }
   };
-
-  // Variaciones para COMPRA
-  const BuyVariationContent = <VariationDisplay variation={buyVariation} />;
-
-  // Variaciones para VENTA
-  const SellVariationContent = <VariationDisplay variation={sellVariation} />;
 
   // Tendencia general
   const generalTrendSign = buyVariation.sign;

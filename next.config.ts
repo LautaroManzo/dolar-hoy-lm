@@ -20,8 +20,15 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   
-  // Headers de seguridad
+  // Headers de seguridad y caché
   headers: async () => [
+    {
+      // Íconos y fuentes en /public → caché de 1 año (Next.js maneja /_next/static internamente)
+      source: '/icons/:path*',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+      ],
+    },
     {
       source: '/(.*)',
       headers: [

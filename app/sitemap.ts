@@ -1,14 +1,12 @@
 import { MetadataRoute } from 'next'
 import { supabase } from '@/app/lib/supabase'
+import { getFechaArgentina } from '@/app/utils/site'
 
 export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://dolarinfohoy.com.ar'
-
-  const fechaArgentina = new Date(
-    new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })
-  )
+  const fechaArgentina = getFechaArgentina()
 
   const { data: posts } = await supabase
     .from('posts')

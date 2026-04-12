@@ -1,35 +1,9 @@
 import { cache } from 'react';
 import { fetchAllDolars, processDolar } from './dolar';
 import { DOLAR_ENTRIES } from '../constants/dolarTypes';
+import type { DolarCardData } from '../types/dolar';
 
-interface DolarData {
-  title: string;
-  buy: number;
-  sell: number;
-  buyVariation: {
-    percent: number;
-    percentAbs: number;
-    sign: "up" | "down" | "neutral";
-    dailyDiff: number;
-    dailyDiffSign: "up" | "down" | "neutral";
-  };
-  sellVariation: {
-    percent: number;
-    percentAbs: number;
-    sign: "up" | "down" | "neutral";
-    dailyDiff: number;
-    dailyDiffSign: "up" | "down" | "neutral";
-  };
-  spread: number;
-  spreadSign: "up" | "down" | "neutral";
-  descripcion: string;
-  extra: string;
-  horaOperacion: string;
-  fechaActualizacion: string;
-  horaActualizacion: string;
-}
-
-export const getAllDolarData = cache(async (): Promise<Record<string, DolarData>> => {
+export const getAllDolarData = cache(async (): Promise<Record<string, DolarCardData>> => {
   const allDolars = await fetchAllDolars();
 
   const resultsArray = Object.entries(DOLAR_ENTRIES).map(([key, [api, title, desc, extra, hora]]) => {
@@ -52,7 +26,7 @@ export const getAllDolarData = cache(async (): Promise<Record<string, DolarData>
 
   return Object.fromEntries(
     resultsArray
-      .filter((r): r is { key: string; data: DolarData } => r !== null)
+      .filter((r): r is { key: string; data: DolarCardData } => r !== null)
       .map(r => [r.key, r.data])
   );
 });

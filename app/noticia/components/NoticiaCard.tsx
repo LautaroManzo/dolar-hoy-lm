@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, TrendingUp, ArrowUpRight } from 'lucide-react';
 
 interface NoticiaCardProps {
   post: {

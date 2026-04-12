@@ -41,7 +41,8 @@ export async function generateMetadata(): Promise<Metadata> {
         images: ["/opengraph-image"]
       }
     };
-  } catch {
+  } catch (err) {
+    console.error('[generateMetadata] Error al obtener cotizaciones:', err);
     return {
       title: { absolute: `Dólar hoy en Argentina | Cotización en tiempo real` },
       description: `Consultá el precio del Dólar Blue, Oficial, MEP y CCL. Brecha cambiaria y variaciones diarias en Argentina.`
@@ -55,7 +56,8 @@ export default async function Page() {
 
   try {
     dataForCards = await getAllDolarData();
-  } catch {
+  } catch (err) {
+    console.error('[Page] Error al obtener cotizaciones:', err);
     hasFetchError = true;
   }
 
@@ -71,80 +73,31 @@ export default async function Page() {
     "image": "https://dolarinfohoy.com.ar/opengraph-image",
     "dateModified": fechaActualizacion,
     "inLanguage": "es-AR",
-    "itemListElement": [
-      {
+    "itemListElement": (
+      [
+        { key: 'blue',    pos: 1, name: 'Dólar Blue',    desc: 'Cotización del mercado paralelo e informal.' },
+        { key: 'oficial', pos: 2, name: 'Dólar Oficial', desc: 'Valor de referencia determinado por el Banco Central.' },
+        { key: 'mep',     pos: 3, name: 'Dólar MEP',     desc: 'Compra legal de dólares mediante bonos nacionales.' },
+        { key: 'ccl',     pos: 4, name: 'Dólar CCL',     desc: 'Cambio de pesos por dólares en el exterior vía bonos.' },
+        { key: 'tarjeta', pos: 5, name: 'Dólar Tarjeta', desc: 'Precio para consumos y servicios en moneda extranjera.' },
+        { key: 'cripto',  pos: 6, name: 'Dólar Cripto',  desc: 'Cotización de monedas digitales como el USDT o USDC.' },
+      ] as const
+    ).flatMap(({ key, pos, name, desc }) => {
+      const d = dataForCards[key];
+      if (!d) return [];
+      return [{
         "@type": "FinancialQuote",
-        "position": 1,
-        "name": "Dólar Blue",
-        "description": "Cotización del mercado paralelo e informal.",
+        "position": pos,
+        "name": name,
+        "description": desc,
         "priceCurrency": "ARS",
-        "price": dataForCards.blue?.sell,
-        "bidPrice": dataForCards.blue?.buy,
-        "offerPrice": dataForCards.blue?.sell,
+        "price": d.sell,
+        "bidPrice": d.buy,
+        "offerPrice": d.sell,
         "baseCurrency": "USD",
-        "quoteDate": dataForCards.blue?.fechaActualizacion ?? fechaActualizacion,
-      },
-      {
-        "@type": "FinancialQuote",
-        "position": 2,
-        "name": "Dólar Oficial",
-        "description": "Valor de referencia determinado por el Banco Central.",
-        "priceCurrency": "ARS",
-        "price": dataForCards.oficial?.sell,
-        "bidPrice": dataForCards.oficial?.buy,
-        "offerPrice": dataForCards.oficial?.sell,
-        "baseCurrency": "USD",
-        "quoteDate": dataForCards.oficial?.fechaActualizacion ?? fechaActualizacion,
-      },
-      {
-        "@type": "FinancialQuote",
-        "position": 3,
-        "name": "Dólar MEP",
-        "description": "Compra legal de dólares mediante bonos nacionales.",
-        "priceCurrency": "ARS",
-        "price": dataForCards.mep?.sell,
-        "bidPrice": dataForCards.mep?.buy,
-        "offerPrice": dataForCards.mep?.sell,
-        "baseCurrency": "USD",
-        "quoteDate": dataForCards.mep?.fechaActualizacion ?? fechaActualizacion,
-      },
-      {
-        "@type": "FinancialQuote",
-        "position": 4,
-        "name": "Dólar CCL",
-        "description": "Cambio de pesos por dólares en el exterior vía bonos.",
-        "priceCurrency": "ARS",
-        "price": dataForCards.ccl?.sell,
-        "bidPrice": dataForCards.ccl?.buy,
-        "offerPrice": dataForCards.ccl?.sell,
-        "baseCurrency": "USD",
-        "quoteDate": dataForCards.ccl?.fechaActualizacion ?? fechaActualizacion,
-      },
-      {
-        "@type": "FinancialQuote",
-        "position": 5,
-        "name": "Dólar Tarjeta",
-        "description": "Precio para consumos y servicios en moneda extranjera.",
-        "priceCurrency": "ARS",
-        "price": dataForCards.tarjeta?.sell,
-        "bidPrice": dataForCards.tarjeta?.buy,
-        "offerPrice": dataForCards.tarjeta?.sell,
-        "baseCurrency": "USD",
-        "quoteDate": dataForCards.tarjeta?.fechaActualizacion ?? fechaActualizacion,
-      },
-      {
-        "@type": "FinancialQuote",
-        "position": 6,
-        "name": "Dólar Cripto",
-        "description": "Cotización de monedas digitales como el USDT o USDC.",
-        "priceCurrency": "ARS",
-        "price": dataForCards.cripto?.sell,
-        "bidPrice": dataForCards.cripto?.buy,
-        "offerPrice": dataForCards.cripto?.sell,
-        "baseCurrency": "USD",
-        "quoteDate": dataForCards.cripto?.fechaActualizacion ?? fechaActualizacion,
-      },
-    ],
+        "quoteDate": d.fechaActualizacion ?? fechaActualizacion,
+      }];
+    }),
   };
 
   return (

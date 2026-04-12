@@ -21,7 +21,7 @@ const iconMap = {
 };
 
 export function VariationDisplay({ variation, showPercentage = true, compact = false }: VariationDisplayProps) {
-  const { signPrefix, hasDailyDifference, formattedDailyDiff, formattedPercent } = formatVariation(variation);
+  const { hasDailyDifference, formattedDailyDiff, formattedPercent } = formatVariation(variation);
   const Icon = iconMap[variation.dailyDiffSign];
   
   if (!hasDailyDifference) return null;

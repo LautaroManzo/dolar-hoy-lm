@@ -1,5 +1,5 @@
 import NoticiaCard from './NoticiaCard';
-import { Newspaper, TrendingUp, Calendar } from 'lucide-react';
+import { Newspaper } from 'lucide-react';
 import { supabase } from '@/app/lib/supabase'
 
 export default async function Noticias() {

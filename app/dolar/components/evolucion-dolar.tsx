@@ -33,8 +33,6 @@ const EvolucionDolar: React.FC = () => {
     { id: 'cripto', name: 'Dólar Cripto', nombre: 'Dólar Cripto' },
   ];
 
-  const nombreSeleccionado = opcionesDolar.find(o => o.id === tipoDolar)?.nombre;
-
   return (
     <section className="w-full font-sans mx-auto px-4 py-8">
       <div className="max-w-6xl mx-auto w-full rounded-2xl border-t-4 border-[#2d5a7b]">

@@ -29,7 +29,7 @@ export function createUniqueSlug(
   existingSlugs: string[] = [], 
   maxAttempts: number = 100
 ): string {
-  let baseSlug = createSlug(text);
+  const baseSlug = createSlug(text);
   let slug = baseSlug;
   let attempt = 1;
 

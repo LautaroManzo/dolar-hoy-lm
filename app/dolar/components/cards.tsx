@@ -1,34 +1,9 @@
 import { DolarCard } from "./dolar-card";
 import ErrorBoundary from "../../shared/ui/error-boundary";
-
-interface DolarData {
-  title: string;
-  buy: number;
-  sell: number;
-  buyVariation: {
-    percent: number;
-    percentAbs: number;
-    sign: "up" | "down" | "neutral";
-    dailyDiff: number;
-    dailyDiffSign: "up" | "down" | "neutral";
-  };
-  sellVariation: {
-    percent: number;
-    percentAbs: number;
-    sign: "up" | "down" | "neutral";
-    dailyDiff: number;
-    dailyDiffSign: "up" | "down" | "neutral";
-  };
-  spread: number;
-  spreadSign: "up" | "down" | "neutral";
-  descripcion: string;
-  extra: string;
-  horaOperacion: string;
-  horaActualizacion: string;
-}
+import type { DolarCardData } from "../../types/dolar";
 
 interface CardsProps {
-  data: Record<string, DolarData>;
+  data: Record<string, DolarCardData>;
 }
 
 export function Cards({ data }: CardsProps) {

@@ -42,7 +42,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   }
 }
 
-function DefaultErrorFallback({ error, reset }: { error?: Error; reset: () => void }) {
+function DefaultErrorFallback({ reset }: { error?: Error; reset: () => void }) {
   return (
     <div className="max-w-6xl mx-auto w-full mt-6 mb-4">
       <div className="w-full bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex items-center justify-between" role="alert">

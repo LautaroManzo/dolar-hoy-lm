@@ -11,16 +11,16 @@ const PreguntasFrecuentes = () => {
   };
 
   const faqs = [
-    { pregunta: "¿Qué es el dólar oficial?", respuesta: "Es el tipo de cambio establecido y regulado por el Banco Central de la República Argentina (BCRA). Se utiliza para operaciones formales como comercio exterior y transacciones bancarias." },
-    { pregunta: "¿Qué es el dólar mayorista?", respuesta: "Es el tipo de cambio utilizado en operaciones entre bancos, grandes empresas y el comercio exterior. Suele ser más bajo que el minorista porque no incluye costos de atención al público." },
-    { pregunta: "¿Qué es el dólar minorista?", respuesta: "Es el precio del dólar que ofrecen los bancos y casas de cambio al público general. Suele ser más alto que el mayorista y sirve como referencia para otros tipos de cambio." },
-    { pregunta: "¿Qué es el dólar ahorro o solidario?", respuesta: "Es el dólar oficial minorista con recargos impositivos aplicados a compras para atesoramiento. Se adquiere de manera legal a través de bancos y entidades financieras." },
-    { pregunta: "¿Qué es el \"cepo cambiario\"?", respuesta: "Es un conjunto de restricciones impuestas por el Estado para limitar el acceso a divisas. Busca controlar la salida de dólares y preservar reservas." },
-    { pregunta: "¿Qué es el dólar blue?", respuesta: "Es el dólar que se comercializa en el mercado informal, fuera del sistema bancario y regulado. Su valor surge de la oferta y demanda entre privados." },
-    { pregunta: "¿Qué significa \"brecha cambiaria\"?", respuesta: "Es la diferencia porcentual entre el dólar oficial y otros tipos de cambio, como el blue o los financieros. Indica el nivel de distorsión del mercado cambiario." },
-    { pregunta: "¿Qué es el dólar MEP?", respuesta: "Es una forma legal de obtener dólares mediante la compra y venta de bonos que cotizan en el mercado local, sin necesidad de recurrir al mercado informal." },
-    { pregunta: "¿Qué es el dólar CCL (Contado con Liquidación)?", respuesta: "Es un tipo de cambio financiero que surge al comprar un activo en pesos en Argentina y venderlo en dólares en el exterior. Permite girar divisas fuera del país." },
-    { pregunta: "¿Qué es el dólar cripto?", respuesta: "Es el tipo de cambio que surge al comprar y vender criptomonedas estables (stablecoins) en pesos y dólares. Se opera de forma digital en exchanges y billeteras virtuales." }
+    { id: 'faq-oficial',    pregunta: "¿Qué es el dólar oficial?", respuesta: "Es el tipo de cambio establecido y regulado por el Banco Central de la República Argentina (BCRA). Se utiliza para operaciones formales como comercio exterior y transacciones bancarias." },
+    { id: 'faq-mayorista',  pregunta: "¿Qué es el dólar mayorista?", respuesta: "Es el tipo de cambio utilizado en operaciones entre bancos, grandes empresas y el comercio exterior. Suele ser más bajo que el minorista porque no incluye costos de atención al público." },
+    { id: 'faq-minorista',  pregunta: "¿Qué es el dólar minorista?", respuesta: "Es el precio del dólar que ofrecen los bancos y casas de cambio al público general. Suele ser más alto que el mayorista y sirve como referencia para otros tipos de cambio." },
+    { id: 'faq-ahorro',     pregunta: "¿Qué es el dólar ahorro o solidario?", respuesta: "Es el dólar oficial minorista con recargos impositivos aplicados a compras para atesoramiento. Se adquiere de manera legal a través de bancos y entidades financieras." },
+    { id: 'faq-cepo',       pregunta: "¿Qué es el \"cepo cambiario\"?", respuesta: "Es un conjunto de restricciones impuestas por el Estado para limitar el acceso a divisas. Busca controlar la salida de dólares y preservar reservas." },
+    { id: 'faq-blue',       pregunta: "¿Qué es el dólar blue?", respuesta: "Es el dólar que se comercializa en el mercado informal, fuera del sistema bancario y regulado. Su valor surge de la oferta y demanda entre privados." },
+    { id: 'faq-brecha',     pregunta: "¿Qué significa \"brecha cambiaria\"?", respuesta: "Es la diferencia porcentual entre el dólar oficial y otros tipos de cambio, como el blue o los financieros. Indica el nivel de distorsión del mercado cambiario." },
+    { id: 'faq-mep',        pregunta: "¿Qué es el dólar MEP?", respuesta: "Es una forma legal de obtener dólares mediante la compra y venta de bonos que cotizan en el mercado local, sin necesidad de recurrir al mercado informal." },
+    { id: 'faq-ccl',        pregunta: "¿Qué es el dólar CCL (Contado con Liquidación)?", respuesta: "Es un tipo de cambio financiero que surge al comprar un activo en pesos en Argentina y venderlo en dólares en el exterior. Permite girar divisas fuera del país." },
+    { id: 'faq-cripto',     pregunta: "¿Qué es el dólar cripto?", respuesta: "Es el tipo de cambio que surge al comprar y vender criptomonedas estables (stablecoins) en pesos y dólares. Se opera de forma digital en exchanges y billeteras virtuales." },
   ];
 
   const faqJsonLd = {
@@ -69,8 +69,8 @@ const PreguntasFrecuentes = () => {
             <div className="px-10 md:px-14 pb-14 space-y-10">
               <div className="h-px bg-gradient-to-r from-transparent via-slate-100 to-transparent mb-6" />
               <div className="grid gap-10 overflow-y-auto max-h-[450px] pr-4">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="space-y-3">
+                {faqs.map((faq) => (
+                  <div key={faq.id} className="space-y-3">
                     <h4 className="font-semibold text-slate-900 text-lg">{faq.pregunta}</h4>
                     <div className="flex gap-5">
                       <div className="w-1 bg-blue-500/20 rounded-full shrink-0" />
