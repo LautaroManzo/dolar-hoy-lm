@@ -15,7 +15,7 @@ type DolarProcesado = {
 
 const LOADING_DEBOUNCE_MS = 300;
 const CACHE_TTL_DAYS = 7;
-const HISTORICAL_DAYS = 30;
+const HISTORICAL_DAYS = 365;
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 export function useDolarHistorico(tipoDolar: string) {
@@ -27,7 +27,7 @@ export function useDolarHistorico(tipoDolar: string) {
     if (typeof window === 'undefined') return;
 
     const controller = new AbortController();
-    const cacheKey = `historico_${tipoDolar}`;
+    const cacheKey = `historico_${tipoDolar}_${HISTORICAL_DAYS}d`;
 
     // Intenta cargar desde caché antes de mostrar el spinner
     const cached = localStorage.getItem(cacheKey);
@@ -70,8 +70,8 @@ export function useDolarHistorico(tipoDolar: string) {
 
             return {
               fecha: fechaObj.toLocaleDateString('es-AR', {
-                day: 'numeric',
                 month: 'short',
+                year: '2-digit',
               }),
               venta: item.venta,
               compra: item.compra,

@@ -42,7 +42,7 @@ const EvolucionDolar: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 gap-6">
           <div className="text-center md:text-left">
             <h2 className="text-2xl font-bold text-[#1a3a52]">
-              Últimos 30 días
+              Último año
             </h2>
           </div>
 
@@ -90,12 +90,19 @@ const EvolucionDolar: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#d1d7dc" />
 
                   <XAxis
-                    dataKey="fecha"
+                    dataKey="originalDate"
                     axisLine={false}
                     tickLine={false}
                     tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 500 }}
                     minTickGap={30}
                     tickMargin={12}
+                    tickFormatter={(value: string) => {
+                      const [year, month, day] = value.split('-').map(Number);
+                      return new Date(year, month - 1, day).toLocaleDateString('es-AR', {
+                        month: 'short',
+                        year: '2-digit',
+                      });
+                    }}
                   />
 
                   <YAxis
@@ -117,8 +124,19 @@ const EvolucionDolar: React.FC = () => {
                     }}
                     itemStyle={{ fontWeight: 'bold', fontSize: '12px' }}
                     labelStyle={{ marginBottom: '4px', color: '#64748b', fontSize: '11px', fontWeight: '600' }}
+                    labelFormatter={(_label, payload) => {
+                      if (payload && payload.length > 0) {
+                        const [year, month, day] = (payload[0].payload.originalDate as string).split('-').map(Number);
+                        return new Date(year, month - 1, day).toLocaleDateString('es-AR', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                        });
+                      }
+                      return _label;
+                    }}
                     formatter={(value, name) => [
-                      `$${value}`, 
+                      `$${value}`,
                       name === 'venta' ? 'Venta' : 'Compra'
                     ]}
                   />

@@ -23,7 +23,7 @@ const Description = () => {
             <div className="relative z-10 max-w-4xl mx-auto px-6 py-16 md:py-24 text-center">
 
                 <h1 className="text-3xl md:text-5xl font-extrabold text-slate-800 mb-6 leading-tight">
-                    Dólar Blue <span className="text-[#1a3a52]">hoy</span> — cotizaciones en tiempo real
+                    Dólar Blue <span className="text-[#1a3a52]">hoy</span> en Argentina
                 </h1>
 
                 <p className="text-lg md:text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto">

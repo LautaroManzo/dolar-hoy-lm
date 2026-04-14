@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💵 DolarInfoHoy
 
-## Getting Started
+Sitio de cotizaciones del dólar en tiempo real para Argentina. Muestra 6 tipos de cambio con gráficos históricos, calculadora de divisas y noticias financieras automatizadas.
 
-First, run the development server:
+[Ver sitio web](https://dolarinfohoy.com.ar)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Tecnologías utilizadas
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![Next.js](https://img.shields.io/badge/next.js-%23000000.svg?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Supabase](https://img.shields.io/badge/supabase-%233ECF8E.svg?style=for-the-badge&logo=supabase&logoColor=white)
+![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
+![n8n](https://img.shields.io/badge/n8n-%23EA4B71.svg?style=for-the-badge&logo=n8n&logoColor=white)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🛠️ Otras dependencias
 
-## Learn More
+- **recharts** — Gráficos de evolución histórica
+- **framer-motion** — Animaciones de UI
+- **embla-carousel-react** — Carrusel de noticias
+- **lucide-react** — Iconografía
+- **@vercel/analytics** — Métricas de uso
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📰 Automatización de noticias
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Las noticias financieras se publican de forma automática mediante un workflow de **n8n** programado. Obtiene artículos desde NewsAPI, los procesa con IA (Gemini) para resumirlos y formatearlos, y los guarda en Supabase desde donde la app los consume.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📡 APIs utilizadas
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| API | Uso | Sitio |
+|-----|-----|-------|
+| **DolarApi** | Cotizaciones en tiempo real de los 6 tipos de cambio | [dolarapi.com](https://dolarapi.com) |
+| **ArgentinaDatos** | Histórico de 1 año por tipo de cambio | [argentinadatos.com](https://argentinadatos.com) |
+| **NewsAPI** | Fuente de noticias para el workflow de n8n | [newsapi.org](https://newsapi.org) |
+| **Supabase** | Base de datos para artículos y noticias | [supabase.com](https://supabase.com) |
+
+---
+
+## 🌐 Despliegue y SEO
+
+El proyecto está desplegado en **Vercel** bajo el dominio [dolarinfohoy.com.ar](https://dolarinfohoy.com.ar). El metadata, Open Graph y datos estructurados JSON-LD se generan dinámicamente con los precios actuales en cada request.
