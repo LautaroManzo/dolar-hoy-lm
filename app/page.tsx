@@ -4,7 +4,9 @@ import { Metadata } from "next";
 import Description from "./dolar/components/description";
 import EvolucionDolar from "./dolar/components/evolucion-dolar";
 import Noticias from "./noticia/components/Noticias";
-import PreguntasFrecuentes from "./dolar/components/preguntas-frecuentes";
+import PreguntasFrecuentes from "./components/preguntas-frecuentes";
+import SobreNosotros from "./components/sobre-nosotros";
+import Contacto from "./components/contacto";
 
 export const dynamic = 'force-dynamic';
 
@@ -128,6 +130,8 @@ export default async function Page() {
       <EvolucionDolar />
       <Noticias />
       <PreguntasFrecuentes />
+      <SobreNosotros />
+      <Contacto />
     </>
   );
 }
