@@ -32,7 +32,7 @@ No hay suite de tests configurada.
 
 | Fuente | Uso | Dónde |
 |---|---|---|
-| `dolarapi.com/v1/ambito/dolares` | Cotizaciones en tiempo real | `app/services/dolar.ts`, revalida cada 60s |
+| `dolarapi.com/v1/ambito/dolares` | Cotizaciones en tiempo real | `app/services/dolar.ts`, revalida cada 60s. `app/components/auto-refresh.tsx` llama `router.refresh()` cada 60s para actualizar los cards sin recargar la página. |
 | `api.argentinadatos.com/v1/cotizaciones/dolares/{type}` | Histórico (hasta 365 días) | Cliente, caché localStorage con TTL 7 días via `app/hooks/useDolarHistorico.ts` |
 | Supabase (tabla `posts`) | Noticias/artículos | Server Components en `app/noticia/` |
 | Resend | Email del formulario de contacto | `POST /api/contact` |

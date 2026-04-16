@@ -11,7 +11,7 @@ export interface DolarData {
 }
 
 const API_AMBITO = "https://dolarapi.com/v1/ambito/dolares";
-const REVALIDATE_SECONDS = 300;
+const REVALIDATE_SECONDS = 60;
 const TZ_BA = 'America/Argentina/Buenos_Aires';
 
 const getSign = (n: number): "up" | "down" | "neutral" => (n > 0 ? "up" : n < 0 ? "down" : "neutral");

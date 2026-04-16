@@ -7,6 +7,7 @@ import Noticias from "./noticia/components/Noticias";
 import PreguntasFrecuentes from "./components/preguntas-frecuentes";
 import SobreNosotros from "./components/sobre-nosotros";
 import Contacto from "./components/contacto";
+import { AutoRefresh } from "./components/auto-refresh";
 
 export const dynamic = 'force-dynamic';
 
@@ -104,6 +105,7 @@ export default async function Page() {
 
   return (
     <>
+      <AutoRefresh />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(quotesJsonLd) }}
