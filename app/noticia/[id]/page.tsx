@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { Calendar, ArrowLeft } from 'lucide-react'
 import { supabase } from '@/app/lib/supabase'
 
@@ -117,7 +118,7 @@ export default async function NoticiaPage({ params }: PageProps) {
       .single()
 
     if (fallbackError || !fallbackPost) {
-      throw new Error('404 La noticia solicitada no está disponible o no existe en nuestro sistema.')
+      notFound()
     }
 
     const fallbackJsonLd = {
