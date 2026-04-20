@@ -190,7 +190,7 @@ export default function Contacto() {
                     <button
                       type="submit"
                       disabled={status === "loading"}
-                      className="group w-full sm:w-auto flex items-center justify-center gap-2 bg-[#2d5a7b] text-white text-sm font-medium px-7 py-3 rounded-xl transition-all duration-300 hover:scale-[1.04] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-sm hover:shadow-lg"
+                      className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#2d5a7b] text-white font-semibold px-6 py-3 rounded-full shadow-[0_4px_14px_rgba(45,90,123,0.35)] hover:shadow-[0_6px_24px_rgba(45,90,123,0.55)] hover:-translate-y-0.5 active:translate-y-0 transition-[transform,box-shadow] duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
                       {status === "loading" ? (
                         "Enviando..."

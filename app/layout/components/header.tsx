@@ -1,15 +1,10 @@
 "use client";
 
 import { Carousel } from "../../shared/ui/carousel";
-import { Calculator } from "lucide-react";
-import { useState } from 'react';
-import CalculatorModal from '../../dolar/components/calculator';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export function Header() {
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -31,27 +26,8 @@ export function Header() {
             </div>
           </Link>
 
-          <div className="flex items-center gap-6">
-
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center bg-[#2d5a7b] text-white p-1.5 sm:p-2 rounded-full 
-                        text-sm font-medium transition-all duration-700 ease-in-out hover:scale-110 
-                        border-2 border-white cursor-pointer shadow-lg"
-              aria-label="Abrir calculadora de dólar"
-            >
-              <Calculator color="white" className="size-4 sm:size-5" />
-            </button>
-
-          </div>
-
         </div>
       </header>
-
-      <CalculatorModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-      />
 
       <Carousel/>
     </>
