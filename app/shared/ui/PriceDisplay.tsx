@@ -25,7 +25,7 @@ export function PriceDisplay({ price, label, variant = 'compra', size = 'md' }: 
     : 'text-[#2d5a7b]';
 
   return (
-    <div className="flex flex-col p-4 text-center bg-slate-50 border border-slate-100 rounded-xl h-[120px] justify-center">
+    <div className="flex flex-col py-4 px-3 text-center bg-slate-50 border border-slate-100 rounded-xl justify-center">
       <span className={`${labelClasses[size]} font-bold ${variant === 'compra' ? 'text-gray-700' : 'text-[#2d5a7b]'} tracking-wide uppercase`}>
         {label}
       </span>

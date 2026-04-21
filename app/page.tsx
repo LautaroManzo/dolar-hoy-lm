@@ -8,6 +8,7 @@ import PreguntasFrecuentes from "./components/preguntas-frecuentes";
 import SobreNosotros from "./components/sobre-nosotros";
 import Contacto from "./components/contacto";
 import { AutoRefresh } from "./components/auto-refresh";
+import OtrasMonedas from "./components/otras-monedas";
 
 export const dynamic = 'force-dynamic';
 
@@ -129,6 +130,7 @@ export default async function Page() {
         </section>
       </div>
 
+      <OtrasMonedas />
       <EvolucionDolar />
       <Noticias />
       <PreguntasFrecuentes />
