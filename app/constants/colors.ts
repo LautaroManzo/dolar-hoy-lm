@@ -17,5 +17,15 @@ export const COLORS = {
   chart: {
     venta: '#2d5a7b',
     compra: '#10b981'
-  }
+  },
+
+  // Comparador de cotizaciones
+  comparador: {
+    blue:            '#2d5a7b',
+    oficial:         '#059669',
+    bolsa:           '#d97706',
+    contadoconliqui: '#7c3aed',
+    tarjeta:         '#dc2626',
+    cripto:          '#0891b2',
+  } as Record<string, string>
 } as const;
