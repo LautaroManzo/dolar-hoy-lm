@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   AreaChart, Area,
@@ -12,6 +12,7 @@ import { useComparador } from '../../hooks/useComparador';
 import { COLORS } from '../../constants/colors';
 
 type Rango = '7D' | '1M' | '3M' | '6M' | '1A' | 'YTD';
+type Modo = 'precio' | 'brecha';
 
 const RANGOS: { id: Rango; label: string; titulo: string }[] = [
   { id: '7D',  label: '7D',  titulo: 'Última semana'   },
@@ -23,16 +24,23 @@ const RANGOS: { id: Rango; label: string; titulo: string }[] = [
 ];
 
 const TIPOS = [
-  { id: 'blue',            label: 'Blue'     },
-  { id: 'oficial',         label: 'Oficial'  },
-  { id: 'bolsa',           label: 'MEP'      },
-  { id: 'contadoconliqui', label: 'CCL'      },
-  { id: 'tarjeta',         label: 'Tarjeta'  },
-  { id: 'cripto',          label: 'Cripto'   },
+  { id: 'blue',            label: 'Blue'    },
+  { id: 'oficial',         label: 'Oficial' },
+  { id: 'bolsa',           label: 'MEP'     },
+  { id: 'contadoconliqui', label: 'CCL'     },
+  { id: 'tarjeta',         label: 'Tarjeta' },
+  { id: 'cripto',          label: 'Cripto'  },
 ];
 
-const LS_RANGO_KEY = 'grafico_rango_temporal';
-const LS_TIPOS_KEY = 'grafico_tipos_seleccionados';
+const TIPOS_BRECHA = [
+  { id: 'blue',            label: 'Blue' },
+  { id: 'bolsa',           label: 'MEP'  },
+  { id: 'contadoconliqui', label: 'CCL'  },
+];
+
+const LS_RANGO_KEY   = 'grafico_rango_temporal';
+const LS_TIPOS_KEY   = 'grafico_tipos_seleccionados';
+const LS_BRECHA_KEY  = 'grafico_brecha_paralelo';
 
 function getSaved<T>(key: string, fallback: T): T {
   try {
@@ -51,20 +59,50 @@ function formatDate(value: string, short = false) {
   );
 }
 
+const BRECHA_COLOR = '#d97706';
+
 const EvolucionDolar: React.FC = () => {
+  const [modo, setModo] = useState<Modo>('precio');
   const [rango, setRango] = useState<Rango>(() =>
     typeof window === 'undefined' ? '1A' : getSaved<Rango>(LS_RANGO_KEY, '1A')
   );
   const [selected, setSelected] = useState<string[]>(() =>
     typeof window === 'undefined' ? ['blue'] : getSaved<string[]>(LS_TIPOS_KEY, ['blue'])
   );
+  const [brechaParalelo, setBrechaParalelo] = useState<string>(() =>
+    typeof window === 'undefined' ? 'blue' : getSaved<string>(LS_BRECHA_KEY, 'blue')
+  );
   const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  useEffect(() => { setIsMounted(true); }, []);
 
-  const { chartData, loading, isSingle } = useComparador(selected, rango);
+  const tiposParaHook = modo === 'brecha' ? ['oficial', brechaParalelo] : selected;
+  const { chartData, loading, isSingle } = useComparador(tiposParaHook, rango);
+
+  const brechaData = useMemo(() => {
+    if (modo !== 'brecha') return [];
+    return chartData
+      .map(point => ({
+        originalDate: point.originalDate as string,
+        brecha: typeof point.oficial === 'number' && typeof point[brechaParalelo] === 'number'
+          ? Number((((point[brechaParalelo] as number) - (point.oficial as number)) / (point.oficial as number) * 100).toFixed(2))
+          : null,
+      }))
+      .filter((p): p is { originalDate: string; brecha: number } => p.brecha !== null);
+  }, [chartData, modo, brechaParalelo]);
+
+  const brechaActual = brechaData.length > 0 ? brechaData[brechaData.length - 1].brecha : null;
+
+  const brecha30d = useMemo(() => {
+    if (!brechaData.length) return null;
+    const corte = new Date();
+    corte.setDate(corte.getDate() - 30);
+    const punto = brechaData.find(p => {
+      const [y, m, d] = p.originalDate.split('-').map(Number);
+      return new Date(y, m - 1, d) >= corte;
+    });
+    return punto?.brecha ?? null;
+  }, [brechaData]);
 
   const handleRango = (r: Rango) => {
     setRango(r);
@@ -81,6 +119,11 @@ const EvolucionDolar: React.FC = () => {
     });
   };
 
+  const handleBrechaParalelo = (id: string) => {
+    setBrechaParalelo(id);
+    try { localStorage.setItem(LS_BRECHA_KEY, JSON.stringify(id)); } catch {}
+  };
+
   const titulo = RANGOS.find(r => r.id === rango)?.titulo ?? 'Último año';
 
   const axisProps = {
@@ -88,14 +131,18 @@ const EvolucionDolar: React.FC = () => {
     tickLine: false as const,
     tick: { fontSize: 10, fill: '#94a3b8', fontWeight: 500 },
   };
-
   const tooltipContentStyle = {
     borderRadius: '12px', border: 'none',
     boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
     padding: '12px', backgroundColor: '#ffffff',
   };
-  const tooltipItemStyle = { fontWeight: 'bold' as const, fontSize: '12px' };
+  const tooltipItemStyle  = { fontWeight: 'bold' as const, fontSize: '12px' };
   const tooltipLabelStyle = { marginBottom: '4px', color: '#64748b', fontSize: '11px', fontWeight: '600' as const };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const tooltipLabel = (_label: any, payload: readonly any[]) =>
+    payload?.length > 0 ? formatDate(payload[0].payload.originalDate) : _label;
+
+  const diffBrecha = brechaActual !== null && brecha30d !== null ? brechaActual - brecha30d : null;
 
   return (
     <section className="w-full font-sans mx-auto px-4 py-8">
@@ -105,58 +152,114 @@ const EvolucionDolar: React.FC = () => {
           {/* HEADER */}
           <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-[#1a3a52]">{titulo}</h2>
-              {!isSingle && (
+              <h2 className="text-2xl font-bold text-[#1a3a52]">
+                {modo === 'brecha' ? 'Brecha cambiaria' : titulo}
+              </h2>
+              {modo === 'precio' && !isSingle && (
                 <p className="text-xs text-slate-400 mt-1">Precio de venta</p>
+              )}
+              {modo === 'brecha' && (
+                <p className="text-xs text-slate-400 mt-1">vs Dólar Oficial</p>
               )}
             </div>
 
-            {/* TABS DE RANGO */}
-            <div className="flex gap-1 bg-slate-100 rounded-xl p-1 h-fit">
-              {RANGOS.map(r => (
-                <button
-                  key={r.id}
-                  onClick={() => handleRango(r.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
-                    rango === r.id
-                      ? 'bg-white text-[#1a3a52] shadow-sm'
-                      : 'text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  {r.label}
-                </button>
-              ))}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+              {/* TOGGLE MODO */}
+              <div className="flex gap-1 bg-slate-100 rounded-xl p-1 h-fit">
+                {(['precio', 'brecha'] as Modo[]).map(m => (
+                  <button
+                    key={m}
+                    onClick={() => setModo(m)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer capitalize ${
+                      modo === m ? 'bg-white text-[#1a3a52] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    {m === 'precio' ? 'Precio' : 'Brecha'}
+                  </button>
+                ))}
+              </div>
+
+              {/* TABS DE RANGO */}
+              <div className="flex gap-1 bg-slate-100 rounded-xl p-1 h-fit">
+                {RANGOS.map(r => (
+                  <button
+                    key={r.id}
+                    onClick={() => handleRango(r.id)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
+                      rango === r.id ? 'bg-white text-[#1a3a52] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    {r.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* PILLS DE TIPO */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {TIPOS.map(tipo => {
-              const isActive = isMounted && selected.includes(tipo.id);
-              const color = COLORS.comparador[tipo.id];
-              return (
-                <button
-                  key={tipo.id}
-                  onClick={() => toggleTipo(tipo.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 transition-all duration-200 cursor-pointer ${
-                    isActive ? 'bg-white' : 'bg-slate-50 border-slate-200 text-slate-400'
-                  }`}
-                  style={isActive ? { borderColor: color, color } : {}}
-                >
-                  <span
-                    className="w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: isActive ? color : '#cbd5e1' }}
-                  />
-                  {tipo.label}
-                </button>
-              );
-            })}
+          {/* PILLS */}
+          <div className="flex flex-wrap items-center gap-2 mb-6">
+            {modo === 'brecha' ? (
+              <>
+                {TIPOS_BRECHA.map(tipo => {
+                  const isActive = isMounted && brechaParalelo === tipo.id;
+                  const color = COLORS.comparador[tipo.id];
+                  return (
+                    <button
+                      key={tipo.id}
+                      onClick={() => handleBrechaParalelo(tipo.id)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 transition-all duration-200 cursor-pointer ${
+                        isActive ? 'bg-white' : 'bg-slate-50 border-slate-200 text-slate-400'
+                      }`}
+                      style={isActive ? { borderColor: color, color } : {}}
+                    >
+                      <span className="w-2 h-2 rounded-full shrink-0"
+                        style={{ backgroundColor: isActive ? color : '#cbd5e1' }} />
+                      {tipo.label}
+                    </button>
+                  );
+                })}
+                {isMounted && brechaActual !== null && (
+                  <div className="ml-auto flex items-center gap-4 pl-4 border-l border-slate-200">
+                    <div>
+                      <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Brecha</p>
+                      <p className="text-xl font-black text-amber-700">{brechaActual.toFixed(1)}%</p>
+                    </div>
+                    {diffBrecha !== null && (
+                      <div>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">vs 30d</p>
+                        <p className={`text-base font-bold ${diffBrecha > 0 ? 'text-red-600' : diffBrecha < 0 ? 'text-green-600' : 'text-slate-500'}`}>
+                          {diffBrecha > 0 ? '+' : ''}{diffBrecha.toFixed(1)}%
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            ) : (
+              TIPOS.map(tipo => {
+                const isActive = isMounted && selected.includes(tipo.id);
+                const color = COLORS.comparador[tipo.id];
+                return (
+                  <button
+                    key={tipo.id}
+                    onClick={() => toggleTipo(tipo.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 transition-all duration-200 cursor-pointer ${
+                      isActive ? 'bg-white' : 'bg-slate-50 border-slate-200 text-slate-400'
+                    }`}
+                    style={isActive ? { borderColor: color, color } : {}}
+                  >
+                    <span className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: isActive ? color : '#cbd5e1' }} />
+                    {tipo.label}
+                  </button>
+                );
+              })
+            )}
           </div>
 
           {/* GRÁFICO */}
           <ErrorBoundary>
             <div className="w-full h-[380px] relative">
-
               {loading && (
                 <div className="absolute inset-0 z-20 bg-white/60 backdrop-blur-[1px] flex items-center justify-center rounded-xl">
                   <div className="flex flex-col items-center">
@@ -169,7 +272,7 @@ const EvolucionDolar: React.FC = () => {
               {isMounted && (
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={`${selected.join('-')}-${rango}`}
+                    key={`${modo}-${selected.join('-')}-${brechaParalelo}-${rango}`}
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
@@ -177,7 +280,30 @@ const EvolucionDolar: React.FC = () => {
                     className="w-full h-full"
                   >
                     <ResponsiveContainer width="100%" height="100%">
-                      {isSingle ? (
+                      {modo === 'brecha' ? (
+                        <AreaChart data={brechaData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+                          <defs>
+                            <linearGradient id="colorBrecha" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor={BRECHA_COLOR} stopOpacity={0.15} />
+                              <stop offset="95%" stopColor={BRECHA_COLOR} stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#d1d7dc" />
+                          <XAxis dataKey="originalDate" {...axisProps} minTickGap={30} tickMargin={12}
+                            tickFormatter={(v: string) => formatDate(v, true)} />
+                          <YAxis orientation="left" domain={['auto', 'auto']} {...axisProps}
+                            tickFormatter={(v) => `${v}%`} />
+                          <Tooltip
+                            contentStyle={tooltipContentStyle}
+                            itemStyle={tooltipItemStyle}
+                            labelStyle={tooltipLabelStyle}
+                            labelFormatter={tooltipLabel}
+                            formatter={(value) => [`${value}%`, 'Brecha']}
+                          />
+                          <Area type="monotone" dataKey="brecha" stroke={BRECHA_COLOR} strokeWidth={2.5}
+                            fillOpacity={1} fill="url(#colorBrecha)" animationDuration={600} />
+                        </AreaChart>
+                      ) : isSingle ? (
                         <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                           <defs>
                             <linearGradient id="colorVenta" x1="0" y1="0" x2="0" y2="1">
@@ -198,8 +324,7 @@ const EvolucionDolar: React.FC = () => {
                             contentStyle={tooltipContentStyle}
                             itemStyle={tooltipItemStyle}
                             labelStyle={tooltipLabelStyle}
-                            labelFormatter={(_label, payload) =>
-                              payload?.length > 0 ? formatDate(payload[0].payload.originalDate) : _label}
+                            labelFormatter={tooltipLabel}
                             formatter={(value, name) => [`$${value}`, name === 'venta' ? 'Venta' : 'Compra']}
                           />
                           <Legend verticalAlign="top" align="right" iconType="circle" iconSize={8}
@@ -226,8 +351,7 @@ const EvolucionDolar: React.FC = () => {
                             contentStyle={tooltipContentStyle}
                             itemStyle={tooltipItemStyle}
                             labelStyle={tooltipLabelStyle}
-                            labelFormatter={(_label, payload) =>
-                              payload?.length > 0 ? formatDate(payload[0].payload.originalDate) : _label}
+                            labelFormatter={tooltipLabel}
                             formatter={(value, name) => [
                               `$${value}`,
                               TIPOS.find(t => t.id === name)?.label ?? name,
@@ -252,10 +376,8 @@ const EvolucionDolar: React.FC = () => {
                   </motion.div>
                 </AnimatePresence>
               )}
-
             </div>
           </ErrorBoundary>
-
 
         </div>
       </div>
