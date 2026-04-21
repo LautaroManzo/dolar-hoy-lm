@@ -10,10 +10,10 @@ export type DolarEntries = Record<string, [string, string, string, string, strin
 
 export const DOLAR_ENTRIES: DolarEntries = {
   blue: [
-    "blue", 
-    "Dólar Blue", 
-    "Cotización del mercado paralelo e informal.", 
-    "Se opera habitualmente en efectivo y sin límites.", 
+    "blue",
+    "Dólar Blue",
+    "Cotización del mercado paralelo e informal, la más seguida como referencia real del valor del peso.",
+    "Se opera en efectivo y fuera del sistema bancario.",
     "De 11:00hs a 16:00hs."
   ],
   oficial: [

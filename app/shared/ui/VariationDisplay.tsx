@@ -23,21 +23,22 @@ const iconMap = {
 export function VariationDisplay({ variation, showPercentage = true, compact = false }: VariationDisplayProps) {
   const { hasDailyDifference, formattedDailyDiff, formattedPercent } = formatVariation(variation);
   const Icon = iconMap[variation.dailyDiffSign];
-  
-  if (!hasDailyDifference) return null;
 
   if (compact) {
     return (
       <div className={`text-xs font-semibold flex items-center gap-1 ${
-        variation.sign === 'down' ? 'text-red-700' : 
-        variation.sign === 'up' ? 'text-green-700' : 
+        variation.sign === 'down' ? 'text-red-700' :
+        variation.sign === 'up' ? 'text-green-700' :
         'text-gray-600'
       }`}>
         <Icon size={12} />
-        {variation.sign === 'down' ? '-' : variation.sign === 'up' ? '+' : ''}{variation.percentAbs.toFixed(2)}%
+        {variation.sign === 'down' ? '-' : variation.sign === 'up' ? '+' : ''}
+        {variation.percentAbs.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%
       </div>
     );
   }
+
+  if (!hasDailyDifference) return null;
 
   return (
     <span className="flex items-center justify-center gap-1 text-xs font-semibold mt-2">

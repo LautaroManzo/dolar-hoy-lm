@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   AreaChart, Area,
   LineChart, Line,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import ErrorBoundary from '../../shared/ui/error-boundary';
 import { useComparador } from '../../hooks/useComparador';
@@ -163,14 +163,14 @@ const EvolucionDolar: React.FC = () => {
               )}
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
               {/* TOGGLE MODO */}
-              <div className="flex gap-1 bg-slate-100 rounded-xl p-1 h-fit">
+              <div className="flex gap-1 bg-slate-100 rounded-xl p-1 w-full sm:w-auto">
                 {(['precio', 'brecha'] as Modo[]).map(m => (
                   <button
                     key={m}
                     onClick={() => setModo(m)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer capitalize ${
+                    className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer capitalize ${
                       modo === m ? 'bg-white text-[#1a3a52] shadow-sm' : 'text-slate-500 hover:text-slate-700'
                     }`}
                   >
@@ -180,12 +180,12 @@ const EvolucionDolar: React.FC = () => {
               </div>
 
               {/* TABS DE RANGO */}
-              <div className="flex gap-1 bg-slate-100 rounded-xl p-1 h-fit">
+              <div className="flex gap-1 bg-slate-100 rounded-xl p-1 w-full sm:w-auto">
                 {RANGOS.map(r => (
                   <button
                     key={r.id}
                     onClick={() => handleRango(r.id)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
+                    className={`flex-1 sm:flex-none px-2 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
                       rango === r.id ? 'bg-white text-[#1a3a52] shadow-sm' : 'text-slate-500 hover:text-slate-700'
                     }`}
                   >
@@ -197,9 +197,9 @@ const EvolucionDolar: React.FC = () => {
           </div>
 
           {/* PILLS */}
-          <div className="flex flex-wrap items-center gap-2 mb-6">
-            {modo === 'brecha' ? (
-              <>
+          {modo === 'brecha' ? (
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
+              <div className="flex flex-wrap justify-center sm:justify-start gap-2">
                 {TIPOS_BRECHA.map(tipo => {
                   const isActive = isMounted && brechaParalelo === tipo.id;
                   const color = COLORS.comparador[tipo.id];
@@ -218,48 +218,62 @@ const EvolucionDolar: React.FC = () => {
                     </button>
                   );
                 })}
-                {isMounted && brechaActual !== null && (
-                  <div className="ml-auto flex items-center gap-4 pl-4 border-l border-slate-200">
-                    <div>
-                      <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Brecha</p>
-                      <p className="text-xl font-black text-amber-700">{brechaActual.toFixed(1)}%</p>
-                    </div>
-                    {diffBrecha !== null && (
-                      <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">vs 30d</p>
-                        <p className={`text-base font-bold ${diffBrecha > 0 ? 'text-red-600' : diffBrecha < 0 ? 'text-green-600' : 'text-slate-500'}`}>
-                          {diffBrecha > 0 ? '+' : ''}{diffBrecha.toFixed(1)}%
-                        </p>
-                      </div>
-                    )}
+              </div>
+              {isMounted && brechaActual !== null && (
+                <div className="flex items-center justify-center sm:justify-start gap-4 sm:ml-auto sm:pl-4 sm:border-l border-slate-200">
+                  <div>
+                    <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Brecha</p>
+                    <p className="text-xl font-black text-amber-700">{brechaActual.toFixed(1)}%</p>
                   </div>
-                )}
-              </>
-            ) : (
-              TIPOS.map(tipo => {
-                const isActive = isMounted && selected.includes(tipo.id);
-                const color = COLORS.comparador[tipo.id];
-                return (
-                  <button
-                    key={tipo.id}
-                    onClick={() => toggleTipo(tipo.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 transition-all duration-200 cursor-pointer ${
-                      isActive ? 'bg-white' : 'bg-slate-50 border-slate-200 text-slate-400'
-                    }`}
-                    style={isActive ? { borderColor: color, color } : {}}
-                  >
-                    <span className="w-2 h-2 rounded-full shrink-0"
-                      style={{ backgroundColor: isActive ? color : '#cbd5e1' }} />
-                    {tipo.label}
-                  </button>
-                );
-              })
-            )}
-          </div>
+                  {diffBrecha !== null && (
+                    <div>
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">vs 30d</p>
+                      <p className={`text-base font-bold ${diffBrecha > 0 ? 'text-red-600' : diffBrecha < 0 ? 'text-green-600' : 'text-slate-500'}`}>
+                        {diffBrecha > 0 ? '+' : ''}{diffBrecha.toFixed(1)}%
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
+              <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2">
+                {TIPOS.map(tipo => {
+                  const isActive = isMounted && selected.includes(tipo.id);
+                  const color = COLORS.comparador[tipo.id];
+                  return (
+                    <button
+                      key={tipo.id}
+                      onClick={() => toggleTipo(tipo.id)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 transition-all duration-200 cursor-pointer ${
+                        isActive ? 'bg-white' : 'bg-slate-50 border-slate-200 text-slate-400'
+                      }`}
+                      style={isActive ? { borderColor: color, color } : {}}
+                    >
+                      <span className="w-2 h-2 rounded-full shrink-0"
+                        style={{ backgroundColor: isActive ? color : '#cbd5e1' }} />
+                      {tipo.label}
+                    </button>
+                  );
+                })}
+              </div>
+              {isMounted && isSingle && (
+                <div className="flex items-center justify-center sm:justify-start gap-4 sm:ml-auto sm:pl-4 sm:border-l border-slate-200">
+                  {[{ key: 'compra', label: 'Compra', color: COLORS.chart.compra }, { key: 'venta', label: 'Venta', color: COLORS.chart.venta }].map(({ key, label, color }) => (
+                    <span key={key} className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide" style={{ color }}>
+                      <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: color }} />
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* GRÁFICO */}
           <ErrorBoundary>
-            <div className="w-full h-[380px] relative">
+            <div className="w-full h-[260px] sm:h-[380px] relative">
               {loading && (
                 <div className="absolute inset-0 z-20 bg-white/60 backdrop-blur-[1px] flex items-center justify-center rounded-xl">
                   <div className="flex flex-col items-center">
@@ -304,7 +318,7 @@ const EvolucionDolar: React.FC = () => {
                             fillOpacity={1} fill="url(#colorBrecha)" animationDuration={600} />
                         </AreaChart>
                       ) : isSingle ? (
-                        <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                        <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                           <defs>
                             <linearGradient id="colorVenta" x1="0" y1="0" x2="0" y2="1">
                               <stop offset="5%" stopColor={COLORS.chart.venta} stopOpacity={0.15} />
@@ -327,21 +341,13 @@ const EvolucionDolar: React.FC = () => {
                             labelFormatter={tooltipLabel}
                             formatter={(value, name) => [`$${value}`, name === 'venta' ? 'Venta' : 'Compra']}
                           />
-                          <Legend verticalAlign="top" align="right" iconType="circle" iconSize={8}
-                            wrapperStyle={{ paddingBottom: '20px', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em' }}
-                            formatter={(value) => (
-                              <span className="ml-1" style={{ color: value === 'venta' ? COLORS.chart.venta : COLORS.chart.compra }}>
-                                {value === 'venta' ? 'Venta' : 'Compra'}
-                              </span>
-                            )}
-                          />
                           <Area type="monotone" dataKey="compra" stroke={COLORS.chart.compra} strokeWidth={2}
                             fillOpacity={1} fill="url(#colorCompra)" animationDuration={600} />
                           <Area type="monotone" dataKey="venta" stroke={COLORS.chart.venta} strokeWidth={2.5}
                             fillOpacity={1} fill="url(#colorVenta)" animationDuration={600} />
                         </AreaChart>
                       ) : (
-                        <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                        <LineChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#d1d7dc" />
                           <XAxis dataKey="originalDate" {...axisProps} minTickGap={30} tickMargin={12}
                             tickFormatter={(v: string) => formatDate(v, true)} />
@@ -356,14 +362,6 @@ const EvolucionDolar: React.FC = () => {
                               `$${value}`,
                               TIPOS.find(t => t.id === name)?.label ?? name,
                             ]}
-                          />
-                          <Legend verticalAlign="top" align="right" iconType="circle" iconSize={8}
-                            wrapperStyle={{ paddingBottom: '20px', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em' }}
-                            formatter={(value) => (
-                              <span className="ml-1" style={{ color: COLORS.comparador[value as string] }}>
-                                {TIPOS.find(t => t.id === value)?.label ?? value}
-                              </span>
-                            )}
                           />
                           {selected.map(tipo => (
                             <Line key={tipo} type="monotone" dataKey={tipo}

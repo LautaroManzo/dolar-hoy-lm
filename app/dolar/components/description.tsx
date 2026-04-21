@@ -40,10 +40,10 @@ const Description = () => {
 
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="inline-flex items-center gap-2 bg-[#2d5a7b] text-white font-semibold px-6 py-3 rounded-full shadow-[0_4px_14px_rgba(45,90,123,0.35)] hover:shadow-[0_6px_24px_rgba(45,90,123,0.55)] hover:-translate-y-0.5 active:translate-y-0 transition-[transform,box-shadow] duration-300 cursor-pointer"
+                        className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[#1a3a52] to-[#2d5a7b] text-white text-sm font-semibold px-6 py-3 rounded-full shadow-[0_6px_24px_rgba(26,58,82,0.35)] hover:shadow-[0_10px_32px_rgba(26,58,82,0.55)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
                         aria-label="Abrir calculadora de dólar"
                     >
-                        <Calculator size={18} />
+                        <Calculator size={16} />
                         Conversor de Moneda
                     </button>
 

@@ -49,7 +49,7 @@ export function processDolar(dolarData: DolarData): DolarResponse {
     percent: Number(variacionPercent.toFixed(2)),
     percentAbs: Number(Math.abs(variacionPercent).toFixed(2)),
     sign: getSign(variacionPercent),
-    dailyDiff: Number((dolarData.compra * variacionPercent / 100).toFixed(2)),
+    dailyDiff: Number((dolarData.venta * variacionPercent / 100).toFixed(2)),
     dailyDiffSign: getSign(variacionPercent)
   };
 

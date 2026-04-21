@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, Minus, Info, X, Share2, Copy } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Info, X, Share2, Copy, Clock } from "lucide-react";
 import { useState } from "react";
 import { VariationDisplay } from "../../shared/ui/VariationDisplay";
 import { PriceDisplay } from "../../shared/ui/PriceDisplay";
@@ -142,13 +142,13 @@ export function DolarCard({
 
   return (
     <motion.div
-      className="relative w-full h-[300px] mb-6"
+      className="relative w-full h-[260px] mb-5"
       animate={{ rotateY: isOpen ? 180 : 0 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
       style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
     >
       <div
-        className={`absolute inset-0 rounded-2xl shadow-md bg-white p-5 flex flex-col gap-3 border-t-4 border-[#2d5a7b] justify-center ${isOpen ? "pointer-events-none" : "pointer-events-auto"}`}
+        className={`absolute inset-0 rounded-2xl shadow-md bg-white px-5 pt-5 pb-8 flex flex-col gap-2 border-t-4 border-[#2d5a7b] justify-between ${isOpen ? "pointer-events-none" : "pointer-events-auto"}`}
         style={{ backfaceVisibility: "hidden" }}
       >
         <div className="flex items-center justify-between">
@@ -164,7 +164,7 @@ export function DolarCard({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-1">
+        <div className="grid grid-cols-2 gap-3">
           <PriceDisplay price={buy} label="Compra hoy" variant="compra" />
           <PriceDisplay price={sell} label="Venta hoy" variant="venta" />
         </div>
@@ -203,26 +203,23 @@ export function DolarCard({
       </div>
 
       <div
-        className={`absolute inset-0 rounded-3xl shadow-2xl border-t-4 border-[#2d5a7b] bg-white flex flex-col p-[20px] ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        className={`absolute inset-0 rounded-2xl shadow-md border-t-4 border-[#2d5a7b] bg-white flex flex-col px-5 pt-5 pb-8 ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
         style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
       >
-        <div className="flex-1 flex flex-col justify-center space-y-4">
-          <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-900 tracking-wide mb-3">
-              {title}
-            </h3>
-            <p className="text-[14px] sm:text-[16px] text-gray-700 font-semibold leading-relaxed">
-              {descripcion}
-            </p>
+        <div className="flex-1 flex flex-col justify-center gap-4 max-w-[90%] mx-auto w-full">
+          <div>
+            <p className="text-[11px] sm:text-[13px] font-black text-[#2d5a7b] uppercase tracking-widest mb-2">{title}</p>
+            <p className="text-[14px] sm:text-[17px] text-gray-700 leading-relaxed">{descripcion}</p>
           </div>
 
-          <div className="flex flex-col gap-2 text-sm">
-            <div className="flex items-center justify-center gap-2 text-gray-600">
-              <p className="text-[13px] sm:text-[15px] font-medium text-center">{extra}</p>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-start gap-2">
+              <Info size={13} className="text-[#2d5a7b] mt-0.5 shrink-0" />
+              <p className="text-[12px] sm:text-[15px] text-gray-600 leading-snug">{extra}</p>
             </div>
-            
-            <div className="flex items-center justify-center gap-2 text-gray-600">
-              <p className="text-[12px] sm:text-[14px] font-medium text-center">{horaOperacion}</p>
+            <div className="flex items-center gap-2">
+              <Clock size={13} className="text-[#2d5a7b] shrink-0" />
+              <p className="text-[12px] sm:text-[14px] text-gray-400">{horaOperacion}</p>
             </div>
           </div>
         </div>

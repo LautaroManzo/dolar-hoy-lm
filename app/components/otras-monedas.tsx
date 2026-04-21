@@ -44,11 +44,11 @@ export default async function OtrasMonedas() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex flex-col items-center justify-center py-3 bg-slate-50 border border-slate-100 rounded-xl">
                     <span className="text-[0.55rem] font-bold text-gray-700 tracking-wide uppercase">Compra</span>
-                    <span className="text-xl font-bold text-gray-700 leading-tight mt-1">${formatPrice(m.compra)}</span>
+                    <span className="text-base sm:text-xl font-bold text-gray-700 leading-tight mt-1">${formatPrice(m.compra)}</span>
                   </div>
                   <div className="flex flex-col items-center justify-center py-3 bg-slate-50 border border-slate-100 rounded-xl">
                     <span className="text-[0.55rem] font-bold text-[#2d5a7b] tracking-wide uppercase">Venta</span>
-                    <span className="text-xl font-bold text-[#2d5a7b] leading-tight mt-1">${formatPrice(m.venta)}</span>
+                    <span className="text-base sm:text-xl font-bold text-[#2d5a7b] leading-tight mt-1">${formatPrice(m.venta)}</span>
                   </div>
                 </div>
 

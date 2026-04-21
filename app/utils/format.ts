@@ -10,7 +10,7 @@ export const formatVariation = (variation: {
   dailyDiffSign: "up" | "down" | "neutral";
 }) => {
   const signPrefix = variation.dailyDiffSign === "up" ? "+" : variation.dailyDiffSign === "down" ? "-" : "";
-  const hasDailyDifference = variation.dailyDiff !== 0;
+  const hasDailyDifference = variation.percent !== 0;
   
   return {
     signPrefix,
