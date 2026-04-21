@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Calendar, ArrowLeft } from 'lucide-react'
+import { Calendar, ArrowLeft, Newspaper } from 'lucide-react'
 import { supabase } from '@/app/lib/supabase'
 
 export async function generateStaticParams() {
@@ -16,6 +16,18 @@ export async function generateStaticParams() {
 
 interface PageProps {
   params: Promise<{ id: string }>
+}
+
+interface Post {
+  id: number;
+  title: string;
+  resumen_noticia: string;
+  content: string;
+  category: string;
+  image_url: string | null;
+  created_at: string;
+  source_name?: string | null;
+  source_url?: string | null;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -166,14 +178,20 @@ export default async function NoticiaPage({ params }: PageProps) {
           <article className="bg-white rounded-2xl shadow-sm overflow-hidden">
 
             <div className="relative h-96 w-full">
-              <Image
-                src={fallbackPost.image_url}
-                alt={fallbackPost.title}
-                fill
-                sizes="(max-width: 1152px) 100vw, 1152px"
-                className="object-cover"
-                priority
-              />
+              {fallbackPost.image_url ? (
+                <Image
+                  src={fallbackPost.image_url}
+                  alt={fallbackPost.title}
+                  fill
+                  sizes="(max-width: 1152px) 100vw, 1152px"
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-slate-100">
+                  <Newspaper className="h-24 w-24 text-slate-300" />
+                </div>
+              )}
             </div>
 
             <div className="p-6 sm:p-8">
@@ -215,6 +233,24 @@ export default async function NoticiaPage({ params }: PageProps) {
                   </div>
                 )}
               </div>
+
+              {(fallbackPost as Post).source_name && (
+                <p className="mt-6 text-xs text-slate-400 border-t pt-4">
+                  Fuente:{' '}
+                  {(fallbackPost as Post).source_url ? (
+                    <a
+                      href={(fallbackPost as Post).source_url!}
+                      rel="nofollow noopener"
+                      target="_blank"
+                      className="hover:underline"
+                    >
+                      {(fallbackPost as Post).source_name}
+                    </a>
+                  ) : (
+                    (fallbackPost as Post).source_name
+                  )}
+                </p>
+              )}
 
             </div>
 
@@ -271,14 +307,20 @@ export default async function NoticiaPage({ params }: PageProps) {
         <article className="bg-white rounded-2xl shadow-sm overflow-hidden">
 
           <div className="relative h-96 w-full">
-            <Image
-              src={post.image_url}
-              alt={post.title}
-              fill
-              sizes="(max-width: 1152px) 100vw, 1152px"
-              className="object-cover"
-              priority
-            />
+            {post.image_url ? (
+              <Image
+                src={post.image_url}
+                alt={post.title}
+                fill
+                sizes="(max-width: 1152px) 100vw, 1152px"
+                className="object-cover"
+                priority
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-slate-100">
+                <Newspaper className="h-24 w-24 text-slate-300" />
+              </div>
+            )}
           </div>
 
           <div className="p-6 sm:p-8">
@@ -320,6 +362,24 @@ export default async function NoticiaPage({ params }: PageProps) {
                 </div>
               )}
             </div>
+
+            {(post as Post).source_name && (
+              <p className="mt-6 text-xs text-slate-400 border-t pt-4">
+                Fuente:{' '}
+                {(post as Post).source_url ? (
+                  <a
+                    href={(post as Post).source_url!}
+                    rel="nofollow noopener"
+                    target="_blank"
+                    className="hover:underline"
+                  >
+                    {(post as Post).source_name}
+                  </a>
+                ) : (
+                  (post as Post).source_name
+                )}
+              </p>
+            )}
 
           </div>
 
