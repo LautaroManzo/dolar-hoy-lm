@@ -3,26 +3,42 @@
 import { useState, useEffect } from "react";
 import { fetchAllDolars } from "../services/dolar";
 
+const LS_KEY = "calculator_selected_dolar";
+
 export interface DolarType {
   id: string;
   name: string;
-  price: number;
+  compra: number;
+  venta: number;
 }
 
 const DEFAULT_TYPES: DolarType[] = [
-  { id: "blue", name: "Dólar Blue", price: 0 },
-  { id: "oficial", name: "Dólar Oficial", price: 0 },
-  { id: "bolsa", name: "Dólar MEP", price: 0 },
-  { id: "contadoconliqui", name: "Dólar CCL", price: 0 },
-  { id: "tarjeta", name: "Dólar Tarjeta", price: 0 },
-  { id: "cripto", name: "Dólar Cripto", price: 0 },
+  { id: "blue", name: "Dólar Blue", compra: 0, venta: 0 },
+  { id: "oficial", name: "Dólar Oficial", compra: 0, venta: 0 },
+  { id: "bolsa", name: "Dólar MEP", compra: 0, venta: 0 },
+  { id: "contadoconliqui", name: "Dólar CCL", compra: 0, venta: 0 },
+  { id: "tarjeta", name: "Dólar Tarjeta", compra: 0, venta: 0 },
+  { id: "cripto", name: "Dólar Cripto", compra: 0, venta: 0 },
 ];
+
+function getSavedId(): string {
+  try {
+    return localStorage.getItem(LS_KEY) ?? "blue";
+  } catch {
+    return "blue";
+  }
+}
 
 export function useCalculator(isOpen: boolean) {
   const [amount, setAmount] = useState<string>("");
   const [dolarTypes, setDolarTypes] = useState<DolarType[]>(DEFAULT_TYPES);
-  const [selectedDolar, setSelectedDolar] = useState<DolarType | null>(DEFAULT_TYPES[0]);
+  const [selectedDolar, setSelectedDolar] = useState<DolarType | null>(null);
   const [isInverse, setIsInverse] = useState(false);
+
+  useEffect(() => {
+    const savedId = getSavedId();
+    setSelectedDolar(DEFAULT_TYPES.find((t) => t.id === savedId) ?? DEFAULT_TYPES[0]);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -30,15 +46,15 @@ export function useCalculator(isOpen: boolean) {
     const loadDolarTypes = async () => {
       try {
         const allDolars = await fetchAllDolars();
-        const find = (casa: string) =>
-          allDolars.find((d) => d.casa === casa)?.compra ?? 0;
+        const find = (casa: string, field: "compra" | "venta") =>
+          allDolars.find((d) => d.casa === casa)?.[field] ?? 0;
         const types: DolarType[] = [
-          { id: "blue", name: "Dólar Blue", price: find("blue") },
-          { id: "oficial", name: "Dólar Oficial", price: find("oficial") },
-          { id: "bolsa", name: "Dólar MEP", price: find("bolsa") },
-          { id: "contadoconliqui", name: "Dólar CCL", price: find("contadoconliqui") },
-          { id: "tarjeta", name: "Dólar Tarjeta", price: find("tarjeta") },
-          { id: "cripto", name: "Dólar Cripto", price: find("cripto") },
+          { id: "blue", name: "Dólar Blue", compra: find("blue", "compra"), venta: find("blue", "venta") },
+          { id: "oficial", name: "Dólar Oficial", compra: find("oficial", "compra"), venta: find("oficial", "venta") },
+          { id: "bolsa", name: "Dólar MEP", compra: find("bolsa", "compra"), venta: find("bolsa", "venta") },
+          { id: "contadoconliqui", name: "Dólar CCL", compra: find("contadoconliqui", "compra"), venta: find("contadoconliqui", "venta") },
+          { id: "tarjeta", name: "Dólar Tarjeta", compra: find("tarjeta", "compra"), venta: find("tarjeta", "venta") },
+          { id: "cripto", name: "Dólar Cripto", compra: find("cripto", "compra"), venta: find("cripto", "venta") },
         ];
         setDolarTypes(types);
         setSelectedDolar((prev) =>
@@ -57,11 +73,20 @@ export function useCalculator(isOpen: boolean) {
     return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
+  const handleSelectDolar = (dolar: DolarType) => {
+    setSelectedDolar(dolar);
+    try {
+      localStorage.setItem(LS_KEY, dolar.id);
+    } catch {}
+  };
+
+  // ARS → USD: el usuario compra dólares, paga el precio de venta
+  // USD → ARS: el usuario vende dólares, recibe el precio de compra
   const result =
     selectedDolar && amount
       ? isInverse
-        ? Number(amount) * selectedDolar.price
-        : Number(amount) / selectedDolar.price
+        ? Number(amount) * selectedDolar.compra
+        : Number(amount) / selectedDolar.venta
       : 0;
 
   const clearAmount = () => setAmount("");
@@ -76,7 +101,7 @@ export function useCalculator(isOpen: boolean) {
     setAmount,
     dolarTypes,
     selectedDolar,
-    setSelectedDolar,
+    setSelectedDolar: handleSelectDolar,
     isInverse,
     toggleInverse,
     result,

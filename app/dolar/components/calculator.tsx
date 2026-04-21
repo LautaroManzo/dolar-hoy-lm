@@ -59,6 +59,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
               }}
               className="w-full"
             />
+
           </div>
 
           <div className="flex flex-col relative">
@@ -116,7 +117,9 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
           </div>
 
           <div className="flex items-center justify-center px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
-            <span className="text-sm font-black text-[#1a3a52]">1 USD = ${formatPrice(selectedDolar?.price || 0)}</span>
+            <span className="text-sm font-black text-[#1a3a52]">
+              Compra: ${formatPrice(selectedDolar?.compra || 0)} · Venta: ${formatPrice(selectedDolar?.venta || 0)}
+            </span>
           </div>
 
         </div>
