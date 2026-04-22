@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Calendar, ArrowLeft, Newspaper } from 'lucide-react'
+import { Calendar, ArrowLeft, Newspaper, ExternalLink } from 'lucide-react'
 import { supabase } from '@/app/lib/supabase'
 
 export async function generateStaticParams() {
@@ -26,6 +26,7 @@ interface Post {
   category: string;
   image_url: string | null;
   created_at: string;
+  published_at?: string | null;
   source_name?: string | null;
   source_url?: string | null;
 }
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { data: post } = await supabase
     .from('posts')
-    .select('title, resumen_noticia, content, category, image_url, created_at')
+    .select('title, resumen_noticia, content, category, image_url, created_at, published_at, source_name, source_url')
     .eq('slug', slug)
     .single()
 
@@ -50,7 +51,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const titleFromSlug = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     const { data: fallbackPost } = await supabase
       .from('posts')
-      .select('title, resumen_noticia, content, category, image_url, created_at')
+      .select('title, resumen_noticia, content, category, image_url, created_at, published_at, source_name, source_url')
       .ilike('title', `%${titleFromSlug}%`)
       .single()
 
@@ -72,7 +73,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         type: 'article',
         locale: 'es_AR',
         url: `https://dolarinfohoy.com.ar/noticia/${slug}`,
-        publishedTime: fallbackPost.created_at,
+        publishedTime: (fallbackPost as Post).published_at ?? fallbackPost.created_at,
         images: fallbackPost.image_url
           ? [{ url: fallbackPost.image_url, width: 1200, height: 630, alt: fallbackPost.title }]
           : [],
@@ -98,7 +99,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'article',
       locale: 'es_AR',
       url: `https://dolarinfohoy.com.ar/noticia/${slug}`,
-      publishedTime: post.created_at,
+      publishedTime: (post as Post).published_at ?? post.created_at,
       images: post.image_url
         ? [{ url: post.image_url, width: 1200, height: 630, alt: post.title }]
         : [],
@@ -117,7 +118,7 @@ export default async function NoticiaPage({ params }: PageProps) {
 
   const { data: post, error } = await supabase
     .from('posts')
-    .select('id, title, resumen_noticia, content, category, image_url, created_at')
+    .select('id, title, resumen_noticia, content, category, image_url, created_at, published_at, source_name, source_url')
     .eq('slug', slug)
     .single()
 
@@ -125,7 +126,7 @@ export default async function NoticiaPage({ params }: PageProps) {
     const titleFromSlug = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     const { data: fallbackPost, error: fallbackError } = await supabase
       .from('posts')
-      .select('id, title, resumen_noticia, content, category, image_url, created_at')
+      .select('id, title, resumen_noticia, content, category, image_url, created_at, published_at, source_name, source_url')
       .ilike('title', `%${titleFromSlug}%`)
       .single()
 
@@ -141,8 +142,8 @@ export default async function NoticiaPage({ params }: PageProps) {
           "headline": fallbackPost.title,
           "description": fallbackPost.resumen_noticia,
           "image": fallbackPost.image_url,
-          "datePublished": fallbackPost.created_at,
-          "dateModified": fallbackPost.created_at,
+          "datePublished": (fallbackPost as Post).published_at ?? fallbackPost.created_at,
+          "dateModified": (fallbackPost as Post).published_at ?? fallbackPost.created_at,
           "author": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar" },
           "publisher": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar", "logo": { "@type": "ImageObject", "url": "https://dolarinfohoy.com.ar/icons/money.svg" } },
           "mainEntityOfPage": { "@type": "WebPage", "@id": `https://dolarinfohoy.com.ar/noticia/${slug}` }
@@ -196,15 +197,34 @@ export default async function NoticiaPage({ params }: PageProps) {
 
             <div className="p-6 sm:p-8">
 
-              <div className="flex items-center gap-2 text-slate-500 mb-4">
-                <Calendar size={16} />
-                <time dateTime={new Date(fallbackPost.created_at).toISOString()} className="text-[12px] sm:text-sm font-medium">
-                  {new Date(fallbackPost.created_at).toLocaleDateString('es-AR', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                  })}
-                </time>
+              <div className="flex items-center justify-between gap-2 text-slate-500 mb-4">
+                <div className="flex items-center gap-2">
+                  <Calendar size={16} />
+                  <time dateTime={new Date((fallbackPost as Post).published_at ?? fallbackPost.created_at).toISOString()} className="text-[12px] sm:text-sm font-medium">
+                    {new Date((fallbackPost as Post).published_at ?? fallbackPost.created_at).toLocaleDateString('es-AR', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric'
+                    })}
+                  </time>
+                </div>
+                {(fallbackPost as Post).source_name && (
+                  <div className="flex items-center gap-1 text-[12px] sm:text-sm">
+                    {(fallbackPost as Post).source_url ? (
+                      <a
+                        href={(fallbackPost as Post).source_url!}
+                        rel="nofollow noopener"
+                        target="_blank"
+                        className="flex items-center gap-1 hover:text-slate-800 transition-colors"
+                      >
+                        {(fallbackPost as Post).source_name}
+                        <ExternalLink size={12} />
+                      </a>
+                    ) : (
+                      <span>{(fallbackPost as Post).source_name}</span>
+                    )}
+                  </div>
+                )}
               </div>
 
               <h1 className="mb-4 text-xl sm:text-3xl font-bold text-slate-900 leading-tight">
@@ -234,23 +254,6 @@ export default async function NoticiaPage({ params }: PageProps) {
                 )}
               </div>
 
-              {(fallbackPost as Post).source_name && (
-                <p className="mt-6 text-xs text-slate-400 border-t pt-4">
-                  Fuente:{' '}
-                  {(fallbackPost as Post).source_url ? (
-                    <a
-                      href={(fallbackPost as Post).source_url!}
-                      rel="nofollow noopener"
-                      target="_blank"
-                      className="hover:underline"
-                    >
-                      {(fallbackPost as Post).source_name}
-                    </a>
-                  ) : (
-                    (fallbackPost as Post).source_name
-                  )}
-                </p>
-              )}
 
             </div>
 
@@ -270,8 +273,8 @@ export default async function NoticiaPage({ params }: PageProps) {
         "headline": post.title,
         "description": post.resumen_noticia,
         "image": post.image_url,
-        "datePublished": post.created_at,
-        "dateModified": post.created_at,
+        "datePublished": (post as Post).published_at ?? post.created_at,
+        "dateModified": (post as Post).published_at ?? post.created_at,
         "author": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar" },
         "publisher": { "@type": "Organization", "name": "DolarInfoHoy", "url": "https://dolarinfohoy.com.ar", "logo": { "@type": "ImageObject", "url": "https://dolarinfohoy.com.ar/icons/money.svg" } },
         "mainEntityOfPage": { "@type": "WebPage", "@id": `https://dolarinfohoy.com.ar/noticia/${slug}` }
@@ -325,15 +328,34 @@ export default async function NoticiaPage({ params }: PageProps) {
 
           <div className="p-6 sm:p-8">
 
-            <div className="flex items-center gap-2 text-slate-500 mb-4">
-              <Calendar size={16} />
-              <time dateTime={new Date(post.created_at).toISOString()} className="text-[12px] sm:text-sm font-medium">
-                {new Date(post.created_at).toLocaleDateString('es-AR', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric'
-                })}
-              </time>
+            <div className="flex items-center justify-between gap-2 text-slate-500 mb-4">
+              <div className="flex items-center gap-2">
+                <Calendar size={16} />
+                <time dateTime={new Date((post as Post).published_at ?? post.created_at).toISOString()} className="text-[12px] sm:text-sm font-medium">
+                  {new Date((post as Post).published_at ?? post.created_at).toLocaleDateString('es-AR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </time>
+              </div>
+              {(post as Post).source_name && (
+                <div className="flex items-center gap-1 text-[12px] sm:text-sm">
+                  {(post as Post).source_url ? (
+                    <a
+                      href={(post as Post).source_url!}
+                      rel="nofollow noopener"
+                      target="_blank"
+                      className="flex items-center gap-1 hover:text-slate-800 transition-colors"
+                    >
+                      {(post as Post).source_name}
+                      <ExternalLink size={12} />
+                    </a>
+                  ) : (
+                    <span>{(post as Post).source_name}</span>
+                  )}
+                </div>
+              )}
             </div>
 
             <h1 className="mb-4 text-xl sm:text-3xl font-bold text-slate-900 leading-tight">
@@ -363,23 +385,6 @@ export default async function NoticiaPage({ params }: PageProps) {
               )}
             </div>
 
-            {(post as Post).source_name && (
-              <p className="mt-6 text-xs text-slate-400 border-t pt-4">
-                Fuente:{' '}
-                {(post as Post).source_url ? (
-                  <a
-                    href={(post as Post).source_url!}
-                    rel="nofollow noopener"
-                    target="_blank"
-                    className="hover:underline"
-                  >
-                    {(post as Post).source_name}
-                  </a>
-                ) : (
-                  (post as Post).source_name
-                )}
-              </p>
-            )}
 
           </div>
 

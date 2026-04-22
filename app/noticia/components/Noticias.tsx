@@ -6,8 +6,8 @@ export default async function Noticias() {
 
   const { data: posts, error } = await supabase
     .from('posts')
-    .select('id, title, resumen_noticia, content, category, image_url, created_at, slug')
-    .order('created_at', { ascending: false })
+    .select('id, title, resumen_noticia, content, category, image_url, created_at, published_at, slug, source_name, source_url')
+    .order('published_at', { ascending: false, nullsFirst: false })
     .limit(2)
 
   if (error) return (

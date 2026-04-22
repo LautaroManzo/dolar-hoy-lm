@@ -63,18 +63,17 @@ const BRECHA_COLOR = '#d97706';
 
 const EvolucionDolar: React.FC = () => {
   const [modo, setModo] = useState<Modo>('precio');
-  const [rango, setRango] = useState<Rango>(() =>
-    typeof window === 'undefined' ? '1A' : getSaved<Rango>(LS_RANGO_KEY, '1A')
-  );
-  const [selected, setSelected] = useState<string[]>(() =>
-    typeof window === 'undefined' ? ['blue'] : getSaved<string[]>(LS_TIPOS_KEY, ['blue'])
-  );
-  const [brechaParalelo, setBrechaParalelo] = useState<string>(() =>
-    typeof window === 'undefined' ? 'blue' : getSaved<string>(LS_BRECHA_KEY, 'blue')
-  );
+  const [rango, setRango] = useState<Rango>('1A');
+  const [selected, setSelected] = useState<string[]>(['blue']);
+  const [brechaParalelo, setBrechaParalelo] = useState<string>('blue');
   const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => { setIsMounted(true); }, []);
+  useEffect(() => {
+    setRango(getSaved<Rango>(LS_RANGO_KEY, '1A'));
+    setSelected(getSaved<string[]>(LS_TIPOS_KEY, ['blue']));
+    setBrechaParalelo(getSaved<string>(LS_BRECHA_KEY, 'blue'));
+    setIsMounted(true);
+  }, []);
 
   const tiposParaHook = modo === 'brecha' ? ['oficial', brechaParalelo] : selected;
   const { chartData, loading, isSingle } = useComparador(tiposParaHook, rango);

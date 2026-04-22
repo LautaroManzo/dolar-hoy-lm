@@ -116,10 +116,20 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
 
           </div>
 
-          <div className="flex items-center justify-center px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
-            <span className="text-sm font-black text-[#1a3a52]">
-              Compra: ${formatPrice(selectedDolar?.compra || 0)} · Venta: ${formatPrice(selectedDolar?.venta || 0)}
-            </span>
+          <div className="flex items-center justify-center gap-6 px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Compra</span>
+              <span className="text-sm font-black text-gray-700">
+                ${formatPrice(selectedDolar?.compra || 0)}
+              </span>
+            </div>
+            <div className="w-px h-6 bg-slate-200" />
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Venta</span>
+              <span className="text-sm font-black" style={{ color: '#2d5a7b' }}>
+                ${formatPrice(selectedDolar?.venta || 0)}
+              </span>
+            </div>
           </div>
 
         </div>
