@@ -43,7 +43,7 @@ export default async function DolarTypePage({ content }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
-      <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
+      <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
 
         {/* Breadcrumb */}
         <nav aria-label="Ruta de navegación">

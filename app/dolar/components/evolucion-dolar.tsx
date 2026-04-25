@@ -275,7 +275,10 @@ const EvolucionDolar: React.FC = () => {
           {/* GRÁFICO */}
           <ErrorBoundary>
             <div className="w-full h-[260px] sm:h-[380px] relative">
-              {loading && (
+              {!isMounted && (
+                <div className="w-full h-full animate-pulse bg-slate-100 rounded-xl" />
+              )}
+              {isMounted && loading && (
                 <div className="absolute inset-0 z-20 bg-white/60 backdrop-blur-[1px] flex items-center justify-center rounded-xl">
                   <div className="flex flex-col items-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2d5a7b] mb-3" />

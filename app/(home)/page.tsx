@@ -1,14 +1,14 @@
-import { getAllDolarData } from "./services/getAllDolarData";
-import { Cards } from "./dolar/components/cards";
+import { getAllDolarData } from "@/app/services/getAllDolarData";
+import { Cards } from "@/app/dolar/components/cards";
 import { Metadata } from "next";
-import Description from "./dolar/components/description";
-import EvolucionDolar from "./dolar/components/evolucion-dolar";
-import Noticias from "./noticia/components/Noticias";
-import PreguntasFrecuentes from "./components/preguntas-frecuentes";
-import SobreNosotros from "./components/sobre-nosotros";
-import Contacto from "./components/contacto";
-import { AutoRefresh } from "./components/auto-refresh";
-import OtrasMonedas from "./components/otras-monedas";
+import Description from "@/app/dolar/components/description";
+import EvolucionDolar from "@/app/dolar/components/evolucion-dolar";
+import Noticias from "@/app/noticia/components/Noticias";
+import PreguntasFrecuentes from "@/app/components/preguntas-frecuentes";
+import SobreNosotros from "@/app/components/sobre-nosotros";
+import Contacto from "@/app/components/contacto";
+import { AutoRefresh } from "@/app/components/auto-refresh";
+import OtrasMonedas from "@/app/components/otras-monedas";
 
 export const dynamic = 'force-dynamic';
 
