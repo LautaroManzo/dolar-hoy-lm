@@ -12,12 +12,12 @@ export function Cards({ data }: CardsProps) {
     <div className="max-w-6xl mx-auto w-full space-y-10">
 
       <section>
-        <div className="grid md:grid-cols-[6fr_4fr] gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-[6fr_4fr] gap-6">
           <ErrorBoundary>
-            <DolarCard {...data.blue} />
+            <DolarCard {...data.blue} slug="dolar/blue" tipoHistorico="blue" />
           </ErrorBoundary>
           <ErrorBoundary>
-            <DolarCard {...data.oficial} />
+            <DolarCard {...data.oficial} slug="dolar/oficial" tipoHistorico="oficial" />
           </ErrorBoundary>
         </div>
       </section>
@@ -25,26 +25,26 @@ export function Cards({ data }: CardsProps) {
       <section aria-labelledby="otras-cotizaciones">
 
         <h2 id="otras-cotizaciones" className="flex items-center mb-5 text-[#1a3a52] text-2xl tracking-wide opacity-70
-            after:content-[''] after:flex-grow after:h-[1px] after:ml-6 
+            after:content-[''] after:flex-grow after:h-[1px] after:ml-6
             after:bg-gradient-to-r after:from-transparent after:to-[#1a3a52]/15">
           Otras cotizaciones
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <ErrorBoundary>
-            <DolarCard {...data.mep} />
+            <DolarCard {...data.mep} slug="dolar/mep" tipoHistorico="bolsa" />
           </ErrorBoundary>
           <ErrorBoundary>
-            <DolarCard {...data.ccl} />
+            <DolarCard {...data.ccl} slug="dolar/ccl" tipoHistorico="contadoconliqui" />
           </ErrorBoundary>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <ErrorBoundary>
-            <DolarCard {...data.tarjeta} />
+            <DolarCard {...data.tarjeta} slug="dolar/tarjeta" tipoHistorico="tarjeta" />
           </ErrorBoundary>
           <ErrorBoundary>
-            <DolarCard {...data.cripto} />
+            <DolarCard {...data.cripto} slug="dolar/cripto" tipoHistorico="cripto" />
           </ErrorBoundary>
         </div>
 

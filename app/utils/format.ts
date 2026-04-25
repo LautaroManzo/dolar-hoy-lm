@@ -2,6 +2,17 @@ export const formatPrice = (price: number): string => {
   return price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
+export function parseNum(v: string): number {
+  return parseFloat(v.replace(/\./g, '').replace(',', '.')) || 0;
+}
+
+export function formatInput(v: string): string {
+  const clean = v.replace(/[^\d,]/g, '');
+  const [intPart = '', ...decParts] = clean.split(',');
+  const formatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return decParts.length > 0 ? `${formatted},${decParts.join('')}` : formatted;
+}
+
 export const formatVariation = (variation: {
   percent: number;
   percentAbs: number;

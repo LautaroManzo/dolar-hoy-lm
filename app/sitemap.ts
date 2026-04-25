@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { supabase } from '@/app/lib/supabase'
 import { getFechaArgentina } from '@/app/utils/site'
+import { DOLAR_PAGE_LIST } from '@/app/constants/dolarPageContent'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,6 +21,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
+  const dolarTypeEntries: MetadataRoute.Sitemap = DOLAR_PAGE_LIST.map(page => ({
+    url: `${baseUrl}/${page.slug}`,
+    lastModified: fechaArgentina,
+    changeFrequency: 'hourly' as const,
+    priority: 0.9,
+  }))
+
   return [
     {
       url: baseUrl,
@@ -27,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'hourly',
       priority: 1,
     },
+    ...dolarTypeEntries,
     ...postEntries,
   ]
 }

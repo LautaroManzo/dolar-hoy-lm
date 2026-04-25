@@ -3,7 +3,7 @@
 import { X, ArrowRightLeft } from 'lucide-react';
 import { useCalculator } from '../../hooks/useCalculator';
 import { Dropdown } from '../../shared/ui/Dropdown';
-import { formatPrice } from '../../utils/format';
+import { formatPrice, formatInput } from '../../utils/format';
 
 interface CalculatorModalProps {
   isOpen: boolean;
@@ -72,18 +72,18 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-slate-300">$</span>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="decimal"
                   placeholder="0"
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => setAmount(formatInput(e.target.value))}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                       e.currentTarget.blur();
                     }
                   }}
-                  className="bg-transparent text-2xl font-bold text-[#1a3a52] focus:outline-none w-full placeholder:text-slate-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="bg-transparent text-2xl font-bold text-[#1a3a52] focus:outline-none w-full placeholder:text-slate-200"
                 />
               </div>
             </div>

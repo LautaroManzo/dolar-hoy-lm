@@ -5,6 +5,13 @@ svg, path, g {
     outline: none;
 }
 
+@layer base {
+    *:focus:not(:focus-visible) {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;

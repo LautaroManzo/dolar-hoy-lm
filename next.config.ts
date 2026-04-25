@@ -18,6 +18,16 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   
+  // Redirects 301 desde URLs antiguas
+  redirects: async () => [
+    { source: '/dolar-blue', destination: '/dolar/blue', permanent: true },
+    { source: '/dolar-oficial', destination: '/dolar/oficial', permanent: true },
+    { source: '/dolar-mep', destination: '/dolar/mep', permanent: true },
+    { source: '/dolar-ccl', destination: '/dolar/ccl', permanent: true },
+    { source: '/dolar-tarjeta', destination: '/dolar/tarjeta', permanent: true },
+    { source: '/dolar-cripto', destination: '/dolar/cripto', permanent: true },
+  ],
+
   // Headers de seguridad y caché
   headers: async () => [
     {

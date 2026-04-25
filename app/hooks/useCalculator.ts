@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { parseNum } from "../utils/format";
 import { fetchAllDolars } from "../services/dolar";
 
 const LS_KEY = "calculator_selected_dolar";
@@ -85,8 +86,8 @@ export function useCalculator(isOpen: boolean) {
   const result =
     selectedDolar && amount
       ? isInverse
-        ? Number(amount) * selectedDolar.compra
-        : Number(amount) / selectedDolar.venta
+        ? parseNum(amount) * selectedDolar.compra
+        : parseNum(amount) / selectedDolar.venta
       : 0;
 
   const clearAmount = () => setAmount("");
