@@ -37,5 +37,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...dolarTypeEntries,
     ...postEntries,
+    {
+      url: `${baseUrl}/politica-de-privacidad`,
+      lastModified: new Date('2026-04-01'),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/terminos-y-condiciones`,
+      lastModified: new Date('2026-04-01'),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
   ]
 }

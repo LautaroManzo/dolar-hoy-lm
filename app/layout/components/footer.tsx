@@ -1,10 +1,12 @@
+import Link from 'next/link'
+
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-gradient-to-r from-[#1a3a52] to-[#2d5a7b] text-white">
       <div className="max-w-6xl mx-auto px-6 py-8">
-        
+
         <div className="flex flex-col md:flex-row justify-evenly items-center gap-4 mb-6">
           <div className="text-[9px] sm:text-[11px] uppercase tracking-widest opacity-60">
             © {currentYear} • DolarInfoHoy • Todos los derechos reservados
@@ -49,6 +51,14 @@ export function Footer() {
           <p className="text-center text-[11px] leading-relaxed opacity-50 hover:opacity-80 transition-opacity duration-300">
             <strong className="text-white/80">Aviso legal:</strong> Los datos mostrados son de carácter informativo y se obtienen de fuentes públicas y APIs de terceros. No constituyen una recomendación de inversión ni oferta de operación. El mercado del dólar informal (blue) no posee cotización oficial. <strong>DólarInfoHoy</strong> no se responsabiliza por errores u omisiones en la información ni por decisiones tomadas en base a la misma.
           </p>
+          <div className="flex justify-center gap-4 mt-4 text-[10px] opacity-50">
+            <Link href="/politica-de-privacidad" className="underline hover:opacity-100 transition-opacity">
+              Política de Privacidad
+            </Link>
+<Link href="/terminos-y-condiciones" className="underline hover:opacity-100 transition-opacity">
+              Términos y Condiciones
+            </Link>
+          </div>
         </div>
 
       </div>
