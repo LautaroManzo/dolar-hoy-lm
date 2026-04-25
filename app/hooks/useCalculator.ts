@@ -36,10 +36,12 @@ export function useCalculator(isOpen: boolean) {
   const [selectedDolar, setSelectedDolar] = useState<DolarType | null>(null);
   const [isInverse, setIsInverse] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     const savedId = getSavedId();
     setSelectedDolar(DEFAULT_TYPES.find((t) => t.id === savedId) ?? DEFAULT_TYPES[0]);
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     if (!isOpen) return;

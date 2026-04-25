@@ -68,12 +68,14 @@ const EvolucionDolar: React.FC = () => {
   const [brechaParalelo, setBrechaParalelo] = useState<string>('blue');
   const [isMounted, setIsMounted] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     setRango(getSaved<Rango>(LS_RANGO_KEY, '1A'));
     setSelected(getSaved<string[]>(LS_TIPOS_KEY, ['blue']));
     setBrechaParalelo(getSaved<string>(LS_BRECHA_KEY, 'blue'));
     setIsMounted(true);
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const tiposParaHook = modo === 'brecha' ? ['oficial', brechaParalelo] : selected;
   const { chartData, loading, isSingle } = useComparador(tiposParaHook, rango);

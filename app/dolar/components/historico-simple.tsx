@@ -33,6 +33,7 @@ export default function HistoricoSimple({ tipo }: Props) {
   const [isMounted, setIsMounted] = useState(false);
   const { chartData, loading } = useComparador([tipo], rango);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setIsMounted(true); }, []);
 
   const axisProps = {

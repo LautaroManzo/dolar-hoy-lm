@@ -71,9 +71,6 @@ export default function Contacto() {
     }
   }
 
-  const inputClasses =
-    "w-full rounded-xl border border-white/10 bg-white/8 px-4 py-3 text-sm text-white placeholder:text-slate-400 outline-none focus:bg-white/12 focus:border-white/25 focus:ring-2 focus:ring-white/15 hover:border-white/15 transition-all duration-200";
-
   return (
     <div className="w-full font-sans pt-3 pb-14 px-4">
       <div className="max-w-6xl mx-auto">
