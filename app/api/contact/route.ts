@@ -18,6 +18,9 @@ const ipLog = new Map<string, number[]>();
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
+  for (const [key, times] of ipLog) {
+    if (times.every((t) => now - t >= WINDOW_MS)) ipLog.delete(key);
+  }
   const timestamps = (ipLog.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
   if (timestamps.length >= RATE_LIMIT) return true;
   ipLog.set(ip, [...timestamps, now]);
