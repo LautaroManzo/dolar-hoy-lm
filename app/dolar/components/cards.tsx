@@ -11,7 +11,8 @@ export function Cards({ data }: CardsProps) {
   return (
     <div className="max-w-6xl mx-auto w-full space-y-10">
 
-      <section>
+      <section aria-labelledby="cotizaciones-principales">
+        <h2 id="cotizaciones-principales" className="sr-only">Cotizaciones principales</h2>
         <div className="grid grid-cols-1 md:grid-cols-[6fr_4fr] gap-6">
           <ErrorBoundary>
             <DolarCard {...data.blue} slug="dolar/blue" tipoHistorico="blue" />

@@ -56,7 +56,7 @@ function CardBackContent({ buy, sell, title }: { buy: number; sell: number; titl
 
   return (
     <div className="flex-1 flex flex-col gap-3 w-full sm:w-[70%] mx-auto justify-center pb-2">
-      <p className="text-center text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">{title}</p>
+      <p className="text-center text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">{title}</p>
       {/* ARS input */}
       <div className={`flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 border transition-all ${
         arsActive ? 'bg-[#2d5a7b]/5 border-[#2d5a7b]/40' : 'bg-slate-50 border-slate-100'

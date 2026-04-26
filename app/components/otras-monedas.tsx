@@ -36,7 +36,7 @@ export default async function OtrasMonedas() {
                   <h3 className="text-lg font-semibold text-gray-900 tracking-wide">
                     {m.nombre}
                   </h3>
-                  <span className="ml-auto text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  <span className="ml-auto text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     {m.moneda}
                   </span>
                 </div>
