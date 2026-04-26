@@ -6,6 +6,7 @@ import { DOLAR_PAGE_LIST, type DolarPageContent } from '@/app/constants/dolarPag
 import FaqAccordion from '@/app/components/FaqAccordion';
 import EditorialCollapsible from '@/app/components/EditorialCollapsible';
 import { DolarCard } from '@/app/dolar/components/dolar-card';
+import StaleBanner from '@/app/components/stale-banner';
 
 interface Props {
   content: DolarPageContent;
@@ -13,8 +14,12 @@ interface Props {
 
 export default async function DolarTypePage({ content }: Props) {
   let data: Awaited<ReturnType<typeof getDolar>> | null = null;
+  let isStale = false;
+  let staleAt: string | undefined;
   try {
     data = await getDolar(content.apiCasa);
+    isStale = data.isStale;
+    staleAt = data.staleAt;
   } catch {}
 
   const faqJsonLd = {
@@ -44,6 +49,8 @@ export default async function DolarTypePage({ content }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
       <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
+
+        {isStale && <StaleBanner staleAt={staleAt} />}
 
         {/* Breadcrumb */}
         <nav aria-label="Ruta de navegación">

@@ -9,12 +9,13 @@ import SobreNosotros from "@/app/components/sobre-nosotros";
 import Contacto from "@/app/components/contacto";
 import { AutoRefresh } from "@/app/components/auto-refresh";
 import OtrasMonedas from "@/app/components/otras-monedas";
+import StaleBanner from "@/app/components/stale-banner";
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const dataForCards = await getAllDolarData();
+    const { data: dataForCards } = await getAllDolarData();
 
     const bluePrice = dataForCards.blue?.sell || '---';
     const oficialPrice = dataForCards.oficial?.sell || '---';
@@ -55,11 +56,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-  let dataForCards: Awaited<ReturnType<typeof getAllDolarData>> = {};
+  let dataForCards: Record<string, import("@/app/types/dolar").DolarCardData> = {};
   let hasFetchError = false;
+  let isStale = false;
+  let staleAt: string | undefined;
 
   try {
-    dataForCards = await getAllDolarData();
+    const result = await getAllDolarData();
+    dataForCards = result.data;
+    isStale = result.isStale;
+    staleAt = result.staleAt;
   } catch (err) {
     console.error('[Page] Error al obtener cotizaciones:', err);
     hasFetchError = true;
@@ -114,6 +120,11 @@ export default async function Page() {
       <Description />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
+        {isStale && (
+          <div className="max-w-6xl mx-auto mb-6">
+            <StaleBanner staleAt={staleAt} />
+          </div>
+        )}
         <section className="flex justify-center w-full" aria-label="Cotizaciones principales del dólar">
           {hasFetchError ? (
             <div className="w-full max-w-6xl mx-auto my-4">

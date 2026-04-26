@@ -48,7 +48,7 @@ export function useCalculator(isOpen: boolean) {
 
     const loadDolarTypes = async () => {
       try {
-        const allDolars = await fetchAllDolars();
+        const { data: allDolars } = await fetchAllDolars();
         const find = (casa: string, field: "compra" | "venta") =>
           allDolars.find((d) => d.casa === casa)?.[field] ?? 0;
         const types: DolarType[] = [
