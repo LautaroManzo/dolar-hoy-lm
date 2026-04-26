@@ -4,7 +4,7 @@ import "./globals.css";
 import { Header } from "./layout/components/header";
 import { Footer } from "./layout/components/footer";
 
-import { GoogleAnalytics } from '@next/third-parties/google';
+import CookieConsent from "./components/cookie-consent";
 import { getFechaHoyFormateada } from "./utils/site";
 
 export const revalidate = 3600;
@@ -113,7 +113,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main id="top" className="flex-1">{children}</main>
         <Footer />
-        <GoogleAnalytics gaId="G-6MP230WEJ1" />
+        <CookieConsent gaId="G-6MP230WEJ1" />
       </body>
 
     </html>
