@@ -103,6 +103,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es-AR">
 
       <head>
+        <link rel="preconnect" href="https://dolarapi.com" />
+        <link rel="preconnect" href="https://api.argentinadatos.com" />
+        <link rel="dns-prefetch" href="https://dolarapi.com" />
+        <link rel="dns-prefetch" href="https://api.argentinadatos.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
