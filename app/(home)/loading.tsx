@@ -6,7 +6,7 @@ function Pulse({ className }: { className: string }) {
 
 export default function HomeLoading() {
   return (
-    <div className="bg-[#fcf7f8]">
+    <div className="bg-brand-bg">
 
       {/* Hero */}
       <div className="relative min-h-[400px] flex items-center justify-center animate-pulse bg-slate-100">

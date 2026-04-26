@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+import { COLORS } from './constants/colors'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -7,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Cotización del dólar blue, oficial, MEP y CCL en tiempo real en Argentina',
     start_url: '/',
     display: 'standalone',
-    background_color: '#fcf7f8',
-    theme_color: '#1a3a52',
+    background_color: COLORS.bg,
+    theme_color: COLORS.primary,
     icons: [
       {
         src: '/icons/money.svg',

@@ -6,7 +6,7 @@ function Pulse({ className }: { className: string }) {
 
 export default function DolarTypePageSkeleton() {
   return (
-    <div className="bg-[#fcf7f8] min-h-screen">
+    <div className="bg-brand-bg min-h-screen">
       <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
 
         {/* Breadcrumb */}

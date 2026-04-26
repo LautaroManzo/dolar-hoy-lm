@@ -9,16 +9,16 @@ export default function SobreNosotros() {
   return (
     <div className="w-full font-sans py-3 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className={`transition-all duration-700 bg-white overflow-hidden rounded-[15px] border-l-3 border-l-[#1a3a52] ${open ? 'shadow-[0_40px_80px_rgba(30,41,59,0.1)]' : 'shadow-xl shadow-slate-200/20 hover:scale-[1.01]'}`}>
+        <div className={`transition-all duration-700 bg-white overflow-hidden rounded-[15px] border-l-3 border-l-brand-primary ${open ? 'shadow-[0_40px_80px_rgba(30,41,59,0.1)]' : 'shadow-xl shadow-slate-200/20 hover:scale-[1.01]'}`}>
           <button
             onClick={() => setOpen(!open)}
             className="group w-full flex items-center justify-between p-6 focus:outline-none cursor-pointer transition-all hover:bg-slate-50/50"
           >
-            <h3 className={`text-xl tracking-wide transition-colors duration-300 ${open ? 'text-[#1a3a52] font-bold' : 'text-slate-900'}`}>
+            <h3 className={`text-xl tracking-wide transition-colors duration-300 ${open ? 'text-brand-primary font-bold' : 'text-slate-900'}`}>
               Sobre nosotros
             </h3>
             <div className={`transition-transform duration-500 ${open ? 'rotate-180' : ''}`}>
-              <ChevronDown className="w-7 h-7" color='#1a3a52' />
+              <ChevronDown className="w-7 h-7 text-brand-primary" />
             </div>
           </button>
 

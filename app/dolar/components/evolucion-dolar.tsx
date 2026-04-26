@@ -59,7 +59,7 @@ function formatDate(value: string, short = false) {
   );
 }
 
-const BRECHA_COLOR = '#d97706';
+const BRECHA_COLOR = COLORS.comparador.bolsa;
 
 const EvolucionDolar: React.FC = () => {
   const [modo, setModo] = useState<Modo>('precio');
@@ -147,13 +147,13 @@ const EvolucionDolar: React.FC = () => {
 
   return (
     <section className="w-full font-sans mx-auto px-4 py-8">
-      <div className="max-w-6xl mx-auto w-full rounded-2xl border-t-4 border-[#2d5a7b]">
+      <div className="max-w-6xl mx-auto w-full rounded-2xl border-t-4 border-brand-secondary">
         <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
 
           {/* HEADER */}
           <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-[#1a3a52]">
+              <h2 className="text-2xl font-bold text-brand-primary">
                 {modo === 'brecha' ? 'Brecha cambiaria' : titulo}
               </h2>
               {modo === 'precio' && !isSingle && (
@@ -172,7 +172,7 @@ const EvolucionDolar: React.FC = () => {
                     key={m}
                     onClick={() => setModo(m)}
                     className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer capitalize ${
-                      modo === m ? 'bg-white text-[#1a3a52] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                      modo === m ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'
                     }`}
                   >
                     {m === 'precio' ? 'Precio' : 'Brecha'}
@@ -187,7 +187,7 @@ const EvolucionDolar: React.FC = () => {
                     key={r.id}
                     onClick={() => handleRango(r.id)}
                     className={`flex-1 sm:flex-none px-2 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
-                      rango === r.id ? 'bg-white text-[#1a3a52] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                      rango === r.id ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'
                     }`}
                   >
                     {r.label}
@@ -214,7 +214,7 @@ const EvolucionDolar: React.FC = () => {
                       style={isActive ? { borderColor: color, color } : {}}
                     >
                       <span className="w-2 h-2 rounded-full shrink-0"
-                        style={{ backgroundColor: isActive ? color : '#cbd5e1' }} />
+                        style={{ backgroundColor: isActive ? color : COLORS.chart.inactive }} />
                       {tipo.label}
                     </button>
                   );
@@ -253,7 +253,7 @@ const EvolucionDolar: React.FC = () => {
                       style={isActive ? { borderColor: color, color } : {}}
                     >
                       <span className="w-2 h-2 rounded-full shrink-0"
-                        style={{ backgroundColor: isActive ? color : '#cbd5e1' }} />
+                        style={{ backgroundColor: isActive ? color : COLORS.chart.inactive }} />
                       {tipo.label}
                     </button>
                   );
@@ -281,7 +281,7 @@ const EvolucionDolar: React.FC = () => {
               {isMounted && loading && (
                 <div className="absolute inset-0 z-20 bg-white/60 backdrop-blur-[1px] flex items-center justify-center rounded-xl">
                   <div className="flex flex-col items-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2d5a7b] mb-3" />
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-secondary mb-3" />
                     <span className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Cargando...</span>
                   </div>
                 </div>

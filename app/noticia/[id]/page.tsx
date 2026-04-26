@@ -161,7 +161,7 @@ export default async function NoticiaPage({ params }: PageProps) {
     }
 
     return (
-      <div className="bg-[#fcf7f8]">
+      <div className="bg-brand-bg">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(fallbackJsonLd) }} />
         <div className="max-w-6xl mx-auto px-4 py-10">
 
@@ -174,7 +174,7 @@ export default async function NoticiaPage({ params }: PageProps) {
                 </Link>
               </li>
               <li className="text-slate-400 select-none" aria-hidden="true">/</li>
-              <li className="text-[#1a3a52] font-medium truncate max-w-[200px] sm:max-w-xs">{fallbackPost.title}</li>
+              <li className="text-brand-primary font-medium truncate max-w-[200px] sm:max-w-xs">{fallbackPost.title}</li>
             </ol>
           </nav>
 
@@ -292,7 +292,7 @@ export default async function NoticiaPage({ params }: PageProps) {
   }
 
   return (
-    <div className="bg-[#fcf7f8]">
+    <div className="bg-brand-bg">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <div className="max-w-6xl mx-auto px-4 py-10">
 
@@ -305,7 +305,7 @@ export default async function NoticiaPage({ params }: PageProps) {
               </Link>
             </li>
             <li className="text-slate-400 select-none" aria-hidden="true">/</li>
-            <li className="text-[#1a3a52] font-medium truncate max-w-[200px] sm:max-w-xs">{post.title}</li>
+            <li className="text-brand-primary font-medium truncate max-w-[200px] sm:max-w-xs">{post.title}</li>
           </ol>
         </nav>
 

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function PoliticaDePrivacidadPage() {
   return (
-    <div className="bg-[#fcf7f8] min-h-screen">
+    <div className="bg-brand-bg min-h-screen">
       <div className="max-w-4xl mx-auto px-4 py-10">
 
         <nav aria-label="Ruta de navegación" className="mb-6">
@@ -24,30 +24,30 @@ export default function PoliticaDePrivacidadPage() {
               </Link>
             </li>
             <li className="text-slate-400 select-none" aria-hidden="true">/</li>
-            <li className="text-[#1a3a52] font-medium">Política de Privacidad</li>
+            <li className="text-brand-primary font-medium">Política de Privacidad</li>
           </ol>
         </nav>
 
         <article className="bg-white rounded-2xl shadow-sm p-6 sm:p-10">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#1a3a52] mb-2">Política de Privacidad</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-brand-primary mb-2">Política de Privacidad</h1>
           <p className="text-sm text-slate-500 mb-8">Última actualización: abril de 2026</p>
 
           <div className="prose prose-slate max-w-none text-sm sm:text-base leading-relaxed space-y-6 text-slate-700">
 
             <section>
-              <h2 className="text-lg font-semibold text-[#1a3a52] mb-2">1. Responsable del tratamiento</h2>
+              <h2 className="text-lg font-semibold text-brand-primary mb-2">1. Responsable del tratamiento</h2>
               <p>
                 El responsable del tratamiento de los datos personales recolectados a través de este sitio es <strong>DolarInfoHoy</strong>,
                 operado de forma independiente con domicilio en la República Argentina.
                 Ante cualquier consulta sobre privacidad podés escribirnos a{' '}
-                <a href="mailto:dolarinfohoy@gmail.com" className="text-[#2d5a7b] underline hover:text-[#1a3a52]">
+                <a href="mailto:dolarinfohoy@gmail.com" className="text-brand-secondary underline hover:text-brand-primary">
                   dolarinfohoy@gmail.com
                 </a>.
               </p>
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#1a3a52] mb-2">2. Datos que recolectamos</h2>
+              <h2 className="text-lg font-semibold text-brand-primary mb-2">2. Datos que recolectamos</h2>
               <p>Recolectamos únicamente los datos estrictamente necesarios para operar el sitio:</p>
               <ul className="list-disc pl-5 mt-2 space-y-1">
                 <li>
@@ -65,7 +65,7 @@ export default function PoliticaDePrivacidadPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#1a3a52] mb-2">3. Finalidad del tratamiento</h2>
+              <h2 className="text-lg font-semibold text-brand-primary mb-2">3. Finalidad del tratamiento</h2>
               <ul className="list-disc pl-5 space-y-1">
                 <li>Responder consultas enviadas a través del formulario de contacto.</li>
                 <li>Analizar el rendimiento del sitio de forma agregada y anónima para mejorar la experiencia de usuario.</li>
@@ -73,7 +73,7 @@ export default function PoliticaDePrivacidadPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#1a3a52] mb-2">4. Plazo de conservación</h2>
+              <h2 className="text-lg font-semibold text-brand-primary mb-2">4. Plazo de conservación</h2>
               <p>
                 Los mensajes recibidos por el formulario de contacto se conservan por el tiempo necesario para dar respuesta a la consulta.
                 Los datos de analítica son agregados e irreversiblemente anonimizados; no tienen plazo de vencimiento propio.
@@ -81,7 +81,7 @@ export default function PoliticaDePrivacidadPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#1a3a52] mb-2">5. Transferencia a terceros</h2>
+              <h2 className="text-lg font-semibold text-brand-primary mb-2">5. Transferencia a terceros</h2>
               <p>
                 No vendemos, alquilamos ni cedemos tus datos personales a terceros con fines comerciales.
                 Los únicos proveedores externos que procesan datos en nombre de DolarInfoHoy son:
@@ -95,7 +95,7 @@ export default function PoliticaDePrivacidadPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#1a3a52] mb-2">6. Tus derechos (ARCO)</h2>
+              <h2 className="text-lg font-semibold text-brand-primary mb-2">6. Tus derechos (ARCO)</h2>
               <p>
                 De acuerdo con la <strong>Ley 25.326 de Protección de Datos Personales</strong> de la República Argentina,
                 tenés derecho a:
@@ -108,7 +108,7 @@ export default function PoliticaDePrivacidadPage() {
               </ul>
               <p className="mt-2">
                 Para ejercer cualquiera de estos derechos escribinos a{' '}
-                <a href="mailto:dolarinfohoy@gmail.com" className="text-[#2d5a7b] underline hover:text-[#1a3a52]">
+                <a href="mailto:dolarinfohoy@gmail.com" className="text-brand-secondary underline hover:text-brand-primary">
                   dolarinfohoy@gmail.com
                 </a>{' '}
                 con el asunto &quot;Derechos ARCO&quot;. Responderemos en un plazo máximo de 5 días hábiles.
@@ -116,14 +116,14 @@ export default function PoliticaDePrivacidadPage() {
               <p className="mt-2 text-slate-500 text-sm">
                 La Dirección Nacional de Protección de Datos Personales (DNPDP) es el organismo de control competente.
                 Podés presentar reclamos en{' '}
-                <a href="https://www.argentina.gob.ar/aaip/datospersonales" target="_blank" rel="noopener noreferrer" className="text-[#2d5a7b] underline hover:text-[#1a3a52]">
+                <a href="https://www.argentina.gob.ar/aaip/datospersonales" target="_blank" rel="noopener noreferrer" className="text-brand-secondary underline hover:text-brand-primary">
                   www.argentina.gob.ar/aaip/datospersonales
                 </a>.
               </p>
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#1a3a52] mb-2">7. Seguridad</h2>
+              <h2 className="text-lg font-semibold text-brand-primary mb-2">7. Seguridad</h2>
               <p>
                 Implementamos medidas técnicas razonables para proteger la información que nos enviás,
                 incluyendo comunicaciones cifradas (HTTPS) y acceso restringido a los datos.
@@ -132,7 +132,7 @@ export default function PoliticaDePrivacidadPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#1a3a52] mb-2">8. Cambios a esta política</h2>
+              <h2 className="text-lg font-semibold text-brand-primary mb-2">8. Cambios a esta política</h2>
               <p>
                 Podemos actualizar esta política cuando sea necesario. La fecha de &quot;última actualización&quot; al inicio del documento
                 refleja la versión vigente. Te recomendamos revisarla periódicamente.

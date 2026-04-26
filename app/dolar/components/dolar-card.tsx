@@ -59,7 +59,7 @@ function CardBackContent({ buy, sell, title }: { buy: number; sell: number; titl
       <p className="text-center text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">{title}</p>
       {/* ARS input */}
       <div className={`flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 border transition-all ${
-        arsActive ? 'bg-[#2d5a7b]/5 border-[#2d5a7b]/40' : 'bg-slate-50 border-slate-100'
+        arsActive ? 'bg-brand-secondary/5 border-brand-secondary/40' : 'bg-slate-50 border-slate-100'
       }`}>
         <span className="text-[10px] font-black text-slate-400 uppercase shrink-0">ARS</span>
         <div className="w-px h-7 bg-slate-200 shrink-0" />
@@ -82,7 +82,7 @@ function CardBackContent({ buy, sell, title }: { buy: number; sell: number; titl
 
       {/* USD input */}
       <div className={`flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 border transition-all ${
-        usdActive ? 'bg-[#2d5a7b]/5 border-[#2d5a7b]/40' : 'bg-slate-50 border-slate-100'
+        usdActive ? 'bg-brand-secondary/5 border-brand-secondary/40' : 'bg-slate-50 border-slate-100'
       }`}>
         <span className="text-[10px] font-black text-slate-400 uppercase shrink-0">USD</span>
         <div className="w-px h-7 bg-slate-200 shrink-0" />
@@ -102,7 +102,7 @@ function CardBackContent({ buy, sell, title }: { buy: number; sell: number; titl
           <button
             onClick={() => switchMode('venta')}
             className={`px-3 py-1 rounded-md font-black uppercase tracking-wide transition-all cursor-pointer ${
-              rateMode === 'venta' ? 'bg-[#2d5a7b] text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'
+              rateMode === 'venta' ? 'bg-brand-secondary text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'
             }`}
           >
             Venta
@@ -110,7 +110,7 @@ function CardBackContent({ buy, sell, title }: { buy: number; sell: number; titl
           <button
             onClick={() => switchMode('compra')}
             className={`px-3 py-1 rounded-md font-black uppercase tracking-wide transition-all cursor-pointer ${
-              rateMode === 'compra' ? 'bg-[#2d5a7b] text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'
+              rateMode === 'compra' ? 'bg-brand-secondary text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'
             }`}
           >
             Compra
@@ -126,7 +126,7 @@ function ActionButton({ onClick, label, children }: { onClick?: () => void; labe
   return (
     <button
       onClick={onClick}
-      className="w-9 h-9 rounded-full flex items-center justify-center bg-[#2d5a7b] text-white transition-all duration-300 hover:scale-110 border-2 border-white cursor-pointer"
+      className="w-9 h-9 rounded-full flex items-center justify-center bg-brand-secondary text-white transition-all duration-300 hover:scale-110 border-2 border-white cursor-pointer"
       aria-label={label}
       title={label}
     >
@@ -194,7 +194,7 @@ export function DolarCard({
       {!hideInfoLink && (
         <Link
           href={`/${slug}`}
-          className="w-9 h-9 rounded-full flex items-center justify-center bg-[#2d5a7b] text-white transition-all duration-300 hover:scale-110 border-2 border-white cursor-pointer"
+          className="w-9 h-9 rounded-full flex items-center justify-center bg-brand-secondary text-white transition-all duration-300 hover:scale-110 border-2 border-white cursor-pointer"
           aria-label={`Ver más información de ${title}`}
           title="Ver más información"
         >
@@ -213,11 +213,11 @@ export function DolarCard({
     >
       {/* FRENTE */}
       <div
-        className={`absolute inset-0 rounded-2xl shadow-md bg-white px-5 pt-5 pb-8 flex flex-col gap-2 border-t-4 border-[#2d5a7b] justify-between ${isOpen ? "pointer-events-none" : "pointer-events-auto"}`}
+        className={`absolute inset-0 rounded-2xl shadow-md bg-white px-5 pt-5 pb-8 flex flex-col gap-2 border-t-4 border-brand-secondary justify-between ${isOpen ? "pointer-events-none" : "pointer-events-auto"}`}
         style={{ backfaceVisibility: "hidden" }}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-bold text-[#1a3a52]">{title}</h3>
+          <h3 className="text-xl font-bold text-brand-primary">{title}</h3>
           {!isNeutral && (
             <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${COLORS.variation[generalTrendSign]}`}>
               <HeaderIcon size={14} />
@@ -249,7 +249,7 @@ export function DolarCard({
 
       {/* REVERSO */}
       <div
-        className={`absolute inset-0 rounded-2xl shadow-md border-t-4 border-[#2d5a7b] bg-white flex flex-col px-5 pt-4 pb-8 ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        className={`absolute inset-0 rounded-2xl shadow-md border-t-4 border-brand-secondary bg-white flex flex-col px-5 pt-4 pb-8 ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
         style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
       >
         {isOpen && <CardBackContent buy={buy} sell={sell} title={title} />}

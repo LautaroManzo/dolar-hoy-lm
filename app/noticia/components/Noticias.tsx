@@ -36,9 +36,9 @@ export default async function Noticias() {
   
         <header className="relative z-10 text-left">
 
-        <h2 id="otras-cotizaciones" className="flex items-center mb-5 text-[#1a3a52] text-2xl tracking-wide opacity-70
-            after:content-[''] after:flex-grow after:h-[1px] after:ml-6 
-            after:bg-gradient-to-r after:from-transparent after:to-[#1a3a52]/15">
+        <h2 id="otras-cotizaciones" className="flex items-center mb-5 text-brand-primary text-2xl tracking-wide opacity-70
+            after:content-[''] after:flex-grow after:h-[1px] after:ml-6
+            after:bg-gradient-to-r after:from-transparent after:to-brand-primary/15">
           Contexto actual
         </h2>
 

@@ -27,7 +27,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#0f2535]/60 backdrop-blur-lg p-4 transition-all"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-brand-dark/60 backdrop-blur-lg p-4 transition-all"
       onClick={() => { clearAmount(); onClose(); }}
     >
       <div
@@ -35,7 +35,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
         onClick={(e) => e.stopPropagation()}
       >
 
-        <div className="p-5 flex justify-between items-center bg-[#1a3a52] rounded-t-2xl text-white">
+        <div className="p-5 flex justify-between items-center bg-brand-primary rounded-t-2xl text-white">
           <h2 className="text-lg font-bold tracking-tight uppercase text-sm opacity-90">Conversor de Moneda</h2>
           <button
             onClick={() => { clearAmount(); onClose(); }}
@@ -83,7 +83,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
                       e.currentTarget.blur();
                     }
                   }}
-                  className="bg-transparent text-2xl font-bold text-[#1a3a52] focus:outline-none w-full placeholder:text-slate-200"
+                  className="bg-transparent text-2xl font-bold text-brand-primary focus:outline-none w-full placeholder:text-slate-200"
                 />
               </div>
             </div>
@@ -91,13 +91,13 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
             <div className="relative h-0 flex justify-center z-10">
               <button
                 onClick={toggleInverse}
-                className="absolute -translate-y-1/2 bg-[#2d5a7b] text-white p-2.5 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all border-[3px] border-white cursor-pointer"
+                className="absolute -translate-y-1/2 bg-brand-secondary text-white p-2.5 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all border-[3px] border-white cursor-pointer"
               >
                 <ArrowRightLeft size={16} />
               </button>
             </div>
 
-            <div className="p-5 rounded-xl bg-[#1a3a52] shadow-inner shadow-black/20 mt-2">
+            <div className="p-5 rounded-xl bg-brand-primary shadow-inner shadow-black/20 mt-2">
               <span className="text-[10px] font-bold text-white/50 uppercase tracking-widest block mb-1">
                 Total Estimado
               </span>
@@ -108,7 +108,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
                     {amount ? result.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
                   </span>
                 </div>
-                <span className="shrink-0 text-[10px] font-black text-[#1a3a52] px-2 py-1 bg-white rounded-md ml-2">
+                <span className="shrink-0 text-[10px] font-black text-brand-primary px-2 py-1 bg-white rounded-md ml-2">
                   {isInverse ? 'ARS' : 'USD'}
                 </span>
               </div>
@@ -126,7 +126,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
             <div className="w-px h-6 bg-slate-200" />
             <div className="flex flex-col items-center gap-0.5">
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Venta</span>
-              <span className="text-sm font-black" style={{ color: '#2d5a7b' }}>
+              <span className="text-sm font-black text-brand-secondary">
                 ${formatPrice(selectedDolar?.venta || 0)}
               </span>
             </div>

@@ -44,7 +44,7 @@ export default async function DolarTypePage({ content }: Props) {
   const otherTypes = DOLAR_PAGE_LIST.filter(p => p.slug !== content.slug);
 
   return (
-    <div className="bg-[#fcf7f8] min-h-screen">
+    <div className="bg-brand-bg min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
@@ -62,7 +62,7 @@ export default async function DolarTypePage({ content }: Props) {
               </Link>
             </li>
             <li className="text-slate-300" aria-hidden="true">/</li>
-            <li className="text-[#1a3a52] font-medium truncate">{content.h1.replace(' hoy en Argentina', '')}</li>
+            <li className="text-brand-primary font-medium truncate">{content.h1.replace(' hoy en Argentina', '')}</li>
           </ol>
         </nav>
 
@@ -86,7 +86,7 @@ export default async function DolarTypePage({ content }: Props) {
             hideInfoLink
           />
         ) : (
-          <div className="bg-white rounded-2xl shadow-sm border-t-4 border-[#2d5a7b] px-5 py-6">
+          <div className="bg-white rounded-2xl shadow-sm border-t-4 border-brand-secondary px-5 py-6">
             <p className="text-slate-400 text-sm">No se pudo cargar la cotización en este momento.</p>
           </div>
         )}
@@ -97,30 +97,30 @@ export default async function DolarTypePage({ content }: Props) {
         </section>
 
         {/* Editorial */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-[#2d5a7b] p-6 sm:p-8">
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-brand-secondary p-6 sm:p-8">
           <EditorialCollapsible sections={content.editorial} />
         </section>
 
         {/* FAQ */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-[#2d5a7b] p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-[#1a3a52] mb-1">Preguntas frecuentes</h2>
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-brand-secondary p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-brand-primary mb-1">Preguntas frecuentes</h2>
           <FaqAccordion items={content.faq} />
         </section>
 
         {/* Links a otros tipos */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-[#2d5a7b] p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-[#1a3a52] mb-5">Otras cotizaciones</h2>
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-brand-secondary p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-brand-primary mb-5">Otras cotizaciones</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 mt-4">
             {otherTypes.map(p => (
               <Link
                 key={p.slug}
                 href={`/${p.slug}`}
-                className="group flex flex-1 items-center justify-between gap-2 px-4 py-4 rounded-xl border border-slate-100 bg-slate-50 hover:border-[#2d5a7b]/30 hover:bg-[#1a3a52]/[0.03] transition-all duration-200 min-w-0"
+                className="group flex flex-1 items-center justify-between gap-2 px-4 py-4 rounded-xl border border-slate-100 bg-slate-50 hover:border-brand-secondary/30 hover:bg-brand-primary/[0.03] transition-all duration-200 min-w-0"
               >
-                <span className="font-semibold text-base text-slate-700 group-hover:text-[#1a3a52] transition-colors duration-200 truncate">
+                <span className="font-semibold text-base text-slate-700 group-hover:text-brand-primary transition-colors duration-200 truncate">
                   {p.h1.replace(' hoy en Argentina', '')}
                 </span>
-                <ArrowUpRight size={15} className="shrink-0 text-slate-300 group-hover:text-[#2d5a7b] transition-colors duration-200" />
+                <ArrowUpRight size={15} className="shrink-0 text-slate-300 group-hover:text-brand-secondary transition-colors duration-200" />
               </Link>
             ))}
           </div>

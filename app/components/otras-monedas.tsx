@@ -19,9 +19,9 @@ export default async function OtrasMonedas() {
 
           <h2
             id="otras-monedas-heading"
-            className="flex items-center mb-5 text-[#1a3a52] text-2xl tracking-wide opacity-70
+            className="flex items-center mb-5 text-brand-primary text-2xl tracking-wide opacity-70
               after:content-[''] after:flex-grow after:h-[1px] after:ml-6
-              after:bg-gradient-to-r after:from-transparent after:to-[#1a3a52]/15"
+              after:bg-gradient-to-r after:from-transparent after:to-brand-primary/15"
           >
             Otras monedas
           </h2>
@@ -30,7 +30,7 @@ export default async function OtrasMonedas() {
             {monedas.map(m => (
               <div
                 key={m.moneda}
-                className="rounded-2xl shadow-md bg-white p-5 flex flex-col gap-3 border-t-4 border-[#2d5a7b]"
+                className="rounded-2xl shadow-md bg-white p-5 flex flex-col gap-3 border-t-4 border-brand-secondary"
               >
                 <div className="flex items-center gap-2">
                   <h3 className="text-lg font-semibold text-gray-900 tracking-wide">
@@ -47,8 +47,8 @@ export default async function OtrasMonedas() {
                     <span className="text-base sm:text-xl font-bold text-gray-700 leading-tight mt-1">${formatPrice(m.compra)}</span>
                   </div>
                   <div className="flex flex-col items-center justify-center py-3 bg-slate-50 border border-slate-100 rounded-xl">
-                    <span className="text-[0.55rem] font-bold text-[#2d5a7b] tracking-wide uppercase">Venta</span>
-                    <span className="text-base sm:text-xl font-bold text-[#2d5a7b] leading-tight mt-1">${formatPrice(m.venta)}</span>
+                    <span className="text-[0.55rem] font-bold text-brand-secondary tracking-wide uppercase">Venta</span>
+                    <span className="text-base sm:text-xl font-bold text-brand-secondary leading-tight mt-1">${formatPrice(m.venta)}</span>
                   </div>
                 </div>
 

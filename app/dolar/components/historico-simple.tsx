@@ -55,14 +55,14 @@ export default function HistoricoSimple({ tipo }: Props) {
   return (
     <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
-        <h2 className="text-xl font-bold text-[#1a3a52]">Evolución histórica</h2>
+        <h2 className="text-xl font-bold text-brand-primary">Evolución histórica</h2>
         <div className="flex gap-1 bg-slate-100 rounded-xl p-1 w-full sm:w-auto">
           {RANGOS.map(r => (
             <button
               key={r.id}
               onClick={() => setRango(r.id)}
               className={`flex-1 sm:flex-none px-2 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
-                rango === r.id ? 'bg-white text-[#1a3a52] shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                rango === r.id ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               {r.label}
@@ -86,7 +86,7 @@ export default function HistoricoSimple({ tipo }: Props) {
         )}
         {isMounted && loading && (
           <div className="absolute inset-0 z-20 bg-white/60 backdrop-blur-[1px] flex items-center justify-center rounded-xl">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2d5a7b]" />
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-secondary" />
           </div>
         )}
         {isMounted && (

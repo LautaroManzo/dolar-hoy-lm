@@ -1,6 +1,15 @@
 @import 'tailwindcss';
 @source "../**/*.{tsx,ts,jsx,js}";
 
+@theme {
+  --color-brand-primary: #1a3a52;
+  --color-brand-secondary: #2d5a7b;
+  --color-brand-dark: #0f2535;
+  --color-brand-bg: #fcf7f8;
+  --shadow-brand-md: 0 6px 24px rgba(26,58,82,0.35);
+  --shadow-brand-lg: 0 10px 32px rgba(26,58,82,0.55);
+}
+
 svg, path, g {
     outline: none;
 }

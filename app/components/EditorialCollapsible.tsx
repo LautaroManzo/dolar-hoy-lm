@@ -15,7 +15,7 @@ export default function EditorialCollapsible({ sections }: { sections: Section[]
   return (
     <div>
       <div>
-        <h3 className="text-base font-bold text-[#1a3a52] mb-1">{first.titulo}</h3>
+        <h3 className="text-base font-bold text-brand-primary mb-1">{first.titulo}</h3>
         <p className="text-slate-500 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: first.cuerpo }} />
       </div>
 
@@ -27,7 +27,7 @@ export default function EditorialCollapsible({ sections }: { sections: Section[]
             <div className="space-y-5 mt-5">
               {rest.map((s, i) => (
                 <div key={i}>
-                  <h3 className="text-base font-bold text-[#1a3a52] mb-1">{s.titulo}</h3>
+                  <h3 className="text-base font-bold text-brand-primary mb-1">{s.titulo}</h3>
                   <p className="text-slate-500 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: s.cuerpo }} />
                 </div>
               ))}

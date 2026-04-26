@@ -8,7 +8,7 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-gradient-to-r from-[#1a3a52] to-[#2d5a7b] text-white">
+      <header className="sticky top-0 z-50 bg-gradient-to-r from-brand-primary to-brand-secondary text-white">
         <div className="max-w-6xl mx-auto px-4 py-4 sm:py-3 flex items-center justify-between">
 
           <Link href="/" className="flex items-center gap-2 sm:gap-3">

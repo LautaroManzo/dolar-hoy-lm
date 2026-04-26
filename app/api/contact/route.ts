@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
+import { COLORS } from "@/app/constants/colors";
 
 const schema = z.object({
   subject: z.string().min(1).max(200),
@@ -64,7 +65,7 @@ export async function POST(req: NextRequest) {
     subject,
     html: `
       <div style="font-family:sans-serif;max-width:900px;margin:0 auto;padding:24px">
-        <blockquote style="border-left:3px solid #1a3a52;margin:0;padding:8px 16px;color:#334155;background:#f8fafc;border-radius:4px">
+        <blockquote style="border-left:3px solid ${COLORS.primary};margin:0;padding:8px 16px;color:#334155;background:#f8fafc;border-radius:4px">
           ${message.replace(/\n/g, "<br/>")}
         </blockquote>
       </div>

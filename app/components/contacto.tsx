@@ -100,17 +100,17 @@ export default function Contacto() {
               />
 
               <div className="relative z-10 bg-white/92 backdrop-blur-sm border border-white/50 rounded-2xl px-6 py-7 shadow-md">
-                <h3 className="text-3xl font-extrabold text-[#1a3a52] tracking-tight leading-none mb-4">
+                <h3 className="text-3xl font-extrabold text-brand-primary tracking-tight leading-none mb-4">
                   Contacto
                 </h3>
                 <div className="h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent mb-5" />
                 <p className="text-slate-600 text-[13px] leading-relaxed mb-4">
-                  <strong className="text-[#1a3a52]">Tu opinión nos importa.</strong> Si detectaste un problema, tenés una sugerencia o simplemente querés contactarnos, escribinos.
+                  <strong className="text-brand-primary">Tu opinión nos importa.</strong> Si detectaste un problema, tenés una sugerencia o simplemente querés contactarnos, escribinos.
                 </p>
                 <p className="text-slate-600 text-[13px] leading-relaxed mb-5">
                   Cada mensaje que recibimos nos ayuda a crecer, <strong className="text-slate-700">sin importar si es algo pequeño o algo grande.</strong>
                 </p>
-                <p className="text-[12px] text-[#2d5a7b] font-semibold">
+                <p className="text-[12px] text-brand-secondary font-semibold">
                   Te respondemos a la brevedad.
                 </p>
               </div>
@@ -139,7 +139,7 @@ export default function Contacto() {
                           type="text"
                           placeholder="Ej: Sugerencia, error, consulta..."
                           required
-                          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-[#1a3a52] focus:ring-2 focus:ring-[#1a3a52]/10 hover:border-slate-300 transition-all duration-200"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 hover:border-slate-300 transition-all duration-200"
                         />
                       </Field>
                       <Field id="contact-email" label="Email">
@@ -149,14 +149,14 @@ export default function Contacto() {
                           type="email"
                           placeholder="Tu email de contacto"
                           required
-                          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-[#1a3a52] focus:ring-2 focus:ring-[#1a3a52]/10 hover:border-slate-300 transition-all duration-200"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 hover:border-slate-300 transition-all duration-200"
                         />
                       </Field>
                     </div>
 
                     <Field id="contact-message" label="Mensaje">
                       <div className="flex flex-col gap-1">
-                        <div className="rounded-xl border border-slate-200 bg-slate-50 overflow-hidden hover:border-slate-300 focus-within:bg-white focus-within:border-[#1a3a52] focus-within:ring-2 focus-within:ring-[#1a3a52]/10 transition-all duration-200">
+                        <div className="rounded-xl border border-slate-200 bg-slate-50 overflow-hidden hover:border-slate-300 focus-within:bg-white focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/10 transition-all duration-200">
                           <textarea
                             id="contact-message"
                             name="message"
@@ -204,7 +204,7 @@ export default function Contacto() {
                     <button
                       type="submit"
                       disabled={status === "loading"}
-                      className="w-full sm:w-auto flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#1a3a52] to-[#2d5a7b] text-white text-sm font-semibold px-6 py-3 rounded-full shadow-[0_6px_24px_rgba(26,58,82,0.35)] hover:shadow-[0_10px_32px_rgba(26,58,82,0.55)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      className="w-full sm:w-auto flex items-center justify-center gap-2.5 bg-gradient-to-r from-brand-primary to-brand-secondary text-white text-sm font-semibold px-6 py-3 rounded-full shadow-brand-md hover:shadow-brand-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
                       {status === "loading" ? (
                         "Enviando..."

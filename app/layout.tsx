@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { COLORS } from "./constants/colors";
 
 import { Header } from "./layout/components/header";
 import { Footer } from "./layout/components/footer";
@@ -103,7 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es-AR">
 
       <head>
-        <meta name="theme-color" content="#1a3a52" />
+        <meta name="theme-color" content={COLORS.primary} />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
         <link rel="preconnect" href="https://dolarapi.com" />
         <link rel="preconnect" href="https://api.argentinadatos.com" />
@@ -115,7 +116,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
 
-      <body className="font-sans antialiased bg-[#fcf7f8] min-h-screen flex flex-col">
+      <body className="font-sans antialiased bg-brand-bg min-h-screen flex flex-col">
         <Header />
         <main id="top" className="flex-1">{children}</main>
         <Footer />

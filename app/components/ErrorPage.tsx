@@ -81,7 +81,7 @@ export default function ErrorPage({
 
           <Link
             href="/"
-            className="inline-block w-full px-6 py-3 bg-[#2d5a7b] text-white font-medium rounded-lg hover:bg-[#1a3a52] transition-colors"
+            className="inline-block w-full px-6 py-3 bg-brand-secondary text-white font-medium rounded-lg hover:bg-brand-primary transition-colors"
           >
             Volver al inicio
           </Link>

@@ -4,7 +4,7 @@ function Pulse({ className }: { className: string }) {
 
 export default function NoticiaLoading() {
   return (
-    <div className="bg-[#fcf7f8]">
+    <div className="bg-brand-bg">
       <div className="max-w-6xl mx-auto px-4 py-10">
 
         {/* Breadcrumb */}

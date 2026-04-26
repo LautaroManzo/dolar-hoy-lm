@@ -22,11 +22,11 @@ export function PriceDisplay({ price, label, variant = 'compra', size = 'md' }: 
 
   const colorClasses = variant === 'compra' 
     ? 'text-gray-700' 
-    : 'text-[#2d5a7b]';
+    : 'text-brand-secondary';
 
   return (
     <div className="flex flex-col py-4 px-3 text-center bg-slate-50 border border-slate-100 rounded-xl justify-center">
-      <span className={`${labelClasses[size]} font-bold ${variant === 'compra' ? 'text-gray-700' : 'text-[#2d5a7b]'} tracking-wide uppercase`}>
+      <span className={`${labelClasses[size]} font-bold ${variant === 'compra' ? 'text-gray-700' : 'text-brand-secondary'} tracking-wide uppercase`}>
         {label}
       </span>
       <span className={`${sizeClasses[size]} ${colorClasses} font-bold leading-none mt-1`}>

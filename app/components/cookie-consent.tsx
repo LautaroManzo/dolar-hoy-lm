@@ -58,11 +58,11 @@ export default function CookieConsent({ gaId }: { gaId: string }) {
           <div className="bg-white shadow-[0_-4px_32px_rgba(0,0,0,0.1)] border-t border-slate-100 px-6 py-5">
             <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex-1 min-w-0">
-                <p className="text-lg font-bold text-[#1a3a52] mb-1">Este sitio utiliza cookies</p>
+                <p className="text-lg font-bold text-brand-primary mb-1">Este sitio utiliza cookies</p>
                 <p className="text-base text-slate-500 leading-relaxed">
                   Usamos cookies para mejorar tu experiencia en el sitio. Tu elección no cambia el contenido ni cómo funciona.{' '}
                   Leé la{' '}
-                  <a href="/politica-de-privacidad" className="underline hover:text-[#1a3a52] transition-colors">
+                  <a href="/politica-de-privacidad" className="underline hover:text-brand-primary transition-colors">
                     política de privacidad
                   </a>.
                 </p>
@@ -70,7 +70,7 @@ export default function CookieConsent({ gaId }: { gaId: string }) {
               <div className="flex sm:flex-col flex-row gap-2 shrink-0 sm:w-36 w-full">
                 <button
                   onClick={accept}
-                  className="w-full py-2.5 text-sm font-semibold text-white bg-[#1a3a52] hover:bg-[#2d5a7b] rounded-lg transition-colors cursor-pointer"
+                  className="w-full py-2.5 text-sm font-semibold text-white bg-brand-primary hover:bg-brand-secondary rounded-lg transition-colors cursor-pointer"
                 >
                   Aceptar
                 </button>

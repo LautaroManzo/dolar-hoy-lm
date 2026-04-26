@@ -19,7 +19,7 @@ export default function FaqAccordion({ items }: { items: FaqItem[] }) {
           <div
             key={i}
             className={`rounded-xl border transition-all duration-200 ${
-              isOpen ? 'border-[#2d5a7b]/30 bg-[#1a3a52]/[0.03]' : 'border-slate-100 bg-slate-50 hover:border-slate-200'
+              isOpen ? 'border-brand-secondary/30 bg-brand-primary/[0.03]' : 'border-slate-100 bg-slate-50 hover:border-slate-200'
             }`}
           >
             <dt>
@@ -29,16 +29,16 @@ export default function FaqAccordion({ items }: { items: FaqItem[] }) {
                 aria-expanded={isOpen}
               >
                 <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs font-black transition-colors duration-200 ${
-                  isOpen ? 'bg-[#2d5a7b] text-white' : 'bg-slate-200 text-slate-500'
+                  isOpen ? 'bg-brand-secondary text-white' : 'bg-slate-200 text-slate-500'
                 }`}>
                   {i + 1}
                 </span>
                 <span className={`flex-1 font-semibold text-base transition-colors duration-200 ${
-                  isOpen ? 'text-[#1a3a52]' : 'text-slate-700'
+                  isOpen ? 'text-brand-primary' : 'text-slate-700'
                 }`}>
                   {item.pregunta}
                 </span>
-                <span className={`shrink-0 transition-colors duration-200 ${isOpen ? 'text-[#2d5a7b]' : 'text-slate-300'}`}>
+                <span className={`shrink-0 transition-colors duration-200 ${isOpen ? 'text-brand-secondary' : 'text-slate-300'}`}>
                   {isOpen ? <Minus size={16} /> : <Plus size={16} />}
                 </span>
               </button>
