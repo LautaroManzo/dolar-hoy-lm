@@ -58,6 +58,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Error de configuración del servidor." }, { status: 500 });
   }
 
+  const safeMessage = message
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/\n/g, "<br/>");
+
   const { error } = await resend.emails.send({
     from: "DolarInfoHoy <contacto@dolarinfohoy.com.ar>",
     to,
@@ -66,7 +74,7 @@ export async function POST(req: NextRequest) {
     html: `
       <div style="font-family:sans-serif;max-width:900px;margin:0 auto;padding:24px">
         <blockquote style="border-left:3px solid ${COLORS.primary};margin:0;padding:8px 16px;color:#334155;background:#f8fafc;border-radius:4px">
-          ${message.replace(/\n/g, "<br/>")}
+          ${safeMessage}
         </blockquote>
       </div>
     `,
