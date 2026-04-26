@@ -22,7 +22,12 @@ export default function Contacto() {
   const [errorMsg, setErrorMsg] = useState("");
   const [messageLength, setMessageLength] = useState(0);
   const formRef = useRef<HTMLFormElement>(null);
+  const loadedAt = useRef<number>(0);
   const MAX_MESSAGE = 1000;
+
+  useEffect(() => {
+    loadedAt.current = Date.now();
+  }, []);
 
   useEffect(() => {
     if (status === "success") {
@@ -45,6 +50,8 @@ export default function Contacto() {
       subject: data.get("subject"),
       email: data.get("email"),
       message: data.get("message"),
+      website: data.get("website") ?? "",
+      loadedAt: loadedAt.current,
     };
 
     try {
@@ -182,6 +189,16 @@ export default function Contacto() {
                       </div>
                     )}
                   </div>
+
+                  {/* honeypot — oculto para humanos, los bots lo llenan */}
+                  <input
+                    type="text"
+                    name="website"
+                    aria-hidden="true"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    style={{ display: "none" }}
+                  />
 
                   <div className="flex justify-end pt-2">
                     <button

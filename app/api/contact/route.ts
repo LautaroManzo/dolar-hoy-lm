@@ -1,22 +1,55 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { z } from "zod";
+
+const schema = z.object({
+  subject: z.string().min(1).max(200),
+  email: z.string().email(),
+  message: z.string().min(1).max(1000),
+  website: z.string().max(0),   // honeypot — debe llegar vacío
+  loadedAt: z.number(),
+});
+
+// Rate limit: máximo 3 envíos por IP cada 10 minutos
+const RATE_LIMIT = 3;
+const WINDOW_MS = 10 * 60 * 1000;
+const ipLog = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = (ipLog.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+  if (timestamps.length >= RATE_LIMIT) return true;
+  ipLog.set(ip, [...timestamps, now]);
+  return false;
+}
 
 export async function POST(req: NextRequest) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const { subject, email, message } = await req.json();
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
 
-  if (!subject?.trim() || !email?.trim() || !message?.trim()) {
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: "Demasiados mensajes. Intentá de nuevo en 10 minutos." },
+      { status: 429 }
+    );
+  }
+
+  const parsed = schema.safeParse(await req.json());
+  if (!parsed.success) {
     return NextResponse.json({ error: "Todos los campos son obligatorios." }, { status: 400 });
   }
 
-  if (message.length > 1000) {
-    return NextResponse.json({ error: "El mensaje no puede superar los 1000 caracteres." }, { status: 400 });
+  const { subject, email, message, website, loadedAt } = parsed.data;
+
+  if (website) {
+    return NextResponse.json({ error: "Solicitud no válida." }, { status: 400 });
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return NextResponse.json({ error: "El email no es válido." }, { status: 400 });
+  if (Date.now() - loadedAt < 3000) {
+    return NextResponse.json({ error: "Solicitud no válida." }, { status: 400 });
   }
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const to = process.env.CONTACT_EMAIL;
   if (!to) {
