@@ -103,6 +103,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es-AR">
 
       <head>
+        <meta name="theme-color" content="#1a3a52" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
         <link rel="preconnect" href="https://dolarapi.com" />
         <link rel="preconnect" href="https://api.argentinadatos.com" />
         <link rel="dns-prefetch" href="https://dolarapi.com" />
