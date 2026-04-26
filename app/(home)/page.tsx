@@ -1,6 +1,7 @@
 import { getAllDolarData } from "@/app/services/getAllDolarData";
 import { Cards } from "@/app/dolar/components/cards";
 import { Metadata } from "next";
+import type { DolarCardData } from "@/app/types/dolar";
 import Description from "@/app/dolar/components/description";
 import EvolucionDolar from "@/app/dolar/components/evolucion-dolar";
 import Noticias from "@/app/noticia/components/Noticias";
@@ -56,7 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-  let dataForCards: Record<string, import("@/app/types/dolar").DolarCardData> = {};
+  let dataForCards: Record<string, DolarCardData> = {};
   let hasFetchError = false;
   let isStale = false;
   let staleAt: string | undefined;
