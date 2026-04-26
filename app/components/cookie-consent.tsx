@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Script from 'next/script'
 
 const CONSENT_KEY = 'cookie_consent'
@@ -8,14 +8,14 @@ const CONSENT_KEY = 'cookie_consent'
 type Consent = 'accepted' | 'rejected' | null
 
 export default function CookieConsent({ gaId }: { gaId: string }) {
-  const [consent, setConsent] = useState<Consent>(() => {
-    if (typeof window === 'undefined') return null
-    return localStorage.getItem(CONSENT_KEY) as Consent
-  })
-  const [visible, setVisible] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false
-    return !localStorage.getItem(CONSENT_KEY)
-  })
+  const [consent, setConsent] = useState<Consent>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const stored = localStorage.getItem(CONSENT_KEY) as Consent
+    setConsent(stored)
+    setVisible(!stored)
+  }, [])
 
   const accept = () => {
     localStorage.setItem(CONSENT_KEY, 'accepted')
