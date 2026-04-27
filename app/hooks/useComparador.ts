@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { API_HISTORICO } from '../constants/api';
 
 type DataPoint = { fecha: string; compra: number; venta: number; originalDate: string };
 type DataMap = Record<string, DataPoint[]>;
 
-const CACHE_TTL_DAYS = 7;
+const CACHE_TTL_DAYS = 1;
 const HISTORICAL_DAYS = 365;
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -32,7 +33,7 @@ function writeCache(tipo: string, datos: DataPoint[]) {
 
 async function fetchTipo(tipo: string, signal: AbortSignal): Promise<DataPoint[]> {
   const res = await fetch(
-    `https://api.argentinadatos.com/v1/cotizaciones/dolares/${tipo}`,
+    `${API_HISTORICO}/${tipo}`,
     { signal }
   );
   if (!res.ok) throw new Error(`${res.status}`);

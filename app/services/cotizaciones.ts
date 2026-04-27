@@ -1,4 +1,4 @@
-const API_COTIZACIONES = 'https://dolarapi.com/v1/cotizaciones';
+import { API_COTIZACIONES } from '../constants/api';
 const REVALIDATE_SECONDS = 60;
 const TZ_BA = 'America/Argentina/Buenos_Aires';
 

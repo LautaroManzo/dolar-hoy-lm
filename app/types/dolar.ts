@@ -10,7 +10,6 @@ export interface DolarResponse {
   buy: number;
   sell: number;
   buyVariation: VariationData;
-  sellVariation: VariationData;
   spread: number;
   spreadSign: "up" | "down" | "neutral";
   fechaActualizacion: string;

@@ -48,9 +48,8 @@ export default function HistoricoSimple({ tipo }: Props) {
     padding: '12px', backgroundColor: '#ffffff',
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const tooltipLabel = (_label: any, payload: readonly any[]) =>
-    payload?.length > 0 ? formatDate(payload[0].payload.originalDate) : _label;
+  const tooltipLabel = (_label: string, payload: readonly { payload?: { originalDate?: string } }[]) =>
+    payload?.length > 0 && payload[0].payload?.originalDate ? formatDate(payload[0].payload.originalDate) : _label;
 
   return (
     <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">

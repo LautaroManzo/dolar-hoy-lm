@@ -1,4 +1,5 @@
 import type { VariationData, DolarResponse } from '../types/dolar';
+import { API_DOLAR_AMBITO } from '../constants/api';
 
 export type { VariationData, DolarResponse };
 
@@ -15,8 +16,6 @@ export interface FetchDolarsResult {
   isStale: boolean;
   staleAt?: string;
 }
-
-const API_AMBITO = "https://dolarapi.com/v1/ambito/dolares";
 const REVALIDATE_SECONDS = 60;
 const TZ_BA = 'America/Argentina/Buenos_Aires';
 const FETCH_TIMEOUT_MS = 5000;
@@ -71,7 +70,7 @@ export async function fetchAllDolars(): Promise<FetchDolarsResult> {
     throw new Error('API no disponible (forzado) y sin datos en caché');
   }
   try {
-    const data = await fetchJson<DolarData[]>(API_AMBITO, REVALIDATE_SECONDS);
+    const data = await fetchJson<DolarData[]>(API_DOLAR_AMBITO, REVALIDATE_SECONDS);
     memCache = { data, formattedAt: formatNowArgentina() };
     return { data, isStale: false };
   } catch {
@@ -94,19 +93,10 @@ export function processDolar(dolarData: DolarData): DolarResponse {
     dailyDiffSign: getSign(variacionPercent)
   };
 
-  const sellVariation: VariationData = {
-    percent: Number(variacionPercent.toFixed(2)),
-    percentAbs: Number(Math.abs(variacionPercent).toFixed(2)),
-    sign: getSign(variacionPercent),
-    dailyDiff: Number((dolarData.venta * variacionPercent / 100).toFixed(2)),
-    dailyDiffSign: getSign(variacionPercent)
-  };
-
   return {
     buy: dolarData.compra,
     sell: dolarData.venta,
     buyVariation,
-    sellVariation,
     spread: Number(spread.toFixed(2)),
     spreadSign: getSign(spread),
     fechaActualizacion: dolarData.fechaActualizacion,

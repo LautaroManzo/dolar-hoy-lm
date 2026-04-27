@@ -44,9 +44,9 @@ const PreguntasFrecuentes = () => {
             onClick={() => setOpen(!open)}
             className="group w-full flex items-center justify-between p-6 focus:outline-none cursor-pointer transition-all hover:bg-slate-50/50"
           >
-            <h3 className={`text-xl tracking-wide transition-colors duration-300 ${open ? 'text-brand-primary font-bold' : 'text-slate-900'}`}>
+            <h2 className={`text-xl tracking-wide transition-colors duration-300 ${open ? 'text-brand-primary font-bold' : 'text-slate-900'}`}>
               Preguntas frecuentes
-            </h3>
+            </h2>
             <div className={`transition-transform duration-500 ${open ? 'rotate-180' : ''}`}>
               <ChevronDown className="w-7 h-7 text-brand-primary" />
             </div>

@@ -139,9 +139,8 @@ const EvolucionDolar: React.FC = () => {
   };
   const tooltipItemStyle  = { fontWeight: 'bold' as const, fontSize: '12px' };
   const tooltipLabelStyle = { marginBottom: '4px', color: '#64748b', fontSize: '11px', fontWeight: '600' as const };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const tooltipLabel = (_label: any, payload: readonly any[]) =>
-    payload?.length > 0 ? formatDate(payload[0].payload.originalDate) : _label;
+  const tooltipLabel = (_label: string, payload: readonly { payload?: { originalDate?: string } }[]) =>
+    payload?.length > 0 && payload[0].payload?.originalDate ? formatDate(payload[0].payload.originalDate) : _label;
 
   const diffBrecha = brechaActual !== null && brecha30d !== null ? brechaActual - brecha30d : null;
 

@@ -74,7 +74,6 @@ export default async function DolarTypePage({ content }: Props) {
             buy={data.buy}
             sell={data.sell}
             buyVariation={data.buyVariation}
-            sellVariation={data.sellVariation}
             spread={data.spread}
             spreadSign={data.spreadSign}
             horaActualizacion={data.horaActualizacion}
