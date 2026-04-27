@@ -1,33 +1,37 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useSyncExternalStore } from 'react'
 import Script from 'next/script'
 
 const CONSENT_KEY = 'cookie_consent'
 
 type Consent = 'accepted' | 'rejected' | null
 
+function subscribe(callback: () => void) {
+  window.addEventListener('consent-change', callback)
+  window.addEventListener('storage', callback)
+  return () => {
+    window.removeEventListener('consent-change', callback)
+    window.removeEventListener('storage', callback)
+  }
+}
+
+function getSnapshot(): Consent {
+  return localStorage.getItem(CONSENT_KEY) as Consent
+}
+
+function getServerSnapshot(): Consent {
+  return null
+}
+
+function setConsent(value: 'accepted' | 'rejected') {
+  localStorage.setItem(CONSENT_KEY, value)
+  window.dispatchEvent(new Event('consent-change'))
+}
+
 export default function CookieConsent({ gaId }: { gaId: string }) {
-  const [consent, setConsent] = useState<Consent>(null)
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const stored = localStorage.getItem(CONSENT_KEY) as Consent
-    setConsent(stored)
-    setVisible(!stored)
-  }, [])
-
-  const accept = () => {
-    localStorage.setItem(CONSENT_KEY, 'accepted')
-    setConsent('accepted')
-    setVisible(false)
-  }
-
-  const reject = () => {
-    localStorage.setItem(CONSENT_KEY, 'rejected')
-    setConsent('rejected')
-    setVisible(false)
-  }
+  const consent = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+  const visible = consent === null
 
   return (
     <>
@@ -69,13 +73,13 @@ export default function CookieConsent({ gaId }: { gaId: string }) {
               </div>
               <div className="flex sm:flex-col flex-row gap-2 shrink-0 sm:w-36 w-full">
                 <button
-                  onClick={accept}
+                  onClick={() => setConsent('accepted')}
                   className="w-full py-2.5 text-sm font-semibold text-white bg-brand-primary hover:bg-brand-secondary rounded-lg transition-colors cursor-pointer"
                 >
                   Aceptar
                 </button>
                 <button
-                  onClick={reject}
+                  onClick={() => setConsent('rejected')}
                   className="w-full py-2.5 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
                 >
                   Rechazar

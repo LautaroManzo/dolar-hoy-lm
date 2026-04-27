@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useCallback } from 'react';
 import { X, ArrowRightLeft } from 'lucide-react';
 import { useCalculator } from '../../hooks/useCalculator';
 import { Dropdown } from '../../shared/ui/Dropdown';
@@ -23,14 +24,47 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
     clearAmount,
   } = useCalculator(isOpen);
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+
+  const handleClose = useCallback(() => {
+    clearAmount();
+    onClose();
+  }, [clearAmount, onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    triggerRef.current = document.activeElement as HTMLElement;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleClose();
+    };
+    document.addEventListener('keydown', handleEscape);
+
+    const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+      'button, input, [tabindex]:not([tabindex="-1"])'
+    );
+    focusable?.[0]?.focus();
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      triggerRef.current?.focus();
+    };
+  }, [isOpen, handleClose]);
+
   if (!isOpen) return null;
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-brand-dark/60 backdrop-blur-lg p-4 transition-all"
-      onClick={() => { clearAmount(); onClose(); }}
+      onClick={handleClose}
     >
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Conversor de moneda"
         className="bg-white w-full max-w-sm overflow-visible rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] max-h-screen overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
@@ -38,8 +72,10 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
         <div className="p-5 flex justify-between items-center bg-brand-primary rounded-t-2xl text-white">
           <h2 className="text-lg font-bold tracking-tight uppercase text-sm opacity-90">Conversor de Moneda</h2>
           <button
-            onClick={() => { clearAmount(); onClose(); }}
+            type="button"
+            onClick={handleClose}
             className="p-2 hover:bg-white/10 rounded-full transition-colors text-white cursor-pointer"
+            aria-label="Cerrar conversor"
           >
             <X size={20} />
           </button>
@@ -90,8 +126,10 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
 
             <div className="relative h-0 flex justify-center z-10">
               <button
+                type="button"
                 onClick={toggleInverse}
                 className="absolute -translate-y-1/2 bg-brand-secondary text-white p-2.5 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all border-[3px] border-white cursor-pointer"
+                aria-label={isInverse ? 'Cambiar a pesos → dólares' : 'Cambiar a dólares → pesos'}
               >
                 <ArrowRightLeft size={16} />
               </button>

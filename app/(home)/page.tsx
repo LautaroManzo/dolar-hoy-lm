@@ -12,7 +12,7 @@ import { AutoRefresh } from "@/app/components/auto-refresh";
 import OtrasMonedas from "@/app/components/otras-monedas";
 import StaleBanner from "@/app/components/stale-banner";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -26,6 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: { absolute: `Dólar Blue Hoy $${bluePrice} | Cotización en tiempo real` },
       description: `Dólar Blue: $${bluePrice} | Oficial: $${oficialPrice} | MEP: $${mepPrice} | CCL: $${cclPrice}. Cotizaciones actualizadas en tiempo real. Brecha cambiaria y variaciones diarias.`,
+      alternates: { canonical: 'https://dolarinfohoy.com.ar' },
       openGraph: {
         title: `Dólar Blue Hoy $${bluePrice} | Cotización en tiempo real`,
         description: `Blue: $${bluePrice} | Oficial: $${oficialPrice} | MEP: $${mepPrice} | CCL: $${cclPrice}. Cotizaciones actualizadas al minuto.`,
@@ -51,7 +52,8 @@ export async function generateMetadata(): Promise<Metadata> {
     console.error('[generateMetadata] Error al obtener cotizaciones:', err);
     return {
       title: { absolute: `Dólar hoy en Argentina | Cotización en tiempo real` },
-      description: `Consultá el precio del Dólar Blue, Oficial, MEP y CCL. Brecha cambiaria y variaciones diarias en Argentina.`
+      description: `Consultá el precio del Dólar Blue, Oficial, MEP y CCL. Brecha cambiaria y variaciones diarias en Argentina.`,
+      alternates: { canonical: 'https://dolarinfohoy.com.ar' },
     };
   }
 }
@@ -116,7 +118,7 @@ export default async function Page() {
       <AutoRefresh />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(quotesJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(quotesJsonLd).replace(/</g, '\\u003c') }}
       />
       <Description />
 

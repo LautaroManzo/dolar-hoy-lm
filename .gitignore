@@ -42,4 +42,5 @@ next-env.d.ts
 
 # local notes / audits
 MEJORAS.md
+ANALISIS.md
 lighthouse-*.json

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { parseNum } from "../utils/format";
-import { fetchAllDolars } from "../services/dolar";
 
 const LS_KEY = "calculator_selected_dolar";
 
@@ -48,7 +47,8 @@ export function useCalculator(isOpen: boolean) {
 
     const loadDolarTypes = async () => {
       try {
-        const { data: allDolars } = await fetchAllDolars();
+        const res = await fetch("/api/dolares");
+        const { data: allDolars }: { data: { casa: string; compra: number; venta: number }[] } = await res.json();
         const find = (casa: string, field: "compra" | "venta") =>
           allDolars.find((d) => d.casa === casa)?.[field] ?? 0;
         const types: DolarType[] = [

@@ -36,7 +36,7 @@ const PreguntasFrecuentes = () => {
     <div className="w-full font-sans pt-8 pb-3 px-4 [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%)]">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }}
       />
       <div className="max-w-6xl mx-auto">
         <div className={`transition-all duration-700 bg-white overflow-hidden rounded-[15px] border-l-3 border-l-brand-primary ${open ? 'shadow-[0_40px_80px_rgba(30,41,59,0.1)]' : 'shadow-xl shadow-slate-200/20 hover:scale-[1.01]'}`}>

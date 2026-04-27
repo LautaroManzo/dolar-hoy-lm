@@ -14,12 +14,17 @@ const schema = z.object({
 // Rate limit: máximo 3 envíos por IP cada 10 minutos
 const RATE_LIMIT = 3;
 const WINDOW_MS = 10 * 60 * 1000;
+const MAX_IPS = 500;
 const ipLog = new Map<string, number[]>();
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
   for (const [key, times] of ipLog) {
     if (times.every((t) => now - t >= WINDOW_MS)) ipLog.delete(key);
+  }
+  if (ipLog.size >= MAX_IPS && !ipLog.has(ip)) {
+    const oldest = ipLog.keys().next().value!;
+    ipLog.delete(oldest);
   }
   const timestamps = (ipLog.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
   if (timestamps.length >= RATE_LIMIT) return true;
