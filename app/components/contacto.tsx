@@ -31,7 +31,7 @@ export default function Contacto() {
 
   useEffect(() => {
     if (status === "success") {
-      const timer = setTimeout(() => setStatus("idle"), 3000);
+      const timer = setTimeout(() => setStatus("idle"), 6000);
       return () => clearTimeout(timer);
     }
     if (status === "error") {

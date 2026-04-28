@@ -10,18 +10,14 @@ import {
 import ErrorBoundary from '../../shared/ui/error-boundary';
 import { useComparador } from '../../hooks/useComparador';
 import { COLORS } from '../../constants/colors';
+import { formatChartDate } from '../../utils/format';
+import {
+  type Rango, RANGOS,
+  CHART_AXIS_PROPS, CHART_TOOLTIP_CONTENT_STYLE,
+  CHART_TOOLTIP_ITEM_STYLE, CHART_TOOLTIP_LABEL_STYLE,
+} from '../constants/chart';
 
-type Rango = '7D' | '1M' | '3M' | '6M' | '1A' | 'YTD';
 type Modo = 'precio' | 'brecha';
-
-const RANGOS: { id: Rango; label: string; titulo: string }[] = [
-  { id: '7D',  label: '7D',  titulo: 'Última semana'   },
-  { id: '1M',  label: '1M',  titulo: 'Último mes'      },
-  { id: '3M',  label: '3M',  titulo: 'Últimos 3 meses' },
-  { id: '6M',  label: '6M',  titulo: 'Últimos 6 meses' },
-  { id: '1A',  label: '1A',  titulo: 'Último año'      },
-  { id: 'YTD', label: 'YTD', titulo: 'Año actual'      },
-];
 
 const TIPOS = [
   { id: 'blue',    label: 'Blue'    },
@@ -51,23 +47,16 @@ function getSaved<T>(key: string, fallback: T): T {
   }
 }
 
-function formatDate(value: string, short = false) {
-  const [y, m, d] = value.split('-').map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString('es-AR', short
-    ? { month: 'short', year: '2-digit' }
-    : { day: 'numeric', month: 'long', year: 'numeric' }
-  );
-}
-
 const BRECHA_COLOR = COLORS.comparador.bolsa;
 
-const EvolucionDolar: React.FC = () => {
+function EvolucionDolar() {
   const [modo, setModo] = useState<Modo>('precio');
   const [rango, setRango] = useState<Rango>('1A');
   const [selected, setSelected] = useState<string[]>(['blue']);
   const [brechaParalelo, setBrechaParalelo] = useState<string>('blue');
   const [isMounted, setIsMounted] = useState(false);
 
+  // Rehidrata estado desde localStorage después del mount para evitar hydration mismatch
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     setRango(getSaved<Rango>(LS_RANGO_KEY, '1A'));
@@ -127,20 +116,8 @@ const EvolucionDolar: React.FC = () => {
 
   const titulo = RANGOS.find(r => r.id === rango)?.titulo ?? 'Último año';
 
-  const axisProps = {
-    axisLine: false as const,
-    tickLine: false as const,
-    tick: { fontSize: 10, fill: '#94a3b8', fontWeight: 500 },
-  };
-  const tooltipContentStyle = {
-    borderRadius: '12px', border: 'none',
-    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-    padding: '12px', backgroundColor: '#ffffff',
-  };
-  const tooltipItemStyle  = { fontWeight: 'bold' as const, fontSize: '12px' };
-  const tooltipLabelStyle = { marginBottom: '4px', color: '#64748b', fontSize: '11px', fontWeight: '600' as const };
   const tooltipLabel = (_label: string, payload: readonly { payload?: { originalDate?: string } }[]) =>
-    payload?.length > 0 && payload[0].payload?.originalDate ? formatDate(payload[0].payload.originalDate) : _label;
+    payload?.length > 0 && payload[0].payload?.originalDate ? formatChartDate(payload[0].payload.originalDate) : _label;
 
   const diffBrecha = brechaActual !== null && brecha30d !== null ? brechaActual - brecha30d : null;
 
@@ -306,14 +283,14 @@ const EvolucionDolar: React.FC = () => {
                             </linearGradient>
                           </defs>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#d1d7dc" />
-                          <XAxis dataKey="originalDate" {...axisProps} minTickGap={30} tickMargin={12}
-                            tickFormatter={(v: string) => formatDate(v, true)} />
-                          <YAxis orientation="left" domain={['auto', 'auto']} {...axisProps}
+                          <XAxis dataKey="originalDate" {...CHART_AXIS_PROPS} minTickGap={30} tickMargin={12}
+                            tickFormatter={(v: string) => formatChartDate(v, true)} />
+                          <YAxis orientation="left" domain={['auto', 'auto']} {...CHART_AXIS_PROPS}
                             tickFormatter={(v) => `${v}%`} />
                           <Tooltip
-                            contentStyle={tooltipContentStyle}
-                            itemStyle={tooltipItemStyle}
-                            labelStyle={tooltipLabelStyle}
+                            contentStyle={CHART_TOOLTIP_CONTENT_STYLE}
+                            itemStyle={CHART_TOOLTIP_ITEM_STYLE}
+                            labelStyle={CHART_TOOLTIP_LABEL_STYLE}
                             labelFormatter={tooltipLabel}
                             formatter={(value) => [`${value}%`, 'Brecha']}
                           />
@@ -333,14 +310,14 @@ const EvolucionDolar: React.FC = () => {
                             </linearGradient>
                           </defs>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#d1d7dc" />
-                          <XAxis dataKey="originalDate" {...axisProps} minTickGap={30} tickMargin={12}
-                            tickFormatter={(v: string) => formatDate(v, true)} />
-                          <YAxis orientation="left" domain={['auto', 'auto']} {...axisProps}
+                          <XAxis dataKey="originalDate" {...CHART_AXIS_PROPS} minTickGap={30} tickMargin={12}
+                            tickFormatter={(v: string) => formatChartDate(v, true)} />
+                          <YAxis orientation="left" domain={['auto', 'auto']} {...CHART_AXIS_PROPS}
                             tickFormatter={(v) => `$${v}`} />
                           <Tooltip
-                            contentStyle={tooltipContentStyle}
-                            itemStyle={tooltipItemStyle}
-                            labelStyle={tooltipLabelStyle}
+                            contentStyle={CHART_TOOLTIP_CONTENT_STYLE}
+                            itemStyle={CHART_TOOLTIP_ITEM_STYLE}
+                            labelStyle={CHART_TOOLTIP_LABEL_STYLE}
                             labelFormatter={tooltipLabel}
                             formatter={(value, name) => [`$${value}`, name === 'venta' ? 'Venta' : 'Compra']}
                           />
@@ -352,14 +329,14 @@ const EvolucionDolar: React.FC = () => {
                       ) : (
                         <LineChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#d1d7dc" />
-                          <XAxis dataKey="originalDate" {...axisProps} minTickGap={30} tickMargin={12}
-                            tickFormatter={(v: string) => formatDate(v, true)} />
-                          <YAxis orientation="left" domain={['auto', 'auto']} {...axisProps}
+                          <XAxis dataKey="originalDate" {...CHART_AXIS_PROPS} minTickGap={30} tickMargin={12}
+                            tickFormatter={(v: string) => formatChartDate(v, true)} />
+                          <YAxis orientation="left" domain={['auto', 'auto']} {...CHART_AXIS_PROPS}
                             tickFormatter={(v) => `$${v}`} />
                           <Tooltip
-                            contentStyle={tooltipContentStyle}
-                            itemStyle={tooltipItemStyle}
-                            labelStyle={tooltipLabelStyle}
+                            contentStyle={CHART_TOOLTIP_CONTENT_STYLE}
+                            itemStyle={CHART_TOOLTIP_ITEM_STYLE}
+                            labelStyle={CHART_TOOLTIP_LABEL_STYLE}
                             labelFormatter={tooltipLabel}
                             formatter={(value, name) => [
                               `$${value}`,
@@ -384,6 +361,6 @@ const EvolucionDolar: React.FC = () => {
       </div>
     </section>
   );
-};
+}
 
 export default EvolucionDolar;

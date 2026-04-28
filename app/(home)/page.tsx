@@ -3,7 +3,7 @@ import { Cards } from "@/app/dolar/components/cards";
 import { Metadata } from "next";
 import type { DolarCardData } from "@/app/types/dolar";
 import Description from "@/app/dolar/components/description";
-import EvolucionDolar from "@/app/dolar/components/evolucion-dolar";
+import EvolucionDolar from "@/app/dolar/components/evolucion-dolar-lazy";
 import Noticias from "@/app/noticia/components/Noticias";
 import PreguntasFrecuentes from "@/app/components/preguntas-frecuentes";
 import SobreNosotros from "@/app/components/sobre-nosotros";

@@ -20,7 +20,9 @@ export default async function DolarTypePage({ content }: Props) {
     data = await getDolar(content.apiCasa);
     isStale = data.isStale;
     staleAt = data.staleAt;
-  } catch {}
+  } catch (err) {
+    console.error(`[DolarTypePage] Error cargando ${content.apiCasa}:`, err);
+  }
 
   const faqJsonLd = {
     '@context': 'https://schema.org',

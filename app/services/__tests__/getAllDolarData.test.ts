@@ -22,7 +22,7 @@ vi.mock('react', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react')>();
   return {
     ...actual,
-    cache: (fn: Function) => fn,
+    cache: <T extends (...args: unknown[]) => unknown>(fn: T) => fn,
   };
 });
 

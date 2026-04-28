@@ -44,7 +44,10 @@ async function findPost(slug: string): Promise<Post | null> {
 
   if (data) return data as Post;
 
-  const titleFromSlug = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  const titleFromSlug = slug
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase())
+    .replace(/[%_\\]/g, c => `\\${c}`);
   const { data: fallback } = await supabase
     .from('posts')
     .select(POST_COLUMNS)

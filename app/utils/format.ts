@@ -13,6 +13,14 @@ export function formatInput(v: string): string {
   return decParts.length > 0 ? `${formatted},${decParts.join('')}` : formatted;
 }
 
+export function formatChartDate(value: string, short = false) {
+  const [y, m, d] = value.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('es-AR', short
+    ? { month: 'short', year: '2-digit' }
+    : { day: 'numeric', month: 'long', year: 'numeric' }
+  );
+}
+
 export const formatVariation = (variation: {
   percent: number;
   percentAbs: number;

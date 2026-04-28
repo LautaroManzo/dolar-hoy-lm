@@ -38,7 +38,14 @@ async function fetchTipo(tipo: string, signal: AbortSignal): Promise<DataPoint[]
     { signal }
   );
   if (!res.ok) throw new Error(`${res.status}`);
-  const raw = await res.json() as { fecha: string; compra: number; venta: number }[];
+  const json: unknown = await res.json();
+  if (!Array.isArray(json)) throw new Error('Respuesta no es un array');
+  const raw = json.filter(
+    (item): item is { fecha: string; compra: number; venta: number } =>
+      typeof item === 'object' && item !== null &&
+      typeof item.fecha === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(item.fecha) &&
+      typeof item.compra === 'number' && typeof item.venta === 'number'
+  );
   return raw.slice(-HISTORICAL_DAYS).map(item => {
     const [y, m, d] = item.fecha.split('-').map(Number);
     return {
@@ -131,6 +138,7 @@ export function useComparador(selectedTypes: string[], rango: string) {
 
     load();
     return () => controllers.forEach(c => c.abort());
+  // selectedTypes.join(',') como dep estable para evitar re-fetches por nueva referencia de array
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTypes.join(',')]);
 
@@ -141,9 +149,10 @@ export function useComparador(selectedTypes: string[], rango: string) {
     if (isSingle) {
       const tipo = available[0];
       const dates = applyRangeFilter(dataMap[tipo].map(d => d.originalDate), rango);
-      return dates.map(date => {
-        const entry = dataMap[tipo].find(d => d.originalDate === date)!;
-        return { originalDate: date, compra: entry.compra, venta: entry.venta };
+      return dates.flatMap(date => {
+        const entry = dataMap[tipo].find(d => d.originalDate === date);
+        if (!entry) return [];
+        return [{ originalDate: date, compra: entry.compra, venta: entry.venta }];
       });
     }
 

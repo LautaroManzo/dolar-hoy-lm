@@ -4,25 +4,12 @@ import { useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useComparador } from '@/app/hooks/useComparador';
 import { COLORS } from '@/app/constants/colors';
-
-type Rango = '7D' | '1M' | '3M' | '6M' | '1A' | 'YTD';
-
-const RANGOS: { id: Rango; label: string }[] = [
-  { id: '7D',  label: '7D'  },
-  { id: '1M',  label: '1M'  },
-  { id: '3M',  label: '3M'  },
-  { id: '6M',  label: '6M'  },
-  { id: '1A',  label: '1A'  },
-  { id: 'YTD', label: 'YTD' },
-];
-
-function formatDate(value: string, short = false) {
-  const [y, m, d] = value.split('-').map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString('es-AR', short
-    ? { month: 'short', year: '2-digit' }
-    : { day: 'numeric', month: 'long', year: 'numeric' }
-  );
-}
+import { formatChartDate } from '@/app/utils/format';
+import {
+  type Rango, RANGOS,
+  CHART_AXIS_PROPS, CHART_TOOLTIP_CONTENT_STYLE,
+  CHART_TOOLTIP_ITEM_STYLE, CHART_TOOLTIP_LABEL_STYLE,
+} from '../constants/chart';
 
 interface Props {
   tipo: string;
@@ -33,23 +20,12 @@ export default function HistoricoSimple({ tipo }: Props) {
   const [isMounted, setIsMounted] = useState(false);
   const { chartData, loading } = useComparador([tipo], rango);
 
+  // Marca el mount para evitar hydration mismatch con el skeleton
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setIsMounted(true); }, []);
 
-  const axisProps = {
-    axisLine: false as const,
-    tickLine: false as const,
-    tick: { fontSize: 10, fill: '#94a3b8', fontWeight: 500 },
-  };
-
-  const tooltipContentStyle = {
-    borderRadius: '12px', border: 'none',
-    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-    padding: '12px', backgroundColor: '#ffffff',
-  };
-
   const tooltipLabel = (_label: string, payload: readonly { payload?: { originalDate?: string } }[]) =>
-    payload?.length > 0 && payload[0].payload?.originalDate ? formatDate(payload[0].payload.originalDate) : _label;
+    payload?.length > 0 && payload[0].payload?.originalDate ? formatChartDate(payload[0].payload.originalDate) : _label;
 
   return (
     <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
@@ -102,14 +78,14 @@ export default function HistoricoSimple({ tipo }: Props) {
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#d1d7dc" />
-              <XAxis dataKey="originalDate" {...axisProps} minTickGap={30} tickMargin={12}
-                tickFormatter={(v: string) => formatDate(v, true)} />
-              <YAxis orientation="left" domain={['auto', 'auto']} {...axisProps}
+              <XAxis dataKey="originalDate" {...CHART_AXIS_PROPS} minTickGap={30} tickMargin={12}
+                tickFormatter={(v: string) => formatChartDate(v, true)} />
+              <YAxis orientation="left" domain={['auto', 'auto']} {...CHART_AXIS_PROPS}
                 tickFormatter={(v) => `$${v}`} />
               <Tooltip
-                contentStyle={tooltipContentStyle}
-                itemStyle={{ fontWeight: 'bold', fontSize: '12px' }}
-                labelStyle={{ marginBottom: '4px', color: '#64748b', fontSize: '11px', fontWeight: '600' }}
+                contentStyle={CHART_TOOLTIP_CONTENT_STYLE}
+                itemStyle={CHART_TOOLTIP_ITEM_STYLE}
+                labelStyle={CHART_TOOLTIP_LABEL_STYLE}
                 labelFormatter={tooltipLabel}
                 formatter={(value, name) => [`$${value}`, name === 'venta' ? 'Venta' : 'Compra']}
               />

@@ -8,6 +8,13 @@ interface Section {
   cuerpo: string;
 }
 
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
+    .replace(/javascript\s*:/gi, '');
+}
+
 export default function EditorialCollapsible({ sections }: { sections: Section[] }) {
   const [expanded, setExpanded] = useState(false);
   const [first, ...rest] = sections;
@@ -16,7 +23,7 @@ export default function EditorialCollapsible({ sections }: { sections: Section[]
     <div>
       <div>
         <h3 className="text-base font-bold text-brand-primary mb-1">{first.titulo}</h3>
-        <p className="text-slate-500 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: first.cuerpo }} />
+        <p className="text-slate-500 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(first.cuerpo) }} />
       </div>
 
       {rest.length > 0 && (
@@ -25,10 +32,10 @@ export default function EditorialCollapsible({ sections }: { sections: Section[]
             expanded ? 'max-h-[4000px] opacity-100' : 'max-h-0 opacity-0'
           }`}>
             <div className="space-y-5 mt-5">
-              {rest.map((s, i) => (
-                <div key={i}>
+              {rest.map((s) => (
+                <div key={s.titulo}>
                   <h3 className="text-base font-bold text-brand-primary mb-1">{s.titulo}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: s.cuerpo }} />
+                  <p className="text-slate-500 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(s.cuerpo) }} />
                 </div>
               ))}
             </div>
