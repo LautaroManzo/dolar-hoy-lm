@@ -33,10 +33,10 @@ export function Cards({ data }: CardsProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <ErrorBoundary>
-            <DolarCard {...data.mep} slug="dolar/mep" tipoHistorico="bolsa" />
+            <DolarCard {...data.mep} slug="dolar/mep" tipoHistorico="mep" />
           </ErrorBoundary>
           <ErrorBoundary>
-            <DolarCard {...data.ccl} slug="dolar/ccl" tipoHistorico="contadoconliqui" />
+            <DolarCard {...data.ccl} slug="dolar/ccl" tipoHistorico="ccl" />
           </ErrorBoundary>
         </div>
 

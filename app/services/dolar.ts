@@ -1,5 +1,6 @@
 import type { VariationData, DolarResponse } from '../types/dolar';
 import { API_DOLAR_AMBITO } from '../constants/api';
+import { toApiCasa } from '../constants/dolarTypes';
 
 export type { VariationData, DolarResponse };
 
@@ -106,7 +107,8 @@ export function processDolar(dolarData: DolarData): DolarResponse {
 
 export async function getDolar(type: string): Promise<DolarResponse & { isStale: boolean; staleAt?: string }> {
   const { data: allDolars, isStale, staleAt } = await fetchAllDolars();
-  const dolarData = allDolars.find(d => d.casa === type);
-  if (!dolarData) throw new Error(`No se encontró el tipo de dólar: ${type}`);
+  const apiCasa = toApiCasa(type);
+  const dolarData = allDolars.find(d => d.casa === apiCasa);
+  if (!dolarData) throw new Error(`No se encontró el tipo de dólar: ${apiCasa}`);
   return { ...processDolar(dolarData), isStale, staleAt };
 }

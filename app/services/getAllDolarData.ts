@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { fetchAllDolars, processDolar } from './dolar';
-import { DOLAR_ENTRIES } from '../constants/dolarTypes';
+import { DOLAR_ENTRIES, toApiCasa } from '../constants/dolarTypes';
 import type { DolarCardData } from '../types/dolar';
 
 export interface AllDolarDataResult {
@@ -12,10 +12,11 @@ export interface AllDolarDataResult {
 export const getAllDolarData = cache(async (): Promise<AllDolarDataResult> => {
   const { data: allDolars, isStale, staleAt } = await fetchAllDolars();
 
-  const resultsArray = Object.entries(DOLAR_ENTRIES).map(([key, [api, title, desc, extra, hora]]) => {
-    const rawData = allDolars.find(d => d.casa === api);
+  const resultsArray = Object.entries(DOLAR_ENTRIES).map(([key, [, title, desc, extra, hora]]) => {
+    const apiCasa = toApiCasa(key);
+    const rawData = allDolars.find(d => d.casa === apiCasa);
     if (!rawData) {
-      console.error(`No se encontró el tipo de dólar: ${api}`);
+      console.error(`No se encontró el tipo de dólar: ${apiCasa}`);
       return null;
     }
     try {

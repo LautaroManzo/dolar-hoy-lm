@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { API_HISTORICO } from '../constants/api';
+import { toApiCasa } from '../constants/dolarTypes';
 
 type DataPoint = { fecha: string; compra: number; venta: number; originalDate: string };
 type DataMap = Record<string, DataPoint[]>;
@@ -33,7 +34,7 @@ function writeCache(tipo: string, datos: DataPoint[]) {
 
 async function fetchTipo(tipo: string, signal: AbortSignal): Promise<DataPoint[]> {
   const res = await fetch(
-    `${API_HISTORICO}/${tipo}`,
+    `${API_HISTORICO}/${toApiCasa(tipo)}`,
     { signal }
   );
   if (!res.ok) throw new Error(`${res.status}`);

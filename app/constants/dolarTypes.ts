@@ -8,6 +8,19 @@ export interface DolarEntry {
 
 export type DolarEntries = Record<string, [string, string, string, string, string]>;
 
+export const API_CASA_MAP: Record<string, string> = {
+  blue: 'blue',
+  oficial: 'oficial',
+  mep: 'bolsa',
+  ccl: 'contadoconliqui',
+  tarjeta: 'tarjeta',
+  cripto: 'cripto',
+};
+
+export function toApiCasa(id: string): string {
+  return API_CASA_MAP[id] ?? id;
+}
+
 export const DOLAR_ENTRIES: DolarEntries = {
   blue: [
     "blue",
@@ -24,14 +37,14 @@ export const DOLAR_ENTRIES: DolarEntries = {
     "De 10:00hs a 15:00hs."
   ],
   mep: [
-    "bolsa", 
+    "mep",
     "Dólar MEP", 
     "Compra legal de dólares mediante bonos nacionales.", 
     "Se acredita de forma segura en tu cuenta bancaria.", 
     "De 11:30hs a 18:00hs."
   ],
   ccl: [
-    "contadoconliqui", 
+    "ccl",
     "Dólar CCL", 
     "Cambio de pesos por dólares en el exterior vía bonos.", 
     "Utilizado mayormente por empresas para girar fondos.", 

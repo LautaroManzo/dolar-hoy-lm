@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { parseNum } from "../utils/format";
+import { toApiCasa } from "../constants/dolarTypes";
 
 const LS_KEY = "calculator_selected_dolar";
 
@@ -15,8 +16,8 @@ export interface DolarType {
 const DEFAULT_TYPES: DolarType[] = [
   { id: "blue", name: "Dólar Blue", compra: 0, venta: 0 },
   { id: "oficial", name: "Dólar Oficial", compra: 0, venta: 0 },
-  { id: "bolsa", name: "Dólar MEP", compra: 0, venta: 0 },
-  { id: "contadoconliqui", name: "Dólar CCL", compra: 0, venta: 0 },
+  { id: "mep", name: "Dólar MEP", compra: 0, venta: 0 },
+  { id: "ccl", name: "Dólar CCL", compra: 0, venta: 0 },
   { id: "tarjeta", name: "Dólar Tarjeta", compra: 0, venta: 0 },
   { id: "cripto", name: "Dólar Cripto", compra: 0, venta: 0 },
 ];
@@ -49,13 +50,13 @@ export function useCalculator(isOpen: boolean) {
       try {
         const res = await fetch("/api/dolares");
         const { data: allDolars }: { data: { casa: string; compra: number; venta: number }[] } = await res.json();
-        const find = (casa: string, field: "compra" | "venta") =>
-          allDolars.find((d) => d.casa === casa)?.[field] ?? 0;
+        const find = (id: string, field: "compra" | "venta") =>
+          allDolars.find((d) => d.casa === toApiCasa(id))?.[field] ?? 0;
         const types: DolarType[] = [
           { id: "blue", name: "Dólar Blue", compra: find("blue", "compra"), venta: find("blue", "venta") },
           { id: "oficial", name: "Dólar Oficial", compra: find("oficial", "compra"), venta: find("oficial", "venta") },
-          { id: "bolsa", name: "Dólar MEP", compra: find("bolsa", "compra"), venta: find("bolsa", "venta") },
-          { id: "contadoconliqui", name: "Dólar CCL", compra: find("contadoconliqui", "compra"), venta: find("contadoconliqui", "venta") },
+          { id: "mep", name: "Dólar MEP", compra: find("mep", "compra"), venta: find("mep", "venta") },
+          { id: "ccl", name: "Dólar CCL", compra: find("ccl", "compra"), venta: find("ccl", "venta") },
           { id: "tarjeta", name: "Dólar Tarjeta", compra: find("tarjeta", "compra"), venta: find("tarjeta", "venta") },
           { id: "cripto", name: "Dólar Cripto", compra: find("cripto", "compra"), venta: find("cripto", "venta") },
         ];

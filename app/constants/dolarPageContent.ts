@@ -75,8 +75,8 @@ export const DOLAR_PAGE_CONTENT: Record<string, DolarPageContent> = {
   mep: {
     slug: 'dolar/mep',
     tipoKey: 'mep',
-    apiCasa: 'bolsa',
-    tipoHistorico: 'bolsa',
+    apiCasa: 'mep',
+    tipoHistorico: 'mep',
     h1: 'Dólar MEP hoy en Argentina',
     subtitle: 'Compra legal de dólares mediante bonos en el mercado de capitales',
     metaTitle: 'Dólar MEP Hoy | Cotización en tiempo real — DolarInfoHoy',
@@ -100,8 +100,8 @@ export const DOLAR_PAGE_CONTENT: Record<string, DolarPageContent> = {
   ccl: {
     slug: 'dolar/ccl',
     tipoKey: 'ccl',
-    apiCasa: 'contadoconliqui',
-    tipoHistorico: 'contadoconliqui',
+    apiCasa: 'ccl',
+    tipoHistorico: 'ccl',
     h1: 'Dólar CCL hoy en Argentina',
     subtitle: 'Tipo de cambio financiero para girar divisas al exterior',
     metaTitle: 'Dólar CCL (Contado con Liquidación) Hoy | Cotización — DolarInfoHoy',

@@ -24,18 +24,18 @@ const RANGOS: { id: Rango; label: string; titulo: string }[] = [
 ];
 
 const TIPOS = [
-  { id: 'blue',            label: 'Blue'    },
-  { id: 'oficial',         label: 'Oficial' },
-  { id: 'bolsa',           label: 'MEP'     },
-  { id: 'contadoconliqui', label: 'CCL'     },
-  { id: 'tarjeta',         label: 'Tarjeta' },
-  { id: 'cripto',          label: 'Cripto'  },
+  { id: 'blue',    label: 'Blue'    },
+  { id: 'oficial', label: 'Oficial' },
+  { id: 'mep',     label: 'MEP'     },
+  { id: 'ccl',     label: 'CCL'     },
+  { id: 'tarjeta', label: 'Tarjeta' },
+  { id: 'cripto',  label: 'Cripto'  },
 ];
 
 const TIPOS_BRECHA = [
-  { id: 'blue',            label: 'Blue' },
-  { id: 'bolsa',           label: 'MEP'  },
-  { id: 'contadoconliqui', label: 'CCL'  },
+  { id: 'blue', label: 'Blue' },
+  { id: 'mep',  label: 'MEP'  },
+  { id: 'ccl',  label: 'CCL'  },
 ];
 
 const LS_RANGO_KEY   = 'grafico_rango_temporal';
