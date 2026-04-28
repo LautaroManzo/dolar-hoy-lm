@@ -32,6 +32,7 @@ export default function NoticiaCard({ post, slug }: NoticiaCardProps) {
               src={post.image_url}
               alt={post.title}
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover transition-all duration-700 group-hover:scale-105"
             />
           ) : (

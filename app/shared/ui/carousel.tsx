@@ -37,9 +37,9 @@ export function Carousel() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex">
-            {infiniteItems.map((text, i) => ( 
+            {infiniteItems.map((text, i) => (
               <div
-                key={i}
+                key={`${text}-${i}`}
                 className="flex-[0_0_auto] px-35 whitespace-nowrap text-center text-xs tracking-wide opacity-90"
               >
                 {text}

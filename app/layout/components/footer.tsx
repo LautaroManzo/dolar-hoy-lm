@@ -55,7 +55,7 @@ export function Footer() {
             <Link href="/politica-de-privacidad" className="underline hover:opacity-100 transition-opacity">
               Política de Privacidad
             </Link>
-<Link href="/terminos-y-condiciones" className="underline hover:opacity-100 transition-opacity">
+            <Link href="/terminos-y-condiciones" className="underline hover:opacity-100 transition-opacity">
               Términos y Condiciones
             </Link>
           </div>

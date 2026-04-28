@@ -1,9 +1,11 @@
+import { Suspense } from "react";
 import { getAllDolarData } from "@/app/services/getAllDolarData";
 import { Cards } from "@/app/dolar/components/cards";
 import { Metadata } from "next";
 import type { DolarCardData } from "@/app/types/dolar";
 import Description from "@/app/dolar/components/description";
 import EvolucionDolar from "@/app/dolar/components/evolucion-dolar-lazy";
+import { ChartSkeleton } from "@/app/components/skeletons";
 import Noticias from "@/app/noticia/components/Noticias";
 import PreguntasFrecuentes from "@/app/components/preguntas-frecuentes";
 import SobreNosotros from "@/app/components/sobre-nosotros";
@@ -145,7 +147,9 @@ export default async function Page() {
       </div>
 
       <OtrasMonedas />
-      <EvolucionDolar />
+      <Suspense fallback={<div className="w-full px-4 py-8"><div className="max-w-6xl mx-auto"><ChartSkeleton height="h-[260px] sm:h-[380px]" /></div></div>}>
+        <EvolucionDolar />
+      </Suspense>
       <Noticias />
       <PreguntasFrecuentes />
       <SobreNosotros />

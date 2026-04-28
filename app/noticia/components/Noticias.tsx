@@ -10,18 +10,21 @@ export default async function Noticias() {
     .order('published_at', { ascending: false, nullsFirst: false })
     .limit(2)
 
-  if (error) return (
+  if (error) {
+    console.error('[Noticias] Supabase error:', error.message);
+    return (
     <section className="max-w-7xl w-full mx-auto px-6 py-16 bg-gradient-to-br from-slate-50 to-blue-50/30">
       <div className="text-center p-8">
         <div className="mb-4 inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-2xl">
           <Newspaper className="w-8 h-8 text-red-600" />
         </div>
         <p className="text-red-600 font-medium text-lg mb-2">Error al cargar noticias</p>
-        <p className="text-slate-500">{error.message}</p>
+        <p className="text-slate-500">No se pudieron obtener las noticias en este momento.</p>
       </div>
     </section>
-  )
-  
+  );
+  }
+
   const hasPosts = posts && posts.length > 0;
   const isEmpty = !hasPosts;
   

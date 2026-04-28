@@ -17,6 +17,14 @@ describe('formatPrice', () => {
   it('formatea cero', () => {
     expect(formatPrice(0)).toBe('0,00');
   });
+
+  it('devuelve 0,00 para NaN', () => {
+    expect(formatPrice(NaN)).toBe('0,00');
+  });
+
+  it('devuelve 0,00 para Infinity', () => {
+    expect(formatPrice(Infinity)).toBe('0,00');
+  });
 });
 
 describe('parseNum', () => {

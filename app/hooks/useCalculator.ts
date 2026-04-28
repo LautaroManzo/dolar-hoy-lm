@@ -46,9 +46,11 @@ export function useCalculator(isOpen: boolean) {
   useEffect(() => {
     if (!isOpen) return;
 
+    const controller = new AbortController();
+
     const loadDolarTypes = async () => {
       try {
-        const res = await fetch("/api/dolares");
+        const res = await fetch("/api/dolares", { signal: controller.signal });
         const { data: allDolars }: { data: { casa: string; compra: number; venta: number }[] } = await res.json();
         const find = (id: string, field: "compra" | "venta") =>
           allDolars.find((d) => d.casa === toApiCasa(id))?.[field] ?? 0;
@@ -65,11 +67,12 @@ export function useCalculator(isOpen: boolean) {
           prev ? types.find((t) => t.id === prev.id) ?? types[0] : types[0]
         );
       } catch (error) {
-        console.error("Error loading dolar types:", error);
+        if (!controller.signal.aborted) console.error("Error loading dolar types:", error);
       }
     };
 
     loadDolarTypes();
+    return () => controller.abort();
   }, [isOpen]);
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 export const formatPrice = (price: number): string => {
+  if (!Number.isFinite(price)) return '0,00';
   return price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
