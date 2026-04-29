@@ -17,6 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL('https://dolarinfohoy.com.ar'),
     alternates: {
       canonical: '/',
+      languages: {
+        'es-AR': '/',
+      },
     },
     title: {
       default: `Dólar hoy ${fechaHoy} | Cotización en tiempo real en Argentina`,

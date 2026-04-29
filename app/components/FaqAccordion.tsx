@@ -44,7 +44,7 @@ export default function FaqAccordion({ items }: { items: FaqItem[] }) {
               </button>
             </dt>
             <dd className={`overflow-hidden transition-all duration-300 ease-in-out ${
-              isOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
+              isOpen ? 'max-h-60' : 'max-h-0'
             }`}>
               <p className="text-slate-500 text-sm sm:text-base leading-relaxed px-5 pb-5 pl-[3.75rem]">
                 {item.respuesta}

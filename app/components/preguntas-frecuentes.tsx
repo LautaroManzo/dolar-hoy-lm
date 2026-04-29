@@ -52,7 +52,7 @@ const PreguntasFrecuentes = () => {
             </div>
           </button>
 
-          <div className={`transition-all duration-500 ease-in-out ${open ? 'max-h-[700px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className={`transition-all duration-500 ease-in-out overflow-hidden ${open ? 'max-h-[700px]' : 'max-h-0'}`}>
             <div className="px-10 md:px-14 pb-14 space-y-10">
               <div className="h-px bg-gradient-to-r from-transparent via-slate-100 to-transparent mb-6" />
               <div className="grid gap-10 overflow-y-auto max-h-[450px] pr-4">

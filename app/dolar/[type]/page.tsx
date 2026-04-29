@@ -32,11 +32,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       locale: 'es_AR',
       url: `https://dolarinfohoy.com.ar/${content.slug}`,
       siteName: 'DolarInfoHoy',
+      images: [{
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: `${content.h1} - DolarInfoHoy`,
+      }],
     },
     twitter: {
       card: 'summary_large_image',
       title: content.metaTitle,
       description: content.metaDescription,
+      images: ['/opengraph-image'],
     },
   };
 }

@@ -101,16 +101,20 @@ export default async function Page() {
       const d = dataForCards[key];
       if (!d) return [];
       return [{
-        "@type": "FinancialQuote",
+        "@type": "ListItem",
         "position": pos,
-        "name": name,
-        "description": desc,
-        "priceCurrency": "ARS",
-        "price": d.sell,
-        "bidPrice": d.buy,
-        "offerPrice": d.sell,
-        "baseCurrency": "USD",
-        "quoteDate": d.fechaActualizacion ?? fechaActualizacion,
+        "item": {
+          "@type": "ExchangeRateSpecification",
+          "name": name,
+          "description": desc,
+          "currency": "ARS",
+          "currentExchangeRate": {
+            "@type": "UnitPriceSpecification",
+            "price": d.sell,
+            "priceCurrency": "ARS",
+            "unitText": "1 USD",
+          },
+        },
       }];
     }),
   };
