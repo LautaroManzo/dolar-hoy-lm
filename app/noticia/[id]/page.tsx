@@ -40,7 +40,7 @@ async function findPost(slug: string): Promise<Post | null> {
     .from('posts')
     .select(POST_COLUMNS)
     .eq('slug', slug)
-    .single()
+    .maybeSingle()
 
   if (data) return data as Post;
 
@@ -48,13 +48,13 @@ async function findPost(slug: string): Promise<Post | null> {
     .replace(/-/g, ' ')
     .replace(/\b\w/g, l => l.toUpperCase())
     .replace(/[%_\\]/g, c => `\\${c}`);
-  const { data: fallback } = await supabase
+  const { data: fallbackRows } = await supabase
     .from('posts')
     .select(POST_COLUMNS)
     .ilike('title', `%${titleFromSlug}%`)
-    .single()
+    .limit(1)
 
-  return (fallback as Post) ?? null;
+  return (fallbackRows?.[0] as Post) ?? null;
 }
 
 function buildArticleJsonLd(post: Post, slug: string) {

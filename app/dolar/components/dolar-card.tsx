@@ -152,19 +152,26 @@ export function DolarCard({
   const HeaderIcon = headerIconMap[generalTrendSign];
   const isNeutral = generalTrendSign === "neutral";
 
-  const handleCopy = async () => {
+  const copyToClipboard = async (text: string) => {
     try {
-      await navigator.clipboard.writeText(`${title}\n• Compra: $${formatPrice(buy)}\n• Venta: $${formatPrice(sell)}`);
+      await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {}
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleCopy = async () => {
+    await copyToClipboard(`${title}\n• Compra: $${formatPrice(buy)}\n• Venta: $${formatPrice(sell)}`);
   };
 
   const handleShare = async () => {
     const text = `${title}\n• Compra: $${formatPrice(buy)}\n• Venta: $${formatPrice(sell)}`;
     try {
       if (navigator.share) await navigator.share({ title, text });
-      else { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }
+      else await copyToClipboard(text);
     } catch {}
   };
 

@@ -67,7 +67,7 @@ function EvolucionDolar() {
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const tiposParaHook = modo === 'brecha' ? ['oficial', brechaParalelo] : selected;
-  const { chartData, loading, isSingle } = useComparador(tiposParaHook, rango);
+  const { chartData, loading, isSingle, hasError } = useComparador(tiposParaHook, rango);
 
   const brechaData = useMemo(() => {
     if (modo !== 'brecha') return [];
@@ -142,11 +142,12 @@ function EvolucionDolar() {
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
               {/* TOGGLE MODO */}
-              <div className="flex gap-1 bg-slate-100 rounded-xl p-1 w-full sm:w-auto">
+              <div className="flex gap-1 bg-slate-100 rounded-xl p-1 w-full sm:w-auto" role="group" aria-label="Modo de visualización">
                 {(['precio', 'brecha'] as Modo[]).map(m => (
                   <button
                     key={m}
                     onClick={() => setModo(m)}
+                    aria-pressed={modo === m}
                     className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer capitalize ${
                       modo === m ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'
                     }`}
@@ -157,11 +158,13 @@ function EvolucionDolar() {
               </div>
 
               {/* TABS DE RANGO */}
-              <div className="flex gap-1 bg-slate-100 rounded-xl p-1 w-full sm:w-auto">
+              <div className="flex gap-1 bg-slate-100 rounded-xl p-1 w-full sm:w-auto" role="group" aria-label="Rango temporal">
                 {RANGOS.map(r => (
                   <button
                     key={r.id}
                     onClick={() => handleRango(r.id)}
+                    aria-pressed={rango === r.id}
+                    aria-label={`Rango ${r.titulo}`}
                     className={`flex-1 sm:flex-none px-2 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
                       rango === r.id ? 'bg-white text-brand-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'
                     }`}
@@ -260,6 +263,11 @@ function EvolucionDolar() {
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-secondary mb-3" />
                     <span className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Cargando...</span>
                   </div>
+                </div>
+              )}
+              {isMounted && !loading && hasError && chartData.length === 0 && (
+                <div className="absolute inset-0 z-20 flex items-center justify-center rounded-xl">
+                  <p className="text-sm text-slate-500">No se pudieron cargar los datos históricos. Intentá de nuevo más tarde.</p>
                 </div>
               )}
 

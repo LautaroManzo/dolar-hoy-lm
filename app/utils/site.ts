@@ -1,21 +1,26 @@
-/*
- * Obtención de fechas
- */
+const TZ_BA = 'America/Argentina/Buenos_Aires';
 
 export function getFechaArgentina(): Date {
-  const ahora = new Date();
-  const opciones = { 
-    timeZone: 'America/Argentina/Buenos_Aires',
-    year: 'numeric' as const,
-    month: 'numeric' as const, 
-    day: 'numeric' as const
-  };
-  const fechaArgentina = new Date(ahora.toLocaleDateString('en-US', opciones));
-  return fechaArgentina;
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: TZ_BA,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  const parts = Object.fromEntries(
+    formatter.formatToParts(new Date()).map(p => [p.type, p.value])
+  );
+  return new Date(Number(parts.year), Number(parts.month) - 1, Number(parts.day));
 }
 
-
 export function getFechaHoyFormateada(): string {
-  const fechaArgentina = getFechaArgentina();
-  return `${fechaArgentina.getDate()} de ${fechaArgentina.toLocaleString('es-AR', { month: 'long', timeZone: 'America/Argentina/Buenos_Aires' })}`;
+  const formatter = new Intl.DateTimeFormat('es-AR', {
+    timeZone: TZ_BA,
+    day: 'numeric',
+    month: 'long',
+  });
+  const parts = Object.fromEntries(
+    formatter.formatToParts(new Date()).map(p => [p.type, p.value])
+  );
+  return `${parts.day} de ${parts.month}`;
 }

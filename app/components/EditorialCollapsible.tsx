@@ -8,11 +8,20 @@ interface Section {
   cuerpo: string;
 }
 
+const ALLOWED_TAGS = new Set(['strong', 'em', 'b', 'i', 'br', 'p', 'ul', 'ol', 'li', 'a']);
+
 function sanitizeHtml(html: string): string {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
-    .replace(/javascript\s*:/gi, '');
+  return html.replace(/<\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>/gi, (match, tag: string) => {
+    const lower = tag.toLowerCase();
+    if (!ALLOWED_TAGS.has(lower)) return '';
+    if (match.startsWith('</')) return `</${lower}>`;
+    if (lower === 'a') {
+      const href = match.match(/href\s*=\s*["']([^"']*)["']/i)?.[1] ?? '';
+      if (!href || /^\s*javascript\s*:/i.test(href)) return '';
+      return `<a href="${href.replace(/"/g, '&quot;')}" rel="nofollow noopener" target="_blank">`;
+    }
+    return `<${lower}>`;
+  });
 }
 
 export default function EditorialCollapsible({ sections }: { sections: Section[] }) {

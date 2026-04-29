@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { API_HISTORICO } from '../constants/api';
 import { toApiCasa } from '../constants/dolarTypes';
 
@@ -78,15 +78,20 @@ export type ChartPoint = Record<string, string | number | undefined>;
 export function useComparador(selectedTypes: string[], rango: string) {
   const [dataMap, setDataMap] = useState<DataMap>({});
   const [loadingTypes, setLoadingTypes] = useState<Set<string>>(new Set());
+  const [failedTypes, setFailedTypes] = useState<Set<string>>(new Set());
+  const inFlightRef = useRef<Set<string>>(new Set());
 
   const isSingle = selectedTypes.length === 1;
-  const loading = selectedTypes.some(t => loadingTypes.has(t) || !dataMap[t]);
+  const loading = selectedTypes.some(t => loadingTypes.has(t) || (!dataMap[t] && !failedTypes.has(t)));
+  const hasError = selectedTypes.some(t => failedTypes.has(t) && !dataMap[t]);
 
   useEffect(() => {
-    const missing = selectedTypes.filter(t => !dataMap[t]);
+    const missing = selectedTypes.filter(t => !dataMap[t] && !inFlightRef.current.has(t));
     if (missing.length === 0) return;
 
     const controllers: AbortController[] = [];
+    const inFlight = inFlightRef.current;
+    missing.forEach(t => inFlight.add(t));
 
     setLoadingTypes(prev => new Set([...prev, ...missing]));
 
@@ -121,23 +126,36 @@ export function useComparador(selectedTypes: string[], rango: string) {
       );
 
       const fresh: DataMap = {};
+      const failed: string[] = [];
       for (const result of results) {
         if (result.status === 'fulfilled') {
           fresh[result.value.tipo] = result.value.data;
           writeCache(result.value.tipo, result.value.data);
+        } else {
+          const idx = results.indexOf(result);
+          if (idx >= 0 && idx < toFetch.length) failed.push(toFetch[idx]);
         }
       }
 
-      setDataMap(prev => ({ ...prev, ...fresh }));
+      if (Object.keys(fresh).length > 0) {
+        setDataMap(prev => ({ ...prev, ...fresh }));
+      }
+      if (failed.length > 0) {
+        setFailedTypes(prev => new Set([...prev, ...failed]));
+      }
       setLoadingTypes(prev => {
         const next = new Set(prev);
         toFetch.forEach(t => next.delete(t));
         return next;
       });
+      missing.forEach(t => inFlight.delete(t));
     };
 
     load();
-    return () => controllers.forEach(c => c.abort());
+    return () => {
+      controllers.forEach(c => c.abort());
+      missing.forEach(t => inFlight.delete(t));
+    };
   // selectedTypes.join(',') como dep estable para evitar re-fetches por nueva referencia de array
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTypes.join(',')]);
@@ -173,5 +191,5 @@ export function useComparador(selectedTypes: string[], rango: string) {
     });
   }, [dataMap, selectedTypes, rango, isSingle]);
 
-  return { chartData, loading, isSingle };
+  return { chartData, loading, isSingle, hasError };
 }

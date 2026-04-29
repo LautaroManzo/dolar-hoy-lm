@@ -27,18 +27,34 @@ function formatHora(fechaISO: string): string {
   return `${parts.day}/${parts.month} ${parts.hour}:${parts.minute} hs`;
 }
 
+let memCache: MonedaData[] | null = null;
+
 export async function getOtrasMonedas(): Promise<MonedaData[]> {
-  const res = await fetch(API_COTIZACIONES, { next: { revalidate: REVALIDATE_SECONDS } });
-  if (!res.ok) throw new Error(`${res.status}`);
-  const data = await res.json() as { moneda: string; nombre: string; compra: number; venta: number; fechaActualizacion: string }[];
-  return data
-    .filter(d => MONEDAS_INCLUIDAS.includes(d.moneda))
-    .sort((a, b) => MONEDAS_INCLUIDAS.indexOf(a.moneda) - MONEDAS_INCLUIDAS.indexOf(b.moneda))
-    .map(d => ({
-      moneda: d.moneda,
-      nombre: d.nombre,
-      compra: d.compra,
-      venta: d.venta,
-      horaActualizacion: formatHora(d.fechaActualizacion),
-    }));
+  try {
+    const res = await fetch(API_COTIZACIONES, { next: { revalidate: REVALIDATE_SECONDS } });
+    if (!res.ok) throw new Error(`${res.status}`);
+    const raw: unknown = await res.json();
+    if (!Array.isArray(raw)) throw new Error('Respuesta no es un array');
+    const data = raw.filter(
+      (d): d is { moneda: string; nombre: string; compra: number; venta: number; fechaActualizacion: string } =>
+        typeof d === 'object' && d !== null &&
+        typeof d.moneda === 'string' && typeof d.nombre === 'string' &&
+        typeof d.compra === 'number' && typeof d.venta === 'number'
+    );
+    const result = data
+      .filter(d => MONEDAS_INCLUIDAS.includes(d.moneda))
+      .sort((a, b) => MONEDAS_INCLUIDAS.indexOf(a.moneda) - MONEDAS_INCLUIDAS.indexOf(b.moneda))
+      .map(d => ({
+        moneda: d.moneda,
+        nombre: d.nombre,
+        compra: d.compra,
+        venta: d.venta,
+        horaActualizacion: formatHora(d.fechaActualizacion),
+      }));
+    memCache = result;
+    return result;
+  } catch {
+    if (memCache) return memCache;
+    return [];
+  }
 }

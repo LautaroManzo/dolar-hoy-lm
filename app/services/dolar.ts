@@ -40,6 +40,17 @@ function formatFechaHoraArgentina(fechaISO: string): string {
   return `${parts.day}/${parts.month} ${parts.hour}:${parts.minute} hs`;
 }
 
+function validateDolarData(data: unknown): DolarData[] {
+  if (!Array.isArray(data)) return [];
+  return data.filter(
+    (item): item is DolarData =>
+      typeof item === 'object' && item !== null &&
+      typeof item.compra === 'number' &&
+      typeof item.venta === 'number' &&
+      typeof item.casa === 'string'
+  );
+}
+
 async function fetchJson<T>(url: string, revalidateTime: number = REVALIDATE_SECONDS): Promise<T> {
   const controller = new AbortController();
   const tid = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
@@ -71,7 +82,9 @@ export async function fetchAllDolars(): Promise<FetchDolarsResult> {
     throw new Error('API no disponible (forzado) y sin datos en caché');
   }
   try {
-    const data = await fetchJson<DolarData[]>(API_DOLAR_AMBITO, REVALIDATE_SECONDS);
+    const raw = await fetchJson<unknown>(API_DOLAR_AMBITO, REVALIDATE_SECONDS);
+    const data = validateDolarData(raw);
+    if (data.length === 0) throw new Error('API devolvió datos inválidos');
     memCache = { data, formattedAt: formatNowArgentina() };
     return { data, isStale: false };
   } catch {
