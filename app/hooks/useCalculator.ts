@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { parseNum } from "../utils/format";
 import { toApiCasa } from "../constants/dolarTypes";
 
@@ -35,6 +35,7 @@ export function useCalculator(isOpen: boolean) {
   const [dolarTypes, setDolarTypes] = useState<DolarType[]>(DEFAULT_TYPES);
   const [selectedDolar, setSelectedDolar] = useState<DolarType | null>(null);
   const [isInverse, setIsInverse] = useState(false);
+  const [rateMode, setRateMode] = useState<'venta' | 'compra'>('venta');
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
@@ -87,21 +88,21 @@ export function useCalculator(isOpen: boolean) {
     } catch {}
   };
 
-  // ARS → USD: el usuario compra dólares, paga el precio de venta
-  // USD → ARS: el usuario vende dólares, recibe el precio de compra
+  const activeRate = selectedDolar ? selectedDolar[rateMode] : 0;
+
   const result =
     selectedDolar && amount
       ? isInverse
-        ? parseNum(amount) * selectedDolar.compra
-        : parseNum(amount) / selectedDolar.venta
+        ? parseNum(amount) * activeRate
+        : parseNum(amount) / activeRate
       : 0;
 
-  const clearAmount = () => setAmount("");
+  const clearAmount = useCallback(() => setAmount(""), []);
 
-  const toggleInverse = () => {
+  const toggleInverse = useCallback(() => {
     setIsInverse((prev) => !prev);
     setAmount("");
-  };
+  }, []);
 
   return {
     amount,
@@ -111,6 +112,8 @@ export function useCalculator(isOpen: boolean) {
     setSelectedDolar: handleSelectDolar,
     isInverse,
     toggleInverse,
+    rateMode,
+    setRateMode,
     result,
     clearAmount,
   };

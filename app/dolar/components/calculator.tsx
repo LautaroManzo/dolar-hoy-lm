@@ -20,6 +20,8 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
     setSelectedDolar,
     isInverse,
     toggleInverse,
+    rateMode,
+    setRateMode,
     result,
     clearAmount,
   } = useCalculator(isOpen);
@@ -32,13 +34,16 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
     onClose();
   }, [clearAmount, onClose]);
 
+  const handleCloseRef = useRef(handleClose);
+  handleCloseRef.current = handleClose;
+
   useEffect(() => {
     if (!isOpen) return;
 
     triggerRef.current = document.activeElement as HTMLElement;
 
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleClose();
+      if (e.key === 'Escape') handleCloseRef.current();
     };
     document.addEventListener('keydown', handleEscape);
 
@@ -51,7 +56,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
       document.removeEventListener('keydown', handleEscape);
       triggerRef.current?.focus();
     };
-  }, [isOpen, handleClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -154,20 +159,40 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
 
           </div>
 
-          <div className="flex items-center justify-center gap-6 px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
-            <div className="flex flex-col items-center gap-0.5">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Compra</span>
-              <span className="text-sm font-black text-gray-700">
+          <div className="flex items-center justify-center gap-0 px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
+            <button
+              type="button"
+              onClick={() => setRateMode('compra')}
+              className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                rateMode === 'compra' ? 'bg-brand-secondary shadow-sm' : 'hover:bg-slate-100'
+              }`}
+            >
+              <span className={`text-[10px] font-black uppercase tracking-widest ${
+                rateMode === 'compra' ? 'text-white' : 'text-slate-400'
+              }`}>Compra</span>
+              <span className={`text-sm font-black ${
+                rateMode === 'compra' ? 'text-white' : 'text-gray-700'
+              }`}>
                 ${formatPrice(selectedDolar?.compra || 0)}
               </span>
-            </div>
-            <div className="w-px h-6 bg-slate-200" />
-            <div className="flex flex-col items-center gap-0.5">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Venta</span>
-              <span className="text-sm font-black text-brand-secondary">
+            </button>
+            <div className="w-px h-8 bg-slate-200" />
+            <button
+              type="button"
+              onClick={() => setRateMode('venta')}
+              className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                rateMode === 'venta' ? 'bg-brand-secondary shadow-sm' : 'hover:bg-slate-100'
+              }`}
+            >
+              <span className={`text-[10px] font-black uppercase tracking-widest ${
+                rateMode === 'venta' ? 'text-white' : 'text-slate-400'
+              }`}>Venta</span>
+              <span className={`text-sm font-black ${
+                rateMode === 'venta' ? 'text-white' : 'text-gray-700'
+              }`}>
                 ${formatPrice(selectedDolar?.venta || 0)}
               </span>
-            </div>
+            </button>
           </div>
 
         </div>
