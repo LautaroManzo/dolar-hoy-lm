@@ -19,7 +19,7 @@ Sitio de cotizaciones del dólar en tiempo real para Argentina. Muestra 6 tipos 
 ### 🛠️ Otras dependencias
 
 - **recharts** — Gráficos de evolución histórica
-- **framer-motion** — Animaciones de UI
+- **framer-motion** — Animaciones scroll-reveal con spring/bounce y flip de cards
 - **embla-carousel-react** — Carrusel de noticias
 - **lucide-react** — Iconografía
 - **@vercel/analytics** — Métricas de uso

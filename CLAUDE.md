@@ -57,6 +57,11 @@ npm run lint && npx tsc --noEmit && npm test
 | `POST /api/contact` | Formulario de contacto con rate limit (3/IP/10min), honeypot y validación Zod |
 | `GET /api/cron/telegram` | Publica cotizaciones en canal de Telegram (@DolarInfoHoy). Protegido con `CRON_SECRET`. Ejecutado por Vercel Cron lunes a viernes a las 17hs Argentina |
 
+**Animaciones (Framer Motion):**
+- `app/components/animate-on-scroll.tsx` es el wrapper reutilizable (`direction`, `delay`, `bounce`). Usa `whileInView` con `once: true` y transiciones tipo `spring`.
+- No animar contenido above-the-fold (hero card, gráfico) para evitar flash de contenido invisible al cargar la página.
+- `DolarCard` usa `motion.div` con `rotateY` para el flip de la calculadora.
+
 **Decisiones no obvias:**
 - El histórico se cachea en localStorage (TTL 1 día) en lugar del servidor porque los datos pasados no cambian y reduce carga en una API gratuita. El hook incluye abort signal para cleanup al desmontar.
 - La homepage usa ISR con `revalidate = 60` — se regenera cada 60 segundos.

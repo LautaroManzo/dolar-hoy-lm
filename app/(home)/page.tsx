@@ -13,6 +13,7 @@ import Contacto from "@/app/components/contacto";
 import { AutoRefresh } from "@/app/components/auto-refresh";
 import OtrasMonedas from "@/app/components/otras-monedas";
 import StaleBanner from "@/app/components/stale-banner";
+import AnimateOnScroll from "@/app/components/animate-on-scroll";
 
 export const revalidate = 60;
 
@@ -151,13 +152,21 @@ export default async function Page() {
       </div>
 
       <OtrasMonedas />
-      <Suspense fallback={<div className="w-full px-4 py-8"><div className="max-w-6xl mx-auto"><ChartSkeleton height="h-[260px] sm:h-[380px]" /></div></div>}>
-        <EvolucionDolar />
-      </Suspense>
+      <AnimateOnScroll direction="up" delay={0.1}>
+        <Suspense fallback={<div className="w-full px-4 py-8"><div className="max-w-6xl mx-auto"><ChartSkeleton height="h-[260px] sm:h-[380px]" /></div></div>}>
+          <EvolucionDolar />
+        </Suspense>
+      </AnimateOnScroll>
       <Noticias />
-      <PreguntasFrecuentes />
-      <SobreNosotros />
-      <Contacto />
+      <AnimateOnScroll direction="up" delay={0.1}>
+        <PreguntasFrecuentes />
+      </AnimateOnScroll>
+      <AnimateOnScroll direction="up" delay={0.15}>
+        <SobreNosotros />
+      </AnimateOnScroll>
+      <AnimateOnScroll direction="down" delay={0.1} bounce={0.4}>
+        <Contacto />
+      </AnimateOnScroll>
     </>
   );
 }

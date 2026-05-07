@@ -1,6 +1,7 @@
 import NoticiaCard from './NoticiaCard';
 import { Newspaper } from 'lucide-react';
-import { supabase } from '@/app/lib/supabase'
+import { supabase } from '@/app/lib/supabase';
+import AnimateOnScroll from '@/app/components/animate-on-scroll';
 
 export default async function Noticias() {
 
@@ -38,13 +39,13 @@ export default async function Noticias() {
       <section className={`max-w-6xl mx-auto space-y-6 relative overflow-hidden`}>
   
         <header className="relative z-10 text-left">
-
-        <h2 id="contexto-actual" className="flex items-center mb-5 text-brand-primary text-2xl tracking-wide opacity-70
-            after:content-[''] after:flex-grow after:h-[1px] after:ml-6
-            after:bg-gradient-to-r after:from-transparent after:to-brand-primary/15">
-          Contexto actual
-        </h2>
-
+        <AnimateOnScroll direction="left" delay={0.1}>
+          <h2 id="contexto-actual" className="flex items-center mb-5 text-brand-primary text-2xl tracking-wide opacity-70
+              after:content-[''] after:flex-grow after:h-[1px] after:ml-6
+              after:bg-gradient-to-r after:from-transparent after:to-brand-primary/15">
+            Contexto actual
+          </h2>
+        </AnimateOnScroll>
         </header>
 
         <div className="relative z-10">
@@ -52,16 +53,14 @@ export default async function Noticias() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 py-4 px-1">
             {posts.map((post, index) => {
               return (
-                <div 
-                  key={post.id} 
-                  className="transform transition-all duration-700"
-                  style={{
-                    animationDelay: `${index * 150}ms`,
-                    animation: 'fadeInUp 0.8s ease-out forwards'
-                  }}
+                <AnimateOnScroll
+                  key={post.id}
+                  direction="down"
+                  delay={0.1 + index * 0.15}
+                  bounce={0.4}
                 >
                   <NoticiaCard post={post} slug={post.slug} />
-                </div>
+                </AnimateOnScroll>
               );
             })}
           </div>

@@ -259,7 +259,7 @@ export function DolarCard({
         className={`absolute inset-0 rounded-2xl shadow-md border-t-4 border-brand-secondary bg-white flex flex-col px-5 pt-4 pb-8 ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
         style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
       >
-        {isOpen && <CardBackContent buy={buy} sell={sell} title={title} />}
+        <CardBackContent buy={buy} sell={sell} title={title} />
         {actionBar('back')}
       </div>
     </motion.div>

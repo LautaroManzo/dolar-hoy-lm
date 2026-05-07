@@ -7,6 +7,7 @@ import FaqAccordion from '@/app/components/FaqAccordion';
 import EditorialCollapsible from '@/app/components/EditorialCollapsible';
 import { DolarCard } from '@/app/dolar/components/dolar-card';
 import StaleBanner from '@/app/components/stale-banner';
+import AnimateOnScroll from '@/app/components/animate-on-scroll';
 
 interface Props {
   content: DolarPageContent;
@@ -98,34 +99,41 @@ export default async function DolarTypePage({ content }: Props) {
         </section>
 
         {/* Editorial */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-brand-secondary p-6 sm:p-8">
-          <EditorialCollapsible sections={content.editorial} />
-        </section>
+        <AnimateOnScroll direction="left" delay={0.1}>
+          <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-brand-secondary p-6 sm:p-8">
+            <EditorialCollapsible sections={content.editorial} />
+          </section>
+        </AnimateOnScroll>
 
         {/* FAQ */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-brand-secondary p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-brand-primary mb-1">Preguntas frecuentes</h2>
-          <FaqAccordion items={content.faq} />
-        </section>
+        <AnimateOnScroll direction="right" delay={0.1}>
+          <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-brand-secondary p-6 sm:p-8">
+            <h2 className="text-xl font-bold text-brand-primary mb-1">Preguntas frecuentes</h2>
+            <FaqAccordion items={content.faq} />
+          </section>
+        </AnimateOnScroll>
 
         {/* Links a otros tipos */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-brand-secondary p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-brand-primary mb-5">Otras cotizaciones</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 mt-4">
-            {otherTypes.map(p => (
-              <Link
-                key={p.slug}
-                href={`/${p.slug}`}
-                className="group flex flex-1 items-center justify-between gap-2 px-4 py-4 rounded-xl border border-slate-100 bg-slate-50 hover:border-brand-secondary/30 hover:bg-brand-primary/[0.03] transition-all duration-200 min-w-0"
-              >
-                <span className="font-semibold text-base text-slate-700 group-hover:text-brand-primary transition-colors duration-200 truncate">
-                  {p.h1.replace(' hoy en Argentina', '')}
-                </span>
-                <ArrowUpRight size={15} className="shrink-0 text-slate-300 group-hover:text-brand-secondary transition-colors duration-200" />
-              </Link>
-            ))}
-          </div>
-        </section>
+        <AnimateOnScroll direction="up" delay={0.15} bounce={0.3}>
+          <section className="bg-white rounded-2xl shadow-sm border border-gray-100 border-t-4 border-t-brand-secondary p-6 sm:p-8">
+            <h2 className="text-xl font-bold text-brand-primary mb-5">Otras cotizaciones</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 mt-4">
+              {otherTypes.map((p, i) => (
+                <AnimateOnScroll key={p.slug} direction="down" delay={0.1 + i * 0.08} bounce={0.4}>
+                  <Link
+                    href={`/${p.slug}`}
+                    className="group flex flex-1 items-center justify-between gap-2 px-4 py-4 rounded-xl border border-slate-100 bg-slate-50 hover:border-brand-secondary/30 hover:bg-brand-primary/[0.03] transition-all duration-200 min-w-0"
+                  >
+                    <span className="font-semibold text-base text-slate-700 group-hover:text-brand-primary transition-colors duration-200 truncate">
+                      {p.h1.replace(' hoy en Argentina', '')}
+                    </span>
+                    <ArrowUpRight size={15} className="shrink-0 text-slate-300 group-hover:text-brand-secondary transition-colors duration-200" />
+                  </Link>
+                </AnimateOnScroll>
+              ))}
+            </div>
+          </section>
+        </AnimateOnScroll>
 
       </div>
     </div>

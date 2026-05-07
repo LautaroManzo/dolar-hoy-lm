@@ -1,5 +1,6 @@
 import { getOtrasMonedas } from '@/app/services/cotizaciones';
 import { formatPrice } from '@/app/utils/format';
+import AnimateOnScroll from '@/app/components/animate-on-scroll';
 
 
 export default async function OtrasMonedas() {
@@ -17,19 +18,21 @@ export default async function OtrasMonedas() {
       <section aria-labelledby="otras-monedas-heading">
         <div className="max-w-6xl mx-auto w-full">
 
-          <h2
-            id="otras-monedas-heading"
-            className="flex items-center mb-5 text-brand-primary text-2xl tracking-wide opacity-70
-              after:content-[''] after:flex-grow after:h-[1px] after:ml-6
-              after:bg-gradient-to-r after:from-transparent after:to-brand-primary/15"
-          >
-            Otras monedas
-          </h2>
+          <AnimateOnScroll direction="left" delay={0.1}>
+            <h2
+              id="otras-monedas-heading"
+              className="flex items-center mb-5 text-brand-primary text-2xl tracking-wide opacity-70
+                after:content-[''] after:flex-grow after:h-[1px] after:ml-6
+                after:bg-gradient-to-r after:from-transparent after:to-brand-primary/15"
+            >
+              Otras monedas
+            </h2>
+          </AnimateOnScroll>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {monedas.map(m => (
+            {monedas.map((m, i) => (
+              <AnimateOnScroll key={m.moneda} direction="down" delay={0.1 + i * 0.1} bounce={0.4}>
               <div
-                key={m.moneda}
                 className="rounded-2xl shadow-md bg-white p-5 flex flex-col gap-3 border-t-4 border-brand-secondary"
               >
                 <div className="flex items-center gap-2">
@@ -56,6 +59,7 @@ export default async function OtrasMonedas() {
                   Última actualización {m.horaActualizacion}
                 </p>
               </div>
+              </AnimateOnScroll>
             ))}
           </div>
 
