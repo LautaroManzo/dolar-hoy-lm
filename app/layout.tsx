@@ -115,7 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
       <body className="font-sans antialiased bg-brand-bg min-h-screen flex flex-col">
         <Header />
-        <main id="top" className="flex-1">{children}</main>
+        <main id="top" className="flex-1 overflow-clip">{children}</main>
         <Footer />
         <CookieConsent gaId="G-6MP230WEJ1" />
       </body>

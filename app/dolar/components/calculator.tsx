@@ -62,17 +62,18 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-brand-dark/60 backdrop-blur-lg p-4 transition-all"
+      className="fixed inset-0 z-50 overflow-y-auto bg-brand-dark/60 backdrop-blur-lg transition-all"
       onClick={handleClose}
     >
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Conversor de moneda"
-        className="bg-white w-full max-w-sm overflow-visible rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] max-h-screen overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="flex min-h-full items-center justify-center p-4">
+        <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Conversor de moneda"
+          className="bg-white w-full max-w-sm rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]"
+          onClick={(e) => e.stopPropagation()}
+        >
 
         <div className="p-5 flex justify-between items-center bg-brand-primary rounded-t-2xl text-white">
           <h2 className="text-lg font-bold tracking-tight uppercase text-sm opacity-90">Conversor de Moneda</h2>
@@ -196,6 +197,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
           </div>
 
         </div>
+      </div>
       </div>
     </div>
   );
