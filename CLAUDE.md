@@ -55,6 +55,7 @@ npm run lint && npx tsc --noEmit && npm test
 |---|---|
 | `GET /api/dolares` | Proxy con cache server-side (revalidate 60s) para que Client Components accedan a cotizaciones sin importar servicios server |
 | `POST /api/contact` | Formulario de contacto con rate limit (3/IP/10min), honeypot y validación Zod |
+| `GET /api/cron/telegram` | Publica cotizaciones en canal de Telegram (@DolarInfoHoy). Protegido con `CRON_SECRET`. Ejecutado por Vercel Cron lunes a viernes a las 17hs Argentina |
 
 **Decisiones no obvias:**
 - El histórico se cachea en localStorage (TTL 1 día) en lugar del servidor porque los datos pasados no cambian y reduce carga en una API gratuita. El hook incluye abort signal para cleanup al desmontar.
@@ -99,4 +100,6 @@ NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 RESEND_API_KEY=...        # Resend (formulario de contacto)
 CONTACT_EMAIL=...         # Destino de los mensajes del formulario
+TELEGRAM_BOT_TOKEN=...    # Bot de Telegram (@DolarInfoHoyBot)
+CRON_SECRET=...           # Protege el endpoint /api/cron/telegram
 ```

@@ -5,23 +5,28 @@ function Pulse({ className }: { className: string }) {
 export default function NoticiaLoading() {
   return (
     <div className="bg-brand-bg">
-      <div className="max-w-6xl mx-auto px-4 py-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
 
         {/* Breadcrumb */}
         <Pulse className="h-4 w-40 mb-6" />
 
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           {/* Imagen */}
-          <div className="animate-pulse bg-slate-200 h-96 w-full" />
+          <div className="animate-pulse bg-slate-200 h-52 sm:h-72 md:h-96 w-full" />
 
-          <div className="p-6 sm:p-8 space-y-4">
-            {/* Fecha */}
-            <Pulse className="h-4 w-32" />
+          <div className="p-5 sm:p-8 md:p-10 space-y-4">
             {/* Título */}
-            <Pulse className="h-7 w-full" />
-            <Pulse className="h-7 w-3/4" />
+            <Pulse className="h-6 sm:h-7 w-full" />
+            <Pulse className="h-6 sm:h-7 w-3/4" />
+            {/* Fecha + fuente */}
+            <Pulse className="h-4 w-48 mt-2" />
+            {/* Separador */}
+            <div className="h-px w-full bg-slate-100" />
+            {/* Resumen */}
+            <Pulse className="h-5 w-full" />
+            <Pulse className="h-5 w-5/6" />
             {/* Contenido */}
-            <div className="pt-2 space-y-2">
+            <div className="pt-2 space-y-3">
               <Pulse className="h-4 w-full" />
               <Pulse className="h-4 w-full" />
               <Pulse className="h-4 w-11/12" />

@@ -137,43 +137,43 @@ export default async function NoticiaPage({ params }: PageProps) {
   return (
     <div className="bg-brand-bg">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd).replace(/</g, '\\u003c') }} />
-      <div className="max-w-6xl mx-auto px-4 py-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
 
         <nav aria-label="Ruta de navegación" className="mb-6">
-          <ol className="flex items-center gap-3 text-sm">
+          <ol className="flex items-center gap-2 sm:gap-3 text-sm">
             <li>
-              <Link href="/" className="flex items-center gap-3 text-slate-500 hover:text-slate-800 transition-colors">
-                <ArrowLeft size={13} />
+              <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors">
+                <ArrowLeft size={14} />
                 Inicio
               </Link>
             </li>
-            <li className="text-slate-400 select-none" aria-hidden="true">/</li>
-            <li className="text-brand-primary font-medium truncate max-w-[200px] sm:max-w-xs">{post.title}</li>
+            <li className="text-slate-300 select-none" aria-hidden="true">/</li>
+            <li className="text-brand-primary font-medium truncate max-w-[200px] sm:max-w-sm">{post.title}</li>
           </ol>
         </nav>
 
         <article className="bg-white rounded-2xl shadow-sm overflow-hidden">
 
-          <div className="relative h-96 w-full">
+          <div className="relative h-60 sm:h-80 md:h-[28rem] w-full">
             {post.image_url ? (
               <Image
                 src={post.image_url}
                 alt={post.title}
                 fill
-                sizes="(max-width: 1152px) 100vw, 1152px"
+                sizes="(max-width: 896px) 100vw, 896px"
                 className="object-cover"
                 priority
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-slate-100">
-                <Newspaper className="h-24 w-24 text-slate-300" />
+              <div className="flex h-full w-full items-center justify-center bg-slate-50">
+                <Newspaper className="h-16 w-16 sm:h-24 sm:w-24 text-slate-200" />
               </div>
             )}
           </div>
 
-          <div className="p-6 sm:p-8">
+          <div className="px-5 pb-5 pt-3 sm:px-8 sm:pb-8 sm:pt-4 md:px-10 md:pb-10 md:pt-5">
 
-            <div className="flex items-center justify-between gap-2 text-slate-500 mb-4">
+            <div className="flex items-center justify-between gap-2 text-slate-500 mb-6">
               <div className="flex items-center gap-2">
                 <Calendar size={16} />
                 <time dateTime={new Date(post.published_at ?? post.created_at).toISOString()} className="text-[12px] sm:text-sm font-medium">
@@ -203,15 +203,21 @@ export default async function NoticiaPage({ params }: PageProps) {
               )}
             </div>
 
-            <h1 className="mb-4 text-xl sm:text-3xl font-bold text-slate-900 leading-tight">
+            <h1 className="mb-5 text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 leading-tight">
               {post.title}
             </h1>
 
+            {post.resumen_noticia && (
+              <p className="text-base sm:text-lg text-slate-600 leading-relaxed mb-6 pb-6 border-b border-slate-100 font-medium">
+                {post.resumen_noticia}
+              </p>
+            )}
+
             <div className="max-w-none">
               {post.content ? (
-                <div className="text-slate-700 leading-relaxed space-y-2 text-sm sm:text-base">
+                <div className="text-slate-700 leading-7 sm:leading-8 text-[15px] sm:text-base">
                   {post.content.split('\n\n').map((paragraph: string, i: number) => (
-                    <p key={i} className="mb-3">
+                    <p key={i} className="mb-5">
                       {paragraph.split('\n').map((line: string, j: number, arr: string[]) => (
                         <span key={j}>{line}{j < arr.length - 1 && <br />}</span>
                       ))}
@@ -219,14 +225,9 @@ export default async function NoticiaPage({ params }: PageProps) {
                   ))}
                 </div>
               ) : (
-                <div className="text-slate-700 leading-relaxed space-y-3 text-sm sm:text-base">
-                  <p className="text-sm italic text-slate-500">
-                    El contenido completo de esta noticia no está disponible en este momento.
-                  </p>
-                  <p>
-                    {post.resumen_noticia}
-                  </p>
-                </div>
+                <p className="text-sm italic text-slate-400">
+                  El contenido completo de esta noticia no está disponible en este momento.
+                </p>
               )}
             </div>
 
