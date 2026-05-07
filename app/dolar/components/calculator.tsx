@@ -35,7 +35,7 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
   }, [clearAmount, onClose]);
 
   const handleCloseRef = useRef(handleClose);
-  handleCloseRef.current = handleClose;
+  useEffect(() => { handleCloseRef.current = handleClose; }, [handleClose]);
 
   useEffect(() => {
     if (!isOpen) return;
