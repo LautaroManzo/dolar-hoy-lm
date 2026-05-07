@@ -32,6 +32,12 @@ Las noticias financieras se publican de forma automática mediante un workflow d
 
 ---
 
+## 📲 Canal de Telegram
+
+Las cotizaciones se publican automáticamente en el canal [@DolarInfoHoy](https://t.me/DolarInfoHoy) todos los días hábiles a las 17hs (Argentina). Utiliza un **Vercel Cron** que ejecuta el endpoint `/api/cron/telegram`, el cual obtiene las cotizaciones y las envía mediante la API de Telegram Bot.
+
+---
+
 ## 📡 APIs utilizadas
 
 | API | Uso | Sitio |
@@ -40,6 +46,8 @@ Las noticias financieras se publican de forma automática mediante un workflow d
 | **ArgentinaDatos** | Histórico de 1 año por tipo de cambio | [argentinadatos.com](https://argentinadatos.com) |
 | **NewsAPI** | Fuente de noticias para el workflow de n8n | [newsapi.org](https://newsapi.org) |
 | **Supabase** | Base de datos para artículos y noticias | [supabase.com](https://supabase.com) |
+| **Resend** | Envío de emails del formulario de contacto | [resend.com](https://resend.com) |
+| **Telegram Bot API** | Publicación automática de cotizaciones en canal | [core.telegram.org](https://core.telegram.org/bots/api) |
 
 ---
 
