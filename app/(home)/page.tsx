@@ -127,7 +127,7 @@ export default async function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(quotesJsonLd).replace(/</g, '\\u003c') }}
       />
-      <Description />
+      <Description dataForCards={dataForCards} />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         {isStale && (

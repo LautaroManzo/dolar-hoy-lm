@@ -5,13 +5,21 @@ import { X, ArrowRightLeft } from 'lucide-react';
 import { useCalculator } from '../../hooks/useCalculator';
 import { Dropdown } from '../../shared/ui/Dropdown';
 import { formatPrice, formatInput } from '../../utils/format';
+import type { DolarCardData } from '@/app/types/dolar';
 
 interface CalculatorModalProps {
   isOpen: boolean;
   onClose: () => void;
+  dataForCards?: Record<string, DolarCardData>;
 }
 
-export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProps) {
+export default function CalculatorModal({ isOpen, onClose, dataForCards }: CalculatorModalProps) {
+  const initialRates = dataForCards
+    ? Object.fromEntries(
+        Object.entries(dataForCards).map(([key, d]) => [key, { buy: d.buy, sell: d.sell }])
+      )
+    : undefined;
+
   const {
     amount,
     setAmount,
@@ -24,7 +32,8 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
     setRateMode,
     result,
     clearAmount,
-  } = useCalculator(isOpen);
+    isLoading,
+  } = useCalculator(isOpen, initialRates);
 
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
@@ -88,114 +97,125 @@ export default function CalculatorModal({ isOpen, onClose }: CalculatorModalProp
         </div>
 
         <div className="p-6 space-y-5">
-          <div>
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] ml-1 mb-1.5 block">
-              Tipo de dólar
-            </label>
-            <Dropdown
-              options={dolarTypes}
-              selectedId={selectedDolar?.id || 'blue'}
-              onSelect={(id) => {
-                const selected = dolarTypes.find(t => t.id === id);
-                if (selected) setSelectedDolar(selected);
-              }}
-              className="w-full"
-            />
-
-          </div>
-
-          <div className="flex flex-col relative">
-
-            {/* Input */}
-            <div className="p-4 rounded-xl border-2 border-slate-100 bg-white focus-within:border-slate-300 transition-colors">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">
-                {isInverse ? 'Ingrese un monto en Dólares' : 'Ingrese un monto en Pesos'}
-              </span>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-slate-300">$</span>
-                <input
-                  type="text"
-                  inputMode="decimal"
-                  placeholder="0"
-                  value={amount}
-                  onChange={(e) => setAmount(formatInput(e.target.value))}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      e.currentTarget.blur();
-                    }
+          {isLoading ? (
+            <div className="space-y-5 animate-pulse">
+              <div>
+                <div className="h-3 w-24 bg-slate-200 rounded mb-2" />
+                <div className="h-12 bg-slate-100 rounded-xl" />
+              </div>
+              <div className="space-y-2">
+                <div className="h-24 bg-slate-100 rounded-xl" />
+                <div className="h-24 bg-slate-200 rounded-xl" />
+              </div>
+              <div className="h-16 bg-slate-100 rounded-xl" />
+            </div>
+          ) : (
+            <>
+              <div>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] ml-1 mb-1.5 block">
+                  Tipo de dólar
+                </label>
+                <Dropdown
+                  options={dolarTypes}
+                  selectedId={selectedDolar?.id || 'blue'}
+                  onSelect={(id) => {
+                    const selected = dolarTypes.find(t => t.id === id);
+                    if (selected) setSelectedDolar(selected);
                   }}
-                  className="bg-transparent text-2xl font-bold text-brand-primary focus:outline-none w-full placeholder:text-slate-200"
+                  className="w-full"
                 />
               </div>
-            </div>
 
-            <div className="relative h-0 flex justify-center z-10">
-              <button
-                type="button"
-                onClick={toggleInverse}
-                className="absolute -translate-y-1/2 bg-brand-secondary text-white p-2.5 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all border-[3px] border-white cursor-pointer"
-                aria-label={isInverse ? 'Cambiar a pesos → dólares' : 'Cambiar a dólares → pesos'}
-              >
-                <ArrowRightLeft size={16} />
-              </button>
-            </div>
-
-            <div className="p-5 rounded-xl bg-brand-primary shadow-inner shadow-black/20 mt-2">
-              <span className="text-[10px] font-bold text-white/50 uppercase tracking-widest block mb-1">
-                Total Estimado
-              </span>
-              <div className="flex items-baseline justify-between">
-                <div className="flex items-baseline gap-2 overflow-hidden">
-                  <span className="text-sm font-bold text-white/60">$</span>
-                  <span className={`text-3xl font-black tracking-tight truncate ${amount ? 'text-white' : 'text-white/20'}`}>
-                    {amount ? result.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
+              <div className="flex flex-col relative">
+                <div className="p-4 rounded-xl border-2 border-slate-100 bg-white focus-within:border-slate-300 transition-colors">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">
+                    {isInverse ? 'Ingrese un monto en Dólares' : 'Ingrese un monto en Pesos'}
                   </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-slate-300">$</span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      placeholder="0"
+                      value={amount}
+                      onChange={(e) => setAmount(formatInput(e.target.value))}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          e.currentTarget.blur();
+                        }
+                      }}
+                      className="bg-transparent text-2xl font-bold text-brand-primary focus:outline-none w-full placeholder:text-slate-200"
+                    />
+                  </div>
                 </div>
-                <span className="shrink-0 text-[10px] font-black text-brand-primary px-2 py-1 bg-white rounded-md ml-2">
-                  {isInverse ? 'ARS' : 'USD'}
-                </span>
+
+                <div className="relative h-0 flex justify-center z-10">
+                  <button
+                    type="button"
+                    onClick={toggleInverse}
+                    className="absolute -translate-y-1/2 bg-brand-secondary text-white p-2.5 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all border-[3px] border-white cursor-pointer"
+                    aria-label={isInverse ? 'Cambiar a pesos → dólares' : 'Cambiar a dólares → pesos'}
+                  >
+                    <ArrowRightLeft size={16} />
+                  </button>
+                </div>
+
+                <div className="p-5 rounded-xl bg-brand-primary shadow-inner shadow-black/20 mt-2">
+                  <span className="text-[10px] font-bold text-white/50 uppercase tracking-widest block mb-1">
+                    Total Estimado
+                  </span>
+                  <div className="flex items-baseline justify-between">
+                    <div className="flex items-baseline gap-2 overflow-hidden">
+                      <span className="text-sm font-bold text-white/60">$</span>
+                      <span className={`text-3xl font-black tracking-tight truncate ${amount ? 'text-white' : 'text-white/20'}`}>
+                        {amount ? result.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
+                      </span>
+                    </div>
+                    <span className="shrink-0 text-[10px] font-black text-brand-primary px-2 py-1 bg-white rounded-md ml-2">
+                      {isInverse ? 'ARS' : 'USD'}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
 
-          </div>
-
-          <div className="flex items-center justify-center gap-0 px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
-            <button
-              type="button"
-              onClick={() => setRateMode('compra')}
-              className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 rounded-lg transition-all cursor-pointer ${
-                rateMode === 'compra' ? 'bg-brand-secondary shadow-sm' : 'hover:bg-slate-100'
-              }`}
-            >
-              <span className={`text-[10px] font-black uppercase tracking-widest ${
-                rateMode === 'compra' ? 'text-white' : 'text-slate-400'
-              }`}>Compra</span>
-              <span className={`text-sm font-black ${
-                rateMode === 'compra' ? 'text-white' : 'text-gray-700'
-              }`}>
-                ${formatPrice(selectedDolar?.compra || 0)}
-              </span>
-            </button>
-            <div className="w-px h-8 bg-slate-200" />
-            <button
-              type="button"
-              onClick={() => setRateMode('venta')}
-              className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 rounded-lg transition-all cursor-pointer ${
-                rateMode === 'venta' ? 'bg-brand-secondary shadow-sm' : 'hover:bg-slate-100'
-              }`}
-            >
-              <span className={`text-[10px] font-black uppercase tracking-widest ${
-                rateMode === 'venta' ? 'text-white' : 'text-slate-400'
-              }`}>Venta</span>
-              <span className={`text-sm font-black ${
-                rateMode === 'venta' ? 'text-white' : 'text-gray-700'
-              }`}>
-                ${formatPrice(selectedDolar?.venta || 0)}
-              </span>
-            </button>
-          </div>
-
+              <div className="flex items-center justify-center gap-0 px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setRateMode('compra')}
+                  className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                    rateMode === 'compra' ? 'bg-brand-secondary shadow-sm' : 'hover:bg-slate-100'
+                  }`}
+                >
+                  <span className={`text-[10px] font-black uppercase tracking-widest ${
+                    rateMode === 'compra' ? 'text-white' : 'text-slate-400'
+                  }`}>Compra</span>
+                  <span className={`text-sm font-black ${
+                    rateMode === 'compra' ? 'text-white' : 'text-gray-700'
+                  }`}>
+                    ${formatPrice(selectedDolar?.compra || 0)}
+                  </span>
+                </button>
+                <div className="w-px h-8 bg-slate-200" />
+                <button
+                  type="button"
+                  onClick={() => setRateMode('venta')}
+                  className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                    rateMode === 'venta' ? 'bg-brand-secondary shadow-sm' : 'hover:bg-slate-100'
+                  }`}
+                >
+                  <span className={`text-[10px] font-black uppercase tracking-widest ${
+                    rateMode === 'venta' ? 'text-white' : 'text-slate-400'
+                  }`}>Venta</span>
+                  <span className={`text-sm font-black ${
+                    rateMode === 'venta' ? 'text-white' : 'text-gray-700'
+                  }`}>
+                    ${formatPrice(selectedDolar?.venta || 0)}
+                  </span>
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
       </div>

@@ -6,8 +6,13 @@ import { motion } from "framer-motion";
 import { Calculator } from "lucide-react";
 import CalculatorModal from "./calculator";
 import { COLORS } from "@/app/constants/colors";
+import type { DolarCardData } from "@/app/types/dolar";
 
-const Description = () => {
+interface DescriptionProps {
+    dataForCards?: Record<string, DolarCardData>;
+}
+
+const Description = ({ dataForCards }: DescriptionProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
@@ -68,6 +73,7 @@ const Description = () => {
             <CalculatorModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                dataForCards={dataForCards}
             />
         </>
     );

@@ -13,14 +13,27 @@ export interface DolarType {
   venta: number;
 }
 
-const DEFAULT_TYPES: DolarType[] = [
-  { id: "blue", name: "Dólar Blue", compra: 0, venta: 0 },
-  { id: "oficial", name: "Dólar Oficial", compra: 0, venta: 0 },
-  { id: "mep", name: "Dólar MEP", compra: 0, venta: 0 },
-  { id: "ccl", name: "Dólar CCL", compra: 0, venta: 0 },
-  { id: "tarjeta", name: "Dólar Tarjeta", compra: 0, venta: 0 },
-  { id: "cripto", name: "Dólar Cripto", compra: 0, venta: 0 },
-];
+interface InitialRates {
+  [key: string]: { buy: number; sell: number };
+}
+
+const DOLAR_DEFS = [
+  { id: "blue", name: "Dólar Blue" },
+  { id: "oficial", name: "Dólar Oficial" },
+  { id: "mep", name: "Dólar MEP" },
+  { id: "ccl", name: "Dólar CCL" },
+  { id: "tarjeta", name: "Dólar Tarjeta" },
+  { id: "cripto", name: "Dólar Cripto" },
+] as const;
+
+function buildTypes(rates: InitialRates): DolarType[] {
+  return DOLAR_DEFS.map(({ id, name }) => ({
+    id,
+    name,
+    compra: rates[id]?.buy ?? 0,
+    venta: rates[id]?.sell ?? 0,
+  }));
+}
 
 function getSavedId(): string {
   try {
@@ -30,43 +43,43 @@ function getSavedId(): string {
   }
 }
 
-export function useCalculator(isOpen: boolean) {
+export function useCalculator(isOpen: boolean, initialRates?: InitialRates) {
+  const hasInitialData = initialRates && Object.keys(initialRates).length > 0;
+  const initialTypes = hasInitialData ? buildTypes(initialRates) : [];
+
   const [amount, setAmount] = useState<string>("");
-  const [dolarTypes, setDolarTypes] = useState<DolarType[]>(DEFAULT_TYPES);
-  const [selectedDolar, setSelectedDolar] = useState<DolarType | null>(null);
+  const [dolarTypes, setDolarTypes] = useState<DolarType[]>(initialTypes);
+  const [selectedDolar, setSelectedDolar] = useState<DolarType | null>(() => {
+    const savedId = getSavedId();
+    return initialTypes.find((t) => t.id === savedId) ?? initialTypes[0] ?? null;
+  });
   const [isInverse, setIsInverse] = useState(false);
   const [rateMode, setRateMode] = useState<'venta' | 'compra'>('venta');
-
-  /* eslint-disable react-hooks/set-state-in-effect */
-  useEffect(() => {
-    const savedId = getSavedId();
-    setSelectedDolar(DEFAULT_TYPES.find((t) => t.id === savedId) ?? DEFAULT_TYPES[0]);
-  }, []);
-  /* eslint-enable react-hooks/set-state-in-effect */
+  const [isLoading, setIsLoading] = useState(!hasInitialData);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || hasInitialData) return;
 
     const controller = new AbortController();
 
     const loadDolarTypes = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch("/api/dolares", { signal: controller.signal });
         const { data: allDolars }: { data: { casa: string; compra: number; venta: number }[] } = await res.json();
         const find = (id: string, field: "compra" | "venta") =>
           allDolars.find((d) => d.casa === toApiCasa(id))?.[field] ?? 0;
-        const types: DolarType[] = [
-          { id: "blue", name: "Dólar Blue", compra: find("blue", "compra"), venta: find("blue", "venta") },
-          { id: "oficial", name: "Dólar Oficial", compra: find("oficial", "compra"), venta: find("oficial", "venta") },
-          { id: "mep", name: "Dólar MEP", compra: find("mep", "compra"), venta: find("mep", "venta") },
-          { id: "ccl", name: "Dólar CCL", compra: find("ccl", "compra"), venta: find("ccl", "venta") },
-          { id: "tarjeta", name: "Dólar Tarjeta", compra: find("tarjeta", "compra"), venta: find("tarjeta", "venta") },
-          { id: "cripto", name: "Dólar Cripto", compra: find("cripto", "compra"), venta: find("cripto", "venta") },
-        ];
+        const types: DolarType[] = DOLAR_DEFS.map(({ id, name }) => ({
+          id,
+          name,
+          compra: find(id, "compra"),
+          venta: find(id, "venta"),
+        }));
         setDolarTypes(types);
         setSelectedDolar((prev) =>
           prev ? types.find((t) => t.id === prev.id) ?? types[0] : types[0]
         );
+        setIsLoading(false);
       } catch (error) {
         if (!controller.signal.aborted) console.error("Error loading dolar types:", error);
       }
@@ -74,7 +87,7 @@ export function useCalculator(isOpen: boolean) {
 
     loadDolarTypes();
     return () => controller.abort();
-  }, [isOpen]);
+  }, [isOpen, hasInitialData]);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -116,5 +129,6 @@ export function useCalculator(isOpen: boolean) {
     setRateMode,
     result,
     clearAmount,
+    isLoading,
   };
 }
